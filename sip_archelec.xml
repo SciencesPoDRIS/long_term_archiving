@@ -20,7 +20,8 @@
 		<type language="fra">Discours et programmes électoraux</type>
 		<type language="fra">Tracts</type>
 		<!-- Généré par le script : nombre de fichiers par type de format -->
-		<format language="fra">5 documents JPG2000 ; 3 documents PDF</format>
+		<format language="fra">5 documents JPG2000</format>
+		<format language="fra">3 documents PDF</format>
 		<source language="fra">EL065</source>
 		<!-- Constante -->
 		<language>fra</language>
@@ -33,6 +34,8 @@
 		<identifiantDocProducteur>EL065_L_1973_03_001_01_1_PF</identifiantDocProducteur>
 		<!-- Constante (cf. INSEE) -->
 		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
+		<!-- "Archives électorales" / Type d'élection / Année / Mois / Département / Circonscription / Tour / Type de document -->
+		<planClassement language="fra">Archives électorales/L/1973/03/001/01/1/PF</planClassement>
 		<!-- Constante -->
 		<version>1</version>
 		<!-- Constante -->
