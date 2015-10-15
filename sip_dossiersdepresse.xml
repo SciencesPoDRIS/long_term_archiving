@@ -1,0 +1,60 @@
+<pac xmlns="http://www.cines.fr/pac/sip" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
+	<DocDC>
+		<!-- Nom du lot de numérisation -->
+		<title language="fra">LOT001</title>
+		<!-- Constante -->
+		<creator>Fondation Nationale des Sciences politiques</creator>
+		<subject language="fra">International</subject>
+		<subject language="fra">France</subject>
+		<subject language="fra">Israël</subject>
+		<subject language="fra">ONU</subject>
+		<!-- Généré par le script :interroge la base de données pour collecter les titres des dossiers et les tronque avant le premier ":" -->
+		<description language="fra">Les pays non-alignés ; Relations Sud-Sud ; Affaire du canal de Suez ; Religion, athéisme, laïcité en France ; Islam en France ; Femmes et féminisme en France ; Relations de la France avec la RFA ; Relations de la France avec l'URSS ; Relations de la France avec l'Afrique ; Relations de la France avec l'Afrique noire ; La vie intellectuelle et culturelle en France ; Relations de la France avec l'Afrique francophone ; La vie intellectuelle et culturelle en France 1965-1969 ; Travail des femmes et égalité professionnelle en France ; Le colonialisme français, la décolonisation et l'Outre-mer ; Vie politique en Israël ; Les Nations Unies</description>
+		<!-- Constante -->
+		<publisher>SciencesPo Bibliothèque</publisher>
+		<!-- Généré par le script : collecte toutes les dates des dossiers et retourne le minimum et le maximum -->
+		<date>1944 - 1991</date>
+		<!-- Constante -->
+		<type language="fra">Dossiers de presse</type>
+		<!-- Généré par le script : nombre de fichiers par type de format -->
+		<format language="fra">5000 documents PDF</format>
+		<source language="fra">LOT001</source>
+		<!-- Constante -->
+		<language>fra</language>
+		<!-- cf. <subject> -->
+		<coverage language="fra">International</coverage>
+		<coverage language="fra">France</coverage>
+		<coverage language="fra">Israël</coverage>
+		<coverage language="fra">ONU</coverage>
+		<!-- cf. <date> -->
+		<coverage language="fra">1944 - 1991</coverage>
+		<!-- Constante -->
+		<rights language="fra">Sous droits</rights>
+	</DocDC>
+	<DocMeta>
+		<identifiantDocProducteur>LOT001</identifiantDocProducteur>
+		<!-- Constante (cf. INSEE) -->
+		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
+		<!-- "Dossiers de Presse" / numéro du lot -->
+		<planClassement language="fra">Dossiers de Presse/LOT001</planClassement>
+		<structureDocument></structureDocument>
+		<!-- Constante -->
+		<version>1</version>
+		<!-- Constante -->
+		<versionPrecedente>0</versionPrecedente>
+	</DocMeta>
+	<FichMeta>
+		<!-- En fonction de l'extension du fichier -->
+		<formatFichier>PDF</formatFichier>
+		<nomFichier>LOT01/LURA/9_203_2_1/9_203_2_1_0011.pdf</nomFichier>
+		<!-- Généré par le script comme MD5 Checksums -->
+		<empreinteOri type="MD5">3a52a9da9df0a62628bbc9f160299995</empreinteOri>
+	</FichMeta>
+	<FichMeta>
+		<!-- En fonction de l'extension du fichier -->
+		<formatFichier>PDF</formatFichier>
+		<nomFichier>/LURA/9_203_2_1/9_203_2_1_0012.pdf</nomFichier>
+		<!-- Généré par le script comme MD5 Checksums -->
+		<empreinteOri type="MD5">3a52a9da9df0a62628bbc9f160299995</empreinteOri>
+	</FichMeta>
+</pac>

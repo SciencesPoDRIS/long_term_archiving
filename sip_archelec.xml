@@ -1,0 +1,55 @@
+<pac xmlns="http://www.cines.fr/pac/sip" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
+	<!-- sip.xml généré pour chaque boite -->
+	<DocDC>
+		<title language="fra">France élections législatives 1973, Ain, 01ere circonscription, 1er tour, Professions de foi</title>
+		<!-- Constante -->
+		<creator>Fondation Nationale des Sciences Politiques</creator>
+		<subject language="fra">france</subject>
+		<subject language="fra">élections</subject>
+		<subject language="fra">législatives</subject>
+		<subject language="fra">1973</subject>
+		<subject language="fra">documents</subject>
+		<subject language="fra">électoraux</subject>
+		<!-- Constante -->
+		<description language="fra">Ce fonds d'archives électorales couvre les élections de 1958 à 2002. Il contient des professions de foi et des bulletins de vote des candidats.</description>
+		<!-- Constante -->
+		<publisher>SciencesPo CEVIPOF</publisher>
+		<date>1973-03-04</date>
+		<type language="fra">Affiches</type>
+		<type language="fra">Banderoles</type>
+		<type language="fra">Discours et programmes électoraux</type>
+		<type language="fra">Tracts</type>
+		<!-- Généré par le script : nombre de fichiers par type de format -->
+		<format language="fra">5 documents JPG2000 ; 3 documents PDF</format>
+		<source language="fra">EL065</source>
+		<!-- Constante -->
+		<language>fra</language>
+		<coverage language="fra">France</coverage>
+		<coverage language="fra">Ain</coverage>
+		<rights language="fra">domaine public</rights>
+		<rights language="fra">Creative Commons CC BY-SA 3.0 FR</rights>
+	</DocDC>
+	<DocMeta>
+		<identifiantDocProducteur>EL065_L_1973_03_001_01_1_PF</identifiantDocProducteur>
+		<!-- Constante (cf. INSEE) -->
+		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
+		<!-- "Archives électorales" / Cote de la boite / Type d'élection / Année / Mois / Département / Circonscription / Tour / Type de document -->
+		<planClassement language="fra">Archives électorales/EL065/L/1973/03/001/01/1/PF</planClassement>
+		<!-- Constante -->
+		<version>1</version>
+		<!-- Constante -->
+		<versionPrecedente>0</versionPrecedente>
+	</DocMeta>
+	<FichMeta>
+		<!-- En fonction de l'extension du fichier -->
+		<formatFichier>JPEG2000</formatFichier>
+		<nomFichier>EL065_L_1973_03_001_01_1_PF/master/EL065_L_1973_03_001_01_1_PF_01_01_master.jp2</nomFichier>
+		<empreinteOri type="MD5">DE1EF430163081160F8E94A6BF9DD87F</empreinteOri>
+	</FichMeta>
+	<FichMeta>
+		<!-- En fonction de l'extension du fichier -->
+		<formatFichier>JPEG2000</formatFichier>
+		<nomFichier>EL065_L_1973_03_001_01_1_PF/master/EL065_L_1973_03_001_01_1_PF_01_02_master.jp2</nomFichier>
+		<empreinteOri type="MD5">6386100C18770873565AFCCB14EADB5A</empreinteOri>
+	</FichMeta>
+</pac>
