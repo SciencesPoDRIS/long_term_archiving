@@ -35,8 +35,6 @@
 		<identifiantDocProducteur>LOT001</identifiantDocProducteur>
 		<!-- Constante (cf. INSEE) -->
 		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
-		<!-- "Dossiers de Presse" / numéro du lot -->
-		<planClassement language="fra">Dossiers de Presse/LOT001</planClassement>
 		<structureDocument></structureDocument>
 		<!-- Constante -->
 		<version>1</version>

@@ -33,8 +33,6 @@
 		<identifiantDocProducteur>EL065_L_1973_03_001_01_1_PF</identifiantDocProducteur>
 		<!-- Constante (cf. INSEE) -->
 		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
-		<!-- "Archives électorales" / Cote de la boite / Type d'élection / Année / Mois / Département / Circonscription / Tour / Type de document -->
-		<planClassement language="fra">Archives électorales/EL065/L/1973/03/001/01/1/PF</planClassement>
 		<!-- Constante -->
 		<version>1</version>
 		<!-- Constante -->
