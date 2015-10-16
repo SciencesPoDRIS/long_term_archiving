@@ -1,0 +1,38 @@
+<pac xmlns="http://www.cines.fr/pac/sip" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
+	<DocDC>
+		<title language="fra">Les conditions démographiques de la nationalité aux Etats-Unis</title>
+		<creator>Boutmy, Emile</creator>
+		<subject language="fra">Population</subject>
+		<!-- Constante -->
+		<description language="fra">Non renseigné</description>
+		<!-- Constante -->
+		<publisher>s.n.</publisher>
+		<date>1899</date>
+		<type language="fra">Monographie</type>
+		<format language="fra">32 p. ; 22 cm</format>
+		<source language="fra">BR.8°0947(13)</source>
+		<!-- Constante -->
+		<language>fra</language>
+		<coverage language="fra">Etats-Unis</coverage>
+		<coverage language="fra">1870-1914</coverage>
+		<!-- Constante -->
+		<rights language="fra">Libre de droits</rights>
+	</DocDC>
+	<DocMeta>
+		<identifiantDocProducteur>sc_0000267825_00000000926980</identifiantDocProducteur>
+		<noteDocument language="fra">don (reliquat A.M. Dethomas)</noteDocument>
+		<!-- Constante (cf. INSEE) -->
+		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
+		<structureDocument>sc_0000267825_00000000926980.xml</structureDocument>
+		<!-- Constante -->
+		<version>1</version>
+		<!-- Constante -->
+		<versionPrecedente>0</versionPrecedente>
+	</DocMeta>
+	<FichMeta>
+		<!-- En fonction de l'extension du fichier -->
+		<formatFichier>JPEG2000</formatFichier>
+		<nomFichier>sc_0000267825_00000000926980_color_000002_R.jp2</nomFichier>
+		<empreinteOri type="MD5">3a52a9da9df0a62628bbc9f160299995</empreinteOri>
+	</FichMeta>
+</pac>
