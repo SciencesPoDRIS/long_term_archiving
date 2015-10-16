@@ -1,37 +1,594 @@
-<pac xmlns="http://www.cines.fr/pac/sip" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
-	<DocDC>
-		<title language="fra">Les conditions démographiques de la nationalité aux Etats-Unis</title>
-		<creator>Boutmy, Emile</creator>
-		<subject language="fra">population</subject>
-		<!-- Constante -->
-		<description language="fra">Non renseigné</description>
-		<!-- Constante -->
-		<publisher>s.n.</publisher>
-		<date>1899</date>
-		<type language="fra">Monographie</type>
-		<format language="fra">32 p. ; 22 cm</format>
-		<source language="fra">BR.8°0947(13)</source>
-		<!-- Constante -->
-		<language>fra</language>
-		<coverage language="fra">Etats-Unis</coverage>
-		<coverage language="fra">1870-1914</coverage>
-		<rights language="fra">Libre de droits</rights>
-	</DocDC>
-	<DocMeta>
-		<identifiantDocProducteur>sc_0000267825_00000000926980</identifiantDocProducteur>
-		<noteDocument language="fra">don (reliquat A.M. Dethomas)</noteDocument>
-		<!-- Constante (cf. INSEE) -->
-		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
-		<structureDocument>sc_0000267825_00000000926980.xml</structureDocument>
-		<!-- Constante -->
-		<version>1</version>
-		<!-- Constante -->
-		<versionPrecedente>0</versionPrecedente>
-	</DocMeta>
-	<FichMeta>
-		<!-- En fonction de l'extension du fichier -->
-		<formatFichier>JPEG2000</formatFichier>
-		<nomFichier>sc_0000267825_00000000926980_color_000002_R.jp2</nomFichier>
-		<empreinteOri type="MD5">3a52a9da9df0a62628bbc9f160299995</empreinteOri>
-	</FichMeta>
-</pac>
+<?xml version='1.0' encoding='utf8'?>
+    <pac xmlns="http://www.cines.fr/pac/sip" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
+        <DocDC>
+            <title language="fra">Les conditions démographiques de la nationalité aux Etats-Unis</title>
+            <creator>Emile Boutmy</creator>
+            <subject language="fra">Population</subject>
+            <description language="fra">Non renseigné</description>
+            <publisher>s.n.</publisher>
+            <date>1899</date>
+            <type language="fra">Monographie</type>
+            <source language="fra">BR.8°0947(13)</source>
+            <language>fra</language>
+            <coverage language="fra">Etats-Unis</coverage>
+            <coverage language="fra">1870-1914</coverage>
+            <rights language="fra">Libre de droits</rights>
+        </DocDC>
+        <DocMeta>
+            <identifiantDocProducteur>sc_0000267825_00000000926980</identifiantDocProducteur>
+            <noteDocument language="fra">don (reliquat A.M. Dethomas)</noteDocument>
+            <serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
+            <version>1</version>
+            <versionPrecedente>0</versionPrecedente>
+        </DocMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_color_000001_L.jp2</nomFichier>
+            <empreinteOri type="MD5">cd3d211ba67082dea8979d05b92450fa</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_color_000002_R.jp2</nomFichier>
+            <empreinteOri type="MD5">3a52a9da9df0a62628bbc9f160299995</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000000.jp2</nomFichier>
+            <empreinteOri type="MD5">a286d8ac24ccde2a75cb2d813f576fa6</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000001.jp2</nomFichier>
+            <empreinteOri type="MD5">0c29bef18a7c05d682c787c0aec5486e</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000002.jp2</nomFichier>
+            <empreinteOri type="MD5">5ab52f04fe6254cfb62dcbd34d125a42</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000003.jp2</nomFichier>
+            <empreinteOri type="MD5">e3e122941aa1b46369f09ccfcf30140c</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000004_R.jp2</nomFichier>
+            <empreinteOri type="MD5">f0310a6085ebe87bfa0a448d3cf3c326</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000005_L.jp2</nomFichier>
+            <empreinteOri type="MD5">1893f7320bfe29dc9670c7660d80f30b</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000006_R.jp2</nomFichier>
+            <empreinteOri type="MD5">f50d0930a8dcaf916a9008ad6959c728</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000007_L.jp2</nomFichier>
+            <empreinteOri type="MD5">00acf4f12497f31349ca6393bdcb2847</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000008_R.jp2</nomFichier>
+            <empreinteOri type="MD5">15bebfc2a4efcf9bf6beaf7485178eb9</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000009_L.jp2</nomFichier>
+            <empreinteOri type="MD5">89ae33fe3de3764f3a5b913370780517</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000010_R.jp2</nomFichier>
+            <empreinteOri type="MD5">d16c1235e5b2c33578d39ed2670cd592</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000011_L.jp2</nomFichier>
+            <empreinteOri type="MD5">548dc5a67faddbbb26dbc58ae51a1a73</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000012_R.jp2</nomFichier>
+            <empreinteOri type="MD5">cb387d0c6fda8c852f939d7cd9da0ecd</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000013_L.jp2</nomFichier>
+            <empreinteOri type="MD5">ea2f5928af4617adebca2b088fa91746</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000014_R.jp2</nomFichier>
+            <empreinteOri type="MD5">a5ab654d9ff5c596ec56288c3441f137</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000015_L.jp2</nomFichier>
+            <empreinteOri type="MD5">630a804d92dadaa918e86991f87588b1</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000016_R.jp2</nomFichier>
+            <empreinteOri type="MD5">3dc5212220ad0bdbcbcbb45001dd8deb</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000017_L.jp2</nomFichier>
+            <empreinteOri type="MD5">e8d7f1eb69465ef32d5bc33ab2e3d7c4</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000018_R.jp2</nomFichier>
+            <empreinteOri type="MD5">a48caa919a33d96eaf1b60a9273cb5bc</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000019_L.jp2</nomFichier>
+            <empreinteOri type="MD5">06b9910d4995fd4c948df9e70270dbb0</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000020_R.jp2</nomFichier>
+            <empreinteOri type="MD5">383bbec7961fdd0cd1b6756ab35e1b23</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000021_L.jp2</nomFichier>
+            <empreinteOri type="MD5">7bd7b95e2ce1a574071ed81ada5cf2d5</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000022_R.jp2</nomFichier>
+            <empreinteOri type="MD5">dc4ff4d46a76d77118b738a7529296f1</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000023_L.jp2</nomFichier>
+            <empreinteOri type="MD5">07c578f06fe8077e590736a3c9362b63</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000024_R.jp2</nomFichier>
+            <empreinteOri type="MD5">e3b29dbec8d1042c9f96a47113010ca5</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000025_L.jp2</nomFichier>
+            <empreinteOri type="MD5">03a0b37128b518c808382d788ba37bfd</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000026_R.jp2</nomFichier>
+            <empreinteOri type="MD5">a82464171d7198b14e1d38c87739f775</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000027_L.jp2</nomFichier>
+            <empreinteOri type="MD5">b74d922fb0fe974a6b2235dc9789a4cf</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000028_R.jp2</nomFichier>
+            <empreinteOri type="MD5">2ab23145da3141eb56c9585857ff7a13</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000029_L.jp2</nomFichier>
+            <empreinteOri type="MD5">b1339ed2b99d7a47c2da0b27f3ba874f</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000030_R.jp2</nomFichier>
+            <empreinteOri type="MD5">e141d0ac4306a9a116b91fb9e5c9c9ad</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000031_L.jp2</nomFichier>
+            <empreinteOri type="MD5">c75925885df9aceed262c32875388fd1</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000032_R.jp2</nomFichier>
+            <empreinteOri type="MD5">035d1fd10c8cfb9a2dd9976cf56595dd</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000033_L.jp2</nomFichier>
+            <empreinteOri type="MD5">6b2f3f6f85813efb72a905dc9d02fc4a</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000034_R.jp2</nomFichier>
+            <empreinteOri type="MD5">30ddbf5c7402d598aee2bba448639685</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000035_L.jp2</nomFichier>
+            <empreinteOri type="MD5">01b167d6de44209be96db34ddb9cb048</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000036_R.jp2</nomFichier>
+            <empreinteOri type="MD5">8150c26ad8daaa63f3fdb8f06cbfe161</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000037_L.jp2</nomFichier>
+            <empreinteOri type="MD5">6d1b33f61f70c032d501ec0bf306625a</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000038_R.jp2</nomFichier>
+            <empreinteOri type="MD5">ff333f0beeb7859d4aedec230cadf4e2</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG2000</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_master_000039_L.jp2</nomFichier>
+            <empreinteOri type="MD5">53aeb032978a6891c478cd57e679f7c2</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000000.xml</nomFichier>
+            <empreinteOri type="MD5">5ff585497f211e1ffdc992fd7a6b1c3b</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000001.xml</nomFichier>
+            <empreinteOri type="MD5">b731283b2b78f77cd4bd1dc4ed2d0f8e</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000002.xml</nomFichier>
+            <empreinteOri type="MD5">8ebe1db6e7a1ce37b0c97ab593847ba3</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000003.xml</nomFichier>
+            <empreinteOri type="MD5">3ccfedce8de6278945ddf9d3354c0c77</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000004_R.xml</nomFichier>
+            <empreinteOri type="MD5">3ae29069bc2e3675e636b6a54995a9d2</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000005_L.xml</nomFichier>
+            <empreinteOri type="MD5">0a03cb5542af8d801443a521875500dd</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000006_R.xml</nomFichier>
+            <empreinteOri type="MD5">99513a78ef091836fd4d1a48d67e0d2a</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000007_L.xml</nomFichier>
+            <empreinteOri type="MD5">517d842d79bdda2b5164463ea4bb4a3a</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000008_R.xml</nomFichier>
+            <empreinteOri type="MD5">b758e2f38497508b03d3c7dc0f7aac5e</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000009_L.xml</nomFichier>
+            <empreinteOri type="MD5">5da5397880d17469edf63e51d3dc559f</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000010_R.xml</nomFichier>
+            <empreinteOri type="MD5">eac3a76a09c52c486beb23c34291db26</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000011_L.xml</nomFichier>
+            <empreinteOri type="MD5">9ed9012c95edd22c2b4dba5ce256f240</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000012_R.xml</nomFichier>
+            <empreinteOri type="MD5">f0d51be942d2de6539d09c1feb141c8d</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000013_L.xml</nomFichier>
+            <empreinteOri type="MD5">4f7ccbf196b408085bfd15d06111b45e</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000014_R.xml</nomFichier>
+            <empreinteOri type="MD5">81e35d6163701d129a3d1d62886b08f0</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000015_L.xml</nomFichier>
+            <empreinteOri type="MD5">fa4d640c1d46f194b26f0c4bf0ae14ed</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000016_R.xml</nomFichier>
+            <empreinteOri type="MD5">b5df570254e0e6a74df3be726bcc720c</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000017_L.xml</nomFichier>
+            <empreinteOri type="MD5">2d21c7da47a8e7faf8eb1e0e9346432b</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000018_R.xml</nomFichier>
+            <empreinteOri type="MD5">de5579889ecac4eec942d040e6839964</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000019_L.xml</nomFichier>
+            <empreinteOri type="MD5">1bbf266de6210b2c38d001817827f2ed</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000020_R.xml</nomFichier>
+            <empreinteOri type="MD5">8e84249ca0358f64edec36e41bae8d92</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000021_L.xml</nomFichier>
+            <empreinteOri type="MD5">aca4a5c4c47fc98af230e2fb87211404</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000022_R.xml</nomFichier>
+            <empreinteOri type="MD5">187ead05c3d38f4f1aedfa59a367a66e</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000023_L.xml</nomFichier>
+            <empreinteOri type="MD5">645a7d3b3a580db94d6b6e7d7cde11b8</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000024_R.xml</nomFichier>
+            <empreinteOri type="MD5">615917740c67fffbea5e85095293f772</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000025_L.xml</nomFichier>
+            <empreinteOri type="MD5">1c3e82b7cf59a6b4d8863d3de61b3f61</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000026_R.xml</nomFichier>
+            <empreinteOri type="MD5">7981b5ecb8be6a1ed53bfaa8867cede4</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000027_L.xml</nomFichier>
+            <empreinteOri type="MD5">635d149c89e538d742c8fc47ef4bc3a1</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000028_R.xml</nomFichier>
+            <empreinteOri type="MD5">19bd67b49a6bad50169954dab5ef8f9d</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000029_L.xml</nomFichier>
+            <empreinteOri type="MD5">f951280c114fedb285ea510ee13e9ba9</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000030_R.xml</nomFichier>
+            <empreinteOri type="MD5">b014eda44d49a717926c80b9da80d1bd</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000031_L.xml</nomFichier>
+            <empreinteOri type="MD5">b29db4d41bf0d6e46b3ec49ebf58ff68</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000032_R.xml</nomFichier>
+            <empreinteOri type="MD5">1218eb6a7733bd9ed0f931c2126cc79e</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000033_L.xml</nomFichier>
+            <empreinteOri type="MD5">2be4062b48e1543e87429574b70902f0</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000034_R.xml</nomFichier>
+            <empreinteOri type="MD5">fcdf6b5965a54ec41a42354f75934677</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000035_L.xml</nomFichier>
+            <empreinteOri type="MD5">6b306534524503a551d641e4021b1910</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000036_R.xml</nomFichier>
+            <empreinteOri type="MD5">9fc9119d5227c8ff754ea660cf81612b</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000037_L.xml</nomFichier>
+            <empreinteOri type="MD5">65654767c24dbb4e2c8ce91be090e729</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000038_R.xml</nomFichier>
+            <empreinteOri type="MD5">33d7d35c7a9f0968f1be34d39da5d790</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>XML</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_ocr_000039_L.xml</nomFichier>
+            <empreinteOri type="MD5">8c17c51d7e1a57d939a7abef8663c808</empreinteOri>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000000.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000001.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000002.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000003.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000004_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000005_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000006_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000007_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000008_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000009_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000010_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000011_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000012_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000013_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000014_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000015_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000016_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000017_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000018_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000019_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000020_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000021_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000022_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000023_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000024_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000025_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000026_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000027_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000028_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000029_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000030_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000031_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000032_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000033_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000034_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000035_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000036_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000037_L.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000038_R.jpg</nomFichier>
+        </FichMeta>
+        <FichMeta>
+            <formatFichier>JPEG</formatFichier>
+            <nomFichier>sc_0000267825_00000000926980_view_000039_L.jpg</nomFichier>
+        </FichMeta>
+    </pac>
