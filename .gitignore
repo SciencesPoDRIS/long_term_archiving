@@ -4,11 +4,17 @@
 .DS_Store
 
 #
+# Log folder
+#
+log
+
+#
 # Data folder
 #
 data
 
+
 #
-# Log folder
+# Images folder
 #
-log
+image
