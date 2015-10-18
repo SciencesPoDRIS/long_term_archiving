@@ -5,7 +5,7 @@
 #
 # Libs
 #
-import codecs, logging, os, sys
+import codecs, hashlib, logging, os, sys, urllib, urllib2
 import xml.etree.ElementTree as ET
 
 #
@@ -17,6 +17,8 @@ log_file = log_folder + folder_separator + 'sip_numpat.log'
 log_level = logging.DEBUG
 sip_folder = 'sips'
 sip_file = sip_folder + folder_separator + 'sip_numpat.xml'
+image_folder = 'images'
+batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
 # Namespaces
 ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
@@ -89,14 +91,51 @@ def main() :
 			logging.error('Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.')
 			print 'Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.'
 		ET.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', '').replace('file://ocr/', '').replace('file://view/', '')
-		# ToDo
-		# Ask Olesea what to do in this situation : generate the checksum ???
+		# If checksum doesn't exist (for .jpg file by example), download file and calculate the MD5 checksum
 		if file.get('CHECKSUM') is None :
-			logging.error('Checksum is missing for file : ' + file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href'))
-			print 'Checksum is missing for file : ' + file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href')
+			image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder)
+			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://view/', image_folder + folder_separator)
+			# Download this image into the image folder
+			if downloadImage(image_url, image_path) :
+				ET.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
+			else :
+				pass
 		else :
 			ET.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
+	# Clear image folder content
+	clearFolder(image_folder)
 	writeSipFile(data)
+
+# Download an image from its image_url if it exists into the image_path
+def downloadImage(image_url, image_path) :
+	try :
+		req = urllib2.Request(image_url)
+		response = urllib2.urlopen(req)
+		urllib.urlretrieve(image_url, image_path)
+		return True
+	except Exception, e :
+		logging.error('Image url does\'nt exist : ' + image_url)
+		print 'Image url does\'nt exist : ' + image_url
+		return False
+
+# Clear a folder from its content
+def clearFolder(folder_path) :
+	for file in os.listdir(folder_path) :
+		file_path = os.path.join(folder_path, file)
+		try :
+			if os.path.isfile(file_path):
+				os.unlink(file_path)
+		except Exception, e :
+			logging.error('Folder does\'nt exist : ' + folder_path)
+			print 'Folder does\'nt exist : ' + folder_path
+
+# Calculate the MD5 checksum for the file fname
+def md5(fname) :
+	hash = hashlib.md5()
+	with open(fname, 'rb') as f :
+		for chunk in iter(lambda: f.read(4096), b""):
+			hash.update(chunk)
+	return hash.hexdigest()
 
 def writeSipFile(data) :
 	# Write result into file
@@ -110,8 +149,13 @@ def writeSipFile(data) :
 #
 if __name__ == '__main__':
 	# Check that log folder exists, else create it
-	if not os.path.exists(log_folder):
+	if not os.path.exists(log_folder) :
 		os.makedirs(log_folder)
+	# Check that image folder exists, else create it
+	if not os.path.exists(image_folder) :
+		os.makedirs(image_folder)
+	# Clear image folder content
+	clearFolder(image_folder)
 	# Init logs
 	logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
 	logging.info('Start')
