@@ -5,7 +5,7 @@
 #
 # Libs
 #
-import codecs, hashlib, logging, os, sys, urllib, urllib2
+import codecs, hashlib, json, logging, os, sys, urllib, urllib2
 import xml.etree.ElementTree as ET
 
 #
@@ -19,11 +19,17 @@ sip_folder = 'sips'
 sip_file = sip_folder + folder_separator + 'sip_numpat.xml'
 image_folder = 'images'
 batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
+conf_folder = 'conf'
+conf_file = conf_folder + folder_separator + 'conf.json'
 # Namespaces
 ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
 	'mets' : 'http://www.loc.gov/METS/',
 	'xlink' : 'http://www.w3.org/1999/xlink'
+}
+ns_marc = {
+	'ns0' : 'http://docs.oasis-open.org/ns/search-ws/sruResponse',
+	'ns1' : 'http://www.loc.gov/MARC21/slim'
 }
 # Constantes
 language = 'fra'
@@ -51,7 +57,8 @@ def main() :
 	tree = ET.parse(sys.argv[1]).getroot()
 	data = ET.Element('pac', {'xmlns' : 'http://www.cines.fr/pac/sip', 'xmlns:xsi' : 'http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation' : 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'})
 	docdc = ET.SubElement(data, 'DocDC')
-	ET.SubElement(docdc, 'title', {'language' : language}).text = tree.find('.//mods:nonSort', ns).text + tree.find('.//mods:title', ns).text
+	title = tree.find('.//mods:nonSort', ns).text + tree.find('.//mods:title', ns).text
+	ET.SubElement(docdc, 'title', {'language' : language}).text = title
 	ET.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
 	for topic in tree.findall('.//mods:topic', ns) :
 		ET.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
@@ -63,10 +70,21 @@ def main() :
 	else :
 		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
 		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
-	# ToDo
-	# Request by Z3950 protocol
-	# Ask Yanick
-	# ET.SubElement(docdc, 'format', {'language' : language}).text = 
+	url_title = title.lower().encode('utf-8').replace(' ', '%20').replace('é', 'e')
+	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
+	try :
+		tree_marc = ET.parse(urllib.urlopen(url)).getroot()
+		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc))
+		if records_count > 0 :
+			format = tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="a"]', ns_marc).text + ' ' + tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="d"]', ns_marc).text
+		else :
+			format = ''
+			logging.info('No format to add for document : ' + title)
+	except Exception, e :
+		format = ''
+		logging.error('Wrong url / host unknown : ' + url)
+		print 'Wrong url / host unknown : ' + url
+	ET.SubElement(docdc, 'format', {'language' : language}).text = format
 	ET.SubElement(docdc, 'source', {'language' : language}).text = tree.find('.//mods:identifier[@type="callnumber"]', ns).text
 	ET.SubElement(docdc, 'language').text = language
 	for geographic in tree.findall('.//mods:geographic', ns) :
@@ -78,9 +96,6 @@ def main() :
 	ET.SubElement(docmeta, 'identifiantDocProducteur').text = tree.find('.//mods:recordIdentifier', ns).text
 	ET.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
 	ET.SubElement(docmeta, 'serviceVersant').text = serviceVersant
-	# ToDo
-	# Wait for Alexia returns
-	# ET.SubElement(docmeta, 'structureDocument').text = 
 	ET.SubElement(docmeta, 'version').text = version
 	ET.SubElement(docmeta, 'versionPrecedente').text = versionPrecedente
 	for file in tree.findall('.//mets:file', ns) :
@@ -159,6 +174,10 @@ if __name__ == '__main__':
 	# Init logs
 	logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
 	logging.info('Start')
+	# Load conf file
+	logging.info('Load conf file')
+	with open(conf_file) as json_file:
+		conf = json.load(json_file)
 	# Check that the METS file is passed as argument
 	if len(sys.argv) < 2 :
 		logging.error('Arguments error')
