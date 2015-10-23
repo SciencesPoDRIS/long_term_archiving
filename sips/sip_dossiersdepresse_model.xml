@@ -35,7 +35,6 @@
 		<identifiantDocProducteur>LOT001</identifiantDocProducteur>
 		<!-- Constante (cf. INSEE) -->
 		<serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
-		<structureDocument></structureDocument>
 		<!-- Constante -->
 		<version>1</version>
 		<!-- Constante -->
