@@ -17,3 +17,8 @@ data
 # Images folder
 #
 image
+
+#
+# Conf file
+#
+conf/conf.json
