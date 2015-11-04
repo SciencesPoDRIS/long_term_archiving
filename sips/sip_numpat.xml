@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf8'?>
+<?xml version='1.0' encoding='UTF-8'?>
     <pac xmlns="http://www.cines.fr/pac/sip" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
         <DocDC>
             <title language="fra">Les conditions démographiques de la nationalité aux Etats-Unis</title>
@@ -19,7 +19,7 @@
             <identifiantDocProducteur>sc_0000267825_00000000926980</identifiantDocProducteur>
             <noteDocument language="fra">don (reliquat A.M. Dethomas)</noteDocument>
             <serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
-            <planClassement>Numérisation patrimoniale</planClassement>
+            <planClassement language="fra">Numérisation patrimoniale</planClassement>
             <version>1</version>
             <versionPrecedente>0</versionPrecedente>
         </DocMeta>
