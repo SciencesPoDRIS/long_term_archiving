@@ -34,7 +34,6 @@ ns_marc = {
 # Constantes
 language = 'fra'
 description = 'Non renseigné'
-publisher = 's.n.'
 type = {
 	'book' : 'Monographie'
 }
@@ -64,7 +63,7 @@ def main() :
 	for topic in tree.findall('.//mods:topic', ns) :
 		ET.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
 	ET.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
-	ET.SubElement(docdc, 'publisher').text = publisher.decode('utf8')
+	ET.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
 	ET.SubElement(docdc, 'date').text = tree.find('.//mods:dateIssued', ns).text
 	if tree.find('.//mods:genre[@authority="marcgt"]', ns).text in type.keys() :
 		ET.SubElement(docdc, 'type', {'language' : language}).text = type[tree.find('.//mods:genre[@authority="marcgt"]', ns).text]
