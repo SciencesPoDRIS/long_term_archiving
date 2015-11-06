@@ -13,10 +13,8 @@ import xml.etree.ElementTree as ET
 #
 folder_separator = '/'
 log_folder = 'log'
-log_file = log_folder + folder_separator + 'sip_numpat.log'
 log_level = logging.DEBUG
 sip_folder = 'sips'
-sip_file = sip_folder + folder_separator + 'sip_numpat.xml'
 image_folder = 'images'
 conf_folder = 'conf'
 conf_file = conf_folder + folder_separator + 'conf.json'
@@ -171,9 +169,6 @@ if __name__ == '__main__':
 		os.makedirs(image_folder)
 	# Clear image folder content
 	clearFolder(image_folder)
-	# Init logs
-	logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
-	logging.info('Start')
 	# Load conf file
 	logging.info('Load conf file')
 	with open(conf_file) as json_file:
@@ -184,5 +179,11 @@ if __name__ == '__main__':
 		print 'Arguments error'
 		print 'Correct usage : ' + sys.argv[0] + ' "path/to/METS.xml"'
 	else :
+		# Create batch folder, log file and sip file
 		batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
+		log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
+		sip_file = sip_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.xml')
+		# Init logs
+		logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
+		logging.info('Start')
 		main()
