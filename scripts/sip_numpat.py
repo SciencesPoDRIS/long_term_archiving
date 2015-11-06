@@ -18,7 +18,6 @@ log_level = logging.DEBUG
 sip_folder = 'sips'
 sip_file = sip_folder + folder_separator + 'sip_numpat.xml'
 image_folder = 'images'
-batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
 conf_folder = 'conf'
 conf_file = conf_folder + folder_separator + 'conf.json'
 # Namespaces
@@ -185,4 +184,5 @@ if __name__ == '__main__':
 		print 'Arguments error'
 		print 'Correct usage : ' + sys.argv[0] + ' "path/to/METS.xml"'
 	else :
+		batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
 		main()
