@@ -1,7 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 Ce document rassemble les informations qui sont à consigner lors de la mise en oeuvre d'un projet d'archives au CINES 
 -->
-<?xml version='1.0' encoding='UTF-8'?>
     <ppdi xmlns="http://www.cines.fr/pac/test/ppdi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cines.fr/pac/test/ppdi http://www.cines.fr/pac/test/ppdi.xsd">
         <Titre>
             Informations de pérennisation du projet d'archives de la Fondation Nationale des Sciences Politiques
@@ -10,102 +10,53 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
             <Fonds>
                 <intitule>Numérisation Patrimoniale</intitule>
                 <contenu>Documents textuels, iconographiques, cartographiques, photographiques, images tramées pour la bibliothèque de Sciences Po.</contenu>
-                <langue>fra</langue>
+                <langue>français</langue>
                 <structure>Numérisation Patrimoniale</structure>
                 <quantite>Entre 250 et 1950 documents, soit entre 340 et 3500 Go</quantite>
                 <sortFinal>Conservation définitive</sortFinal>
                 <original>Mélanges, brochures, mémoires de l'École Libre en Sciences Politiques, Barodet, livres de la Réserve, monographies et périodiques, conservés par la bibliothèque de Sciences Po</original>
-                <communauteCible>Chercheurs et Professeurs, Etudiants et Doctorants, Public universitaire intéressé par les sciences sociales</communauteCible>
+                <communauteCible>Chercheurs et Professeurs</communauteCible>
+                <communauteCible>Etudiants et Doctorants</communauteCible>
+                <communauteCible>Public universitaire intéressé par les sciences sociales</communauteCible>
             </Fonds>
-            <Producteur>
-                <nomProd>Fondation Nationale des Sciences Politiques</nomProd>
-                <datesProd>1945-10-09</datesProd>
-                <historiqueProd>Fondation de droit privé, investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris</historiqueProd>
-            </Producteur>
-            <ServiceVersant>
-                <nomSV>Fondation Nationale des Sciences Politiques</nomSV>
-                <datesSV>1945-10-09</datesSV>
-                <historiqueSV>Fondation de droit privé, investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris</historiqueSV>
-                <relationSvProd>Le service versant est le producteur</relationSvProd>
-            </ServiceVersant>
-            <CircuitProduction>
-                <productionCollecte>Collecte en interne et sous-traitance de la numérisation par le prestataire Numen</productionCollecte>
-                <numerisation>Très haute définition et format compressé, couleurs, résolution de 600, 300 et 150 dpi</numerisation>
-            </CircuitProduction>
-            <Archivage>
-                <cadre>Archivage patrimonial</cadre>
-                <dateArchivage>2015-11-01</dateArchivage>
-                <classeService>Conservation long terme</classeService>
-                <infoPreserv>Résolution des images, contenu structuré conforme à l’original : l'enchaînement logique des pages, intégralité des métadonnées</infoPreserv>
-                <acces>Pas de diffusion à un large public, accès réservé aux membres du service versant et aux personnes désignées par lui</acces>
-                <reproduction>Aucune reproduction autorisée</reproduction>
-            </Archivage>
-        </Contexte>
-        <Contexte>
             <Fonds>
                 <intitule>Archives Electorales</intitule>
                 <contenu>Sources primaires collectées par les chercheurs du CEVIPOF qui couvre notamment les élections présidentielles de 1965 à 2002 et les élections législatives de 1958 à 2002. Il comprend plus de 25 000 documents, de nature très diverse, affiches, banderoles, discours et programmes électoraux, tracts...</contenu>
-                <langue>fra</langue>
+                <langue>français</langue>
                 <structure>Archives Electorales</structure>
                 <quantite>Entre 20.000 et 150.000 documents, soit entre 175 et 1.200 Go</quantite>
                 <sortFinal>Conservation définitive</sortFinal>
                 <original>Affiches, banderoles, discours et programmes électoraux, tracts, conservés par le Centre de recherche Cevipof de Sciences Po</original>
-                <communauteCible>Chercheurs et Professeurs, Etudiants et Doctorants, Public universitaire intéressé par les sciences sociales</communauteCible>
+                <communauteCible>Chercheurs et Professeurs</communauteCible>
+                <communauteCible>Etudiants et Doctorants</communauteCible>
+                <communauteCible>Public universitaire intéressé par les sciences sociales</communauteCible>
             </Fonds>
-            <Producteur>
-                <nomProd>Fondation Nationale des Sciences Politiques</nomProd>
-                <datesProd>1945-10-09</datesProd>
-                <historiqueProd>Fondation de droit privé, investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris</historiqueProd>
-            </Producteur>
-            <ServiceVersant>
-                <nomSV>Fondation Nationale des Sciences Politiques</nomSV>
-                <datesSV>1945-10-09</datesSV>
-                <historiqueSV>Fondation de droit privé, investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris</historiqueSV>
-                <relationSvProd>Le service versant est le producteur</relationSvProd>
-            </ServiceVersant>
-            <CircuitProduction>
-                <productionCollecte>Collecte en interne et sous-traitance de la numérisation par le prestataire Azentis</productionCollecte>
-                <numerisation>Très haute définition et format compressé, couleurs, résolution de 600, 300 et 150 dpi</numerisation>
-            </CircuitProduction>
-            <Archivage>
-                <cadre>Archivage patrimonial</cadre>
-                <dateArchivage>2015-11-01</dateArchivage>
-                <classeService>Conservation long terme</classeService>
-                <infoPreserv>Résolution des images, contenu structuré conforme à l’original : l'enchaînement logique des pages, intégralité des métadonnées</infoPreserv>
-                <acces>Pas de diffusion à un large public, accès réservé aux membres du service versant et aux personnes désignées par lui</acces>
-                <reproduction>Aucune reproduction autorisée</reproduction>
-            </Archivage>
-        </Contexte>
-        <Contexte>
             <Fonds>
                 <intitule>Dossiers de Presse</intitule>
                 <contenu>Dossiers sur l’actualité nationale et internationale de 1945 à 2005.</contenu>
-                <langue>fra</langue>
+                <langue>français</langue>
                 <structure>Dossiers de Presse</structure>
                 <quantite>Environ 856.311 documents, soit entre 4.000 et 6.000 Go</quantite>
                 <sortFinal>Conservation définitive</sortFinal>
                 <original>Coupures de presse, conservés par la bibliothèque de Sciences Po</original>
-                <communauteCible>Chercheurs et Professeurs, Etudiants et Doctorants, Public universitaire intéressé par les sciences sociales</communauteCible>
+                <communauteCible>Chercheurs et Professeurs</communauteCible>
+                <communauteCible>Etudiants et Doctorants</communauteCible>
+                <communauteCible>Public universitaire intéressé par les sciences sociales</communauteCible>
             </Fonds>
-            <Producteur>
-                <nomProd>Fondation Nationale des Sciences Politiques</nomProd>
-                <datesProd>1945-10-09</datesProd>
-                <historiqueProd>Fondation de droit privé, investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris</historiqueProd>
-            </Producteur>
             <ServiceVersant>
                 <nomSV>Fondation Nationale des Sciences Politiques</nomSV>
                 <datesSV>1945-10-09</datesSV>
-                <historiqueSV>Fondation de droit privé, investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris</historiqueSV>
+                <historiqueSV>Fondation de droit privé reconnue d’utilité publique, a hérité du patrimoine de l'École libre des sciences politiques et est investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris. La FNSP est un acteur majeur de la recherche en sciences sociales. D'elle dépendent neuf centres de recherche regroupant plus de cent soixante-quinze enseignants-chercheurs, cinq centres étant associés au Centre national de la recherche scientifique en tant qu'unité mixte de recherche (UMR) ou unité mixte de service (UMS).</historiqueSV>
                 <relationSvProd>Le service versant est le producteur</relationSvProd>
             </ServiceVersant>
             <CircuitProduction>
-                <productionCollecte>Collecte en interne et sous-traitance de la numérisation par le prestataire Azentis</productionCollecte>
+                <productionCollecte>Pour les fonds Numérisation Patrimoniale, Archives Electorales et Dossiers de Presse, collecte en interne et sous-traitance de la numérisation par le prestataire Numen</productionCollecte>
                 <numerisation>Très haute définition et format compressé, couleurs, résolution de 600, 300 et 150 dpi</numerisation>
             </CircuitProduction>
             <Archivage>
-                <cadre>Archivage patrimonial</cadre>
+                <cadre>Tiers archivage</cadre>
                 <dateArchivage>2015-11-01</dateArchivage>
-                <classeService>Conservation long terme</classeService>
+                <classeService>Conservation sur le long terme</classeService>
                 <infoPreserv>Résolution des images, contenu structuré conforme à l’original : l'enchaînement logique des pages, intégralité des métadonnées</infoPreserv>
                 <acces>Pas de diffusion à un large public, accès réservé aux membres du service versant et aux personnes désignées par lui</acces>
                 <reproduction>Aucune reproduction autorisée</reproduction>
@@ -113,13 +64,13 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
         </Contexte>
         <Caracteristiques>
             <Documents>
-                <structureDocuments>Pour NumPat, un AIP est un regroupement de lots par cote-lettres envoyés au prestataire pour la numérisation</structureDocuments>
+                <structureDocuments>Pour Numérisation Patrimoniale, un AIP est un regroupement de lots par cote-lettres envoyés au prestataire pour la numérisation, donc 1 AIP = une monographie en un ou plusieurs volumes.</structureDocuments>
             </Documents>
             <Documents>
-                <structureDocuments>Pour ArchElec, un AIP est un regroupement de boites par type d'élection envoyées au prestataire pour la numérisation</structureDocuments>
+                <structureDocuments>Pour ArchElec, un AIP est un regroupement de boites par type d'élection envoyées au prestataire pour la numérisation, donc 1 AIP = un département par élection.</structureDocuments>
             </Documents>
             <Documents>
-                <structureDocuments>Pour les Dossiers de Presse, un AIP est un regroupement de dossiers</structureDocuments>
+                <structureDocuments>Pour les Dossiers de Presse, un AIP est un regroupement de dossiers, donc 1 AIP = un dossier de presse en 1 ou plusieurs tomes.</structureDocuments>
             </Documents>
             <SipDescription>
                 <DocDCDescription>
@@ -128,47 +79,47 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
                     <subject>Mots-clés du document</subject>
                     <description>Non renseigné</description>
                     <publisher>Lieu d'édition</publisher>
-                    <contributor></contributor>
+                    <contributor>Métadonnée non utilisée</contributor>
                     <date>Date d'édition</date>
                     <type>Type de document</type>
                     <format>Format de document</format>
                     <source>Cote interne du document</source>
                     <language>fra</language>
-                    <relation></relation>
+                    <relation>Métadonnée non utilisée</relation>
                     <coverage>Couverture géographique et temporelle du document</coverage>
                     <rights>Statut juridique du document</rights>
                 </DocDCDescription>
                 <DocMetaDescription>
                     <identifiantDocProducteur>"sc" + numéro de séquence + code barre</identifiantDocProducteur>
                     <docRelation>
-                        <typeRelation></typeRelation>
-                        <sourceRelation></sourceRelation>
-                        <identifiantSourceRelation></identifiantSourceRelation>
+                        <typeRelation>Métadonnée non utilisée</typeRelation>
+                        <sourceRelation>Métadonnée non utilisée</sourceRelation>
+                        <identifiantSourceRelation>Métadonnée non utilisée</identifiantSourceRelation>
                     </docRelation>
                     <evaluation>
-                        <DUA></DUA>
-                        <traitement></traitement>
-                        <dateDebut></dateDebut>
+                        <DUA>Métadonnée non utilisée</DUA>
+                        <traitement>Métadonnée non utilisée</traitement>
+                        <dateDebut>Métadonnée non utilisée</dateDebut>
                     </evaluation>
                     <communicabilite>
-                        <code/>
-                        <dateDebut></dateDebut>
+                        <code>Métadonnée non utilisée</code>
+                        <dateDebut>Métadonnée non utilisée</dateDebut>
                     </communicabilite>
                     <noteDocument>Champs libre portant des informations sur le document</noteDocument>
                     <serviceVersant>Nom de l'organisme versant</serviceVersant>
                     <planClassement>Nom du projet</planClassement>
-                    <structureDocument></structureDocument>
+                    <structureDocument>Métadonnée non utilisée</structureDocument>
                     <version>Numéro de version courante du document</version>
                     <versionPrecedente>Numéro de version précédente du document</versionPrecedente>
                 </DocMetaDescription>
                 <FichMetaDescription>
-                    <compression></compression>
-                    <encodage></encodage>
+                    <compression>Métadonnée non utilisée</compression>
+                    <encodage>Métadonnée non utilisée</encodage>
                     <formatFichier>Format sortant de fichier</formatFichier>
                     <nomFichier>Nom du fichier</nomFichier>
                     <empreinteOri>Empreinte numérique du fichier</empreinteOri>
-                    <noteFichier></noteFichier>
-                    <structureFichier></structureFichier>
+                    <noteFichier>Métadonnée non utilisée</noteFichier>
+                    <structureFichier>Métadonnée non utilisée</structureFichier>
                 </FichMetaDescription>
             </SipDescription>
         </Caracteristiques>
