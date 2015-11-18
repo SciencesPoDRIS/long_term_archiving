@@ -40,10 +40,6 @@
             <serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
             <!-- "Archives électorales" / Type d'élection / Année / Mois / Département -->
             <planClassement language="fra">Archives électorales/L/1973/03</planClassement>
-            <!-- Constante -->
-            <version>1</version>
-            <!-- Constante -->
-            <versionPrecedente>0</versionPrecedente>
         </DocMeta>
         <FichMeta>
             <!-- En fonction de l'extension du fichier -->

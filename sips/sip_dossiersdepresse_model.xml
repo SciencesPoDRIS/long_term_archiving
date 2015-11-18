@@ -37,10 +37,6 @@
             <!-- Constante (cf. INSEE) -->
             <serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
             <planClassement language="fra">Dossiers de presse</planClassement>
-            <!-- Constante -->
-            <version>1</version>
-            <!-- Constante -->
-            <versionPrecedente>0</versionPrecedente>
         </DocMeta>
         <FichMeta>
             <!-- En fonction de l'extension du fichier -->
