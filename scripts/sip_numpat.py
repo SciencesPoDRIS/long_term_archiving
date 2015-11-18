@@ -37,8 +37,6 @@ type = {
 rights = 'Libre de droits'
 serviceVersant = 'Fondation Nationale des Sciences Politiques'
 planClassement = 'Numérisation patrimoniale'
-version = '1'
-versionPrecedente = '0'
 mimetype = {
 	'image/jp2' : 'JPEG2000',
 	'image/xml' : 'XML',
@@ -94,8 +92,6 @@ def main() :
 	ET.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
 	ET.SubElement(docmeta, 'serviceVersant').text = serviceVersant
 	ET.SubElement(docmeta, 'planClassement', {'language' : language}).text = planClassement.decode('utf8')
-	ET.SubElement(docmeta, 'version').text = version
-	ET.SubElement(docmeta, 'versionPrecedente').text = versionPrecedente
 	for file in tree.findall('.//mets:file', ns) :
 		fichmeta = ET.SubElement(data, 'FichMeta')
 		if file.get('MIMETYPE') in mimetype :
@@ -151,7 +147,7 @@ def md5(fname) :
 	return hash.hexdigest()
 
 def writeSipFile(data) :
-	# Write result into file
+	# Write results into file
 	logging.info('Write results in file')
 	tree = ET.ElementTree(data)
 	tree.write(sip_file, encoding='UTF-8')
