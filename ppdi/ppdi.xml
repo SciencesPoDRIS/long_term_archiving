@@ -33,7 +33,7 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
             </Fonds>
             <Fonds>
                 <intitule>Dossiers de Presse</intitule>
-                <contenu>Dossiers sur l’actualité nationale et internationale de 1945 à 2005.</contenu>
+                <contenu>Dossiers sur l’actualité nationale et internationale de 1945 à 2005. Regroupement archivistique d'articles relatifs aux situations et vies politiques, classés par pays.</contenu>
                 <langue>français</langue>
                 <structure>Dossiers de Presse</structure>
                 <quantite>Environ 856.311 documents, soit entre 4.000 et 6.000 Go</quantite>
@@ -44,7 +44,7 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
                 <communauteCible>Public universitaire intéressé par les sciences sociales</communauteCible>
             </Fonds>
             <ServiceVersant>
-                <nomSV>Fondation Nationale des Sciences Politiques</nomSV>
+                <nomSV>Fondation Nationale des Sciences Politiques - 784.308.249.000.19</nomSV>
                 <datesSV>1945-10-09</datesSV>
                 <historiqueSV>Fondation de droit privé reconnue d’utilité publique, a hérité du patrimoine de l'École libre des sciences politiques et est investie de la gestion administrative et financière de l'Institut d'Etudes Politiques (IEP) de Paris. La FNSP est un acteur majeur de la recherche en sciences sociales. D'elle dépendent neuf centres de recherche regroupant plus de cent soixante-quinze enseignants-chercheurs, cinq centres étant associés au Centre national de la recherche scientifique en tant qu'unité mixte de recherche (UMR) ou unité mixte de service (UMS).</historiqueSV>
                 <relationSvProd>Le service versant est le producteur</relationSvProd>
@@ -64,10 +64,10 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
         </Contexte>
         <Caracteristiques>
             <Documents>
-                <structureDocuments>Pour Numérisation Patrimoniale, un AIP est un regroupement de lots par cote-lettres envoyés au prestataire pour la numérisation, donc 1 AIP = une monographie en un ou plusieurs volumes.</structureDocuments>
+                <structureDocuments>Pour NumPat, un AIP est un regroupement de lots par cote-lettres envoyés au prestataire pour la numérisation, donc 1 AIP = plusieurs monographies en plusieurs volumes.</structureDocuments>
             </Documents>
             <Documents>
-                <structureDocuments>Pour ArchElec, un AIP est un regroupement de boites par type d'élection envoyées au prestataire pour la numérisation, donc 1 AIP = un département par élection.</structureDocuments>
+                <structureDocuments>Pour ArchElec, un AIP est un regroupement de boites par type d'élection envoyées au prestataire pour la numérisation, donc 1 AIP = plusieurs départements par année d'élection.</structureDocuments>
             </Documents>
             <Documents>
                 <structureDocuments>Pour les Dossiers de Presse, un AIP est un regroupement de dossiers, donc 1 AIP = un dossier de presse en 1 ou plusieurs tomes.</structureDocuments>
