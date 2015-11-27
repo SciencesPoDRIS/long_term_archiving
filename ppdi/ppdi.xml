@@ -64,33 +64,33 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
         </Contexte>
         <Caracteristiques>
             <Documents>
-                <structureDocuments>Pour NumPat, un AIP est un regroupement de lots par cote-lettres envoyés au prestataire pour la numérisation, donc 1 AIP = plusieurs monographies en plusieurs volumes.</structureDocuments>
+                <structureDocuments>Pour NumPat, un AIP est une monographie en un ou plusieurs volumes qui a comme idenfiant une cote-lettres envoyés au prestataire pour la numérisation, donc 1 AIP = une monographie en un ou plusieurs volumes.</structureDocuments>
             </Documents>
             <Documents>
-                <structureDocuments>Pour ArchElec, un AIP est un regroupement de boites par type d'élection envoyées au prestataire pour la numérisation, donc 1 AIP = plusieurs départements par année d'élection.</structureDocuments>
+                <structureDocuments>Pour ArchElec, un AIP contient les archives d'un département par type d'élection envoyées au prestataire pour la numérisation, donc 1 AIP = un département par année et par type d'élection.</structureDocuments>
             </Documents>
             <Documents>
                 <structureDocuments>Pour les Dossiers de Presse, un AIP est un regroupement de dossiers, donc 1 AIP = un dossier de presse en 1 ou plusieurs tomes.</structureDocuments>
             </Documents>
             <SipDescription>
                 <DocDCDescription>
-                    <title>Titre du document</title>
-                    <creator>Auteur du document</creator>
-                    <subject>Mots-clés du document</subject>
+                    <title>Pour le fonds Numérisation Patrimoniale, titre du document. Pour le fonds Archives Electorales, contexte de l'élection. Pour le fonds Dossiers de Presse, titre de la boite.</title>
+                    <creator>Pour le fonds Numérisation Patrimoniale, auteur du document. Pour le fonds Archives Electorales, "Fondation Nationale des Sciences Politiques". Pour le fonds Dossiers de Presse, "Fondation Nationale des Sciences Politiques".</creator>
+                    <subject>Pour le fonds Numérisation Patrimoniale, mots-clés du document. Pour le fonds Archives Electorales, mots-clés du document. Pour le fonds Dossiers de Presse, mots-clés du document</subject>
                     <description>Non renseigné</description>
-                    <publisher>Lieu d'édition</publisher>
+                    <publisher>Pour le fonds Numérisation Patrimoniale, lieu d'édition. Pour le fonds Archives Electorales, "SciencesPo CEVIPOF". Pour le fonds Dossiers de Presse, "SciencesPo Bibliothèque".</publisher>
                     <contributor>Métadonnée non utilisée</contributor>
-                    <date>Date d'édition</date>
-                    <type>Type de document</type>
-                    <format>Format de document</format>
-                    <source>Cote interne du document</source>
+                    <date>Pour le fonds Numérisation Patrimoniale, date d'édition. Pour le fonds Archives Electorales, date d'élection. Pour le fonds Dossiers de Presse, date de publication des articles.</date>
+                    <type>Pour le fonds Numérisation Patrimoniale, type de document. Pour le fonds Archives Electorales, type de document. Pour le fonds Dossiers de Presse, type de document.</type>
+                    <format>Pour le fonds Numérisation Patrimoniale, format de document. Pour le fonds Archives Electorales, format de document. Pour le fonds Dossiers de Presse, format de document.</format>
+                    <source>Pour le fonds Numérisation Patrimoniale, cote interne du document. Pour le fonds Archives Electorales, cote interne du document. Pour le fonds Dossiers de Presse, cote interne du document.</source>
                     <language>fra</language>
                     <relation>Métadonnée non utilisée</relation>
-                    <coverage>Couverture géographique et temporelle du document</coverage>
-                    <rights>Statut juridique du document</rights>
+                    <coverage>Pour le fonds Numérisation Patrimoniale, couverture géographique et temporelle du document. Pour le fonds Archives Electorales, lieu d'élection. Pour le fonds Dossiers de Presse, couverture géographique et temporelle du document.</coverage>
+                    <rights>Pour le fonds Numérisation Patrimoniale, statut juridique du document. Pour le fonds Archives Electorales, statut juridique du document. Pour le fonds Dossiers de Presse, statut juridique du document.</rights>
                 </DocDCDescription>
                 <DocMetaDescription>
-                    <identifiantDocProducteur>"sc" + numéro de séquence + code barre</identifiantDocProducteur>
+                    <identifiantDocProducteur>Pour le fonds Numérisation Patrimoniale, "sc" + numéro de séquence + code barre. Pour le fonds Archives Electorales, numéro de la boite + type d'élection + année + mois + département + circonscription + tour + type de document. Pour le fonds Dossiers de Presse, numéro de boite.</identifiantDocProducteur>
                     <docRelation>
                         <typeRelation>Métadonnée non utilisée</typeRelation>
                         <sourceRelation>Métadonnée non utilisée</sourceRelation>
@@ -105,19 +105,19 @@ Ce document rassemble les informations qui sont à consigner lors de la mise en 
                         <code>Métadonnée non utilisée</code>
                         <dateDebut>Métadonnée non utilisée</dateDebut>
                     </communicabilite>
-                    <noteDocument>Champs libre portant des informations sur le document</noteDocument>
-                    <serviceVersant>Nom de l'organisme versant</serviceVersant>
-                    <planClassement>Nom du projet</planClassement>
+                    <noteDocument>Pour le fonds Numérisation Patrimoniale, champs libre portant des informations sur le document. Pour le fonds Archives Electorales, champs libre portant des informations sur le document. Pour le fonds Dossiers de Presse, champs libre portant des informations sur le document.</noteDocument>
+                    <serviceVersant>Pour le fonds Numérisation Patrimoniale, "Fondation Nationale des Sciences Politiques". Pour le fonds Archives Electorales, "Fondation Nationale des Sciences Politiques". Pour le fonds Dossiers de Presse, "Fondation Nationale des Sciences Politiques".</serviceVersant>
+                    <planClassement>Pour le fonds Numérisation Patrimoniale, "Numérisation Patrimoniale". Pour le fonds Archives Electorales, "Archives électorales" + type d'élection + année + mois + département. Pour le fonds Dossiers de Presse, "Dossiers de presse"</planClassement>
                     <structureDocument>Métadonnée non utilisée</structureDocument>
-                    <version>Numéro de version courante du document</version>
-                    <versionPrecedente>Numéro de version précédente du document</versionPrecedente>
+                    <version>Métadonnée non utilisée</version>
+                    <versionPrecedente>Métadonnée non utilisée</versionPrecedente>
                 </DocMetaDescription>
                 <FichMetaDescription>
                     <compression>Métadonnée non utilisée</compression>
                     <encodage>Métadonnée non utilisée</encodage>
-                    <formatFichier>Format sortant de fichier</formatFichier>
-                    <nomFichier>Nom du fichier</nomFichier>
-                    <empreinteOri>Empreinte numérique du fichier</empreinteOri>
+                    <formatFichier>Pour le fonds Numérisation Patrimoniale, "JPEG2000". Pour le fonds Archives Electorales, "JPEG2000". Pour le fonds Dossiers de Presse, "PDF".</formatFichier>
+                    <nomFichier>Pour le fonds Numérisation Patrimoniale, "sc" + numéro de séquence + code barre + usage + numéro séquentiel + latéralisation + extension. Pour le fonds Archives Electorales, "Archives électorales" + type d'élection + année + mois + département + nombre de documents + numéro séquentiel + usage + extension. Pour le fonds Dossiers de Presse, usage + couverture géographique + cote Dewey + numéro séquentiel + extension.</nomFichier>
+                    <empreinteOri>Pour le fonds Numérisation Patrimoniale, empreinte numérique du fichier. Pour le fonds Archives Electorales, empreinte numérique du fichier. Pour le fonds Dossiers de Presse, empreinte numérique du fichier.</empreinteOri>
                     <noteFichier>Métadonnée non utilisée</noteFichier>
                     <structureFichier>Métadonnée non utilisée</structureFichier>
                 </FichMetaDescription>
