@@ -29,7 +29,7 @@
         <FichMeta>
             <!-- En fonction de l'extension du fichier -->
             <formatFichier>JPEG2000</formatFichier>
-            <nomFichier>sc_0000267825_00000000926980_color_000002_R.jp2</nomFichier>
+            <nomFichier>master/sc_0000267825_00000000926980_color_000002_R.jp2</nomFichier>
             <empreinteOri type="MD5">3a52a9da9df0a62628bbc9f160299995</empreinteOri>
         </FichMeta>
     </pac>
