@@ -6,7 +6,7 @@
 # Libs
 #
 import codecs, hashlib, json, logging, os, sys, urllib, urllib2
-import xml.etree.ElementTree as ET
+from lxml import etree
 
 #
 # Config
@@ -20,6 +20,12 @@ image_folder = 'images'
 conf_folder = 'conf'
 conf_file = conf_folder + folder_separator + 'conf.json'
 # Namespaces
+xsi = 'http://www.w3.org/2001/XMLSchema-instance'
+xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'
+nsmap = {
+	None : 'http://www.cines.fr/pac/sip',
+	'xsi' : xsi
+}
 ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
 	'mets' : 'http://www.loc.gov/METS/',
@@ -50,26 +56,26 @@ mimetype = {
 def main() :
 	data = ''
 	# Load METS file
-	tree = ET.parse(sys.argv[1]).getroot()
-	data = ET.Element('pac', {'xmlns' : 'http://www.cines.fr/pac/sip', 'xmlns:xsi' : 'http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation' : 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'})
-	docdc = ET.SubElement(data, 'DocDC')
+	tree = etree.parse(sys.argv[1]).getroot()
+	data = etree.Element('pac', nsmap = nsmap, attrib = {'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	docdc = etree.SubElement(data, 'DocDC')
 	title = tree.find('.//mods:nonSort', ns).text + tree.find('.//mods:title', ns).text
-	ET.SubElement(docdc, 'title', {'language' : language}).text = title
-	ET.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
+	etree.SubElement(docdc, 'title', {'language' : language}).text = title
+	etree.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
 	for topic in tree.findall('.//mods:topic', ns) :
-		ET.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
-	ET.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
-	ET.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
-	ET.SubElement(docdc, 'date').text = tree.find('.//mods:dateIssued', ns).text
+		etree.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
+	etree.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
+	etree.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
+	etree.SubElement(docdc, 'date').text = tree.find('.//mods:dateIssued', ns).text
 	if tree.find('.//mods:genre[@authority="marcgt"]', ns).text in type.keys() :
-		ET.SubElement(docdc, 'type', {'language' : language}).text = type[tree.find('.//mods:genre[@authority="marcgt"]', ns).text]
+		etree.SubElement(docdc, 'type', {'language' : language}).text = type[tree.find('.//mods:genre[@authority="marcgt"]', ns).text]
 	else :
 		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
 		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
 	url_title = title.lower().encode('utf-8').replace(' ', '%20').replace('é', 'e')
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	try :
-		tree_marc = ET.parse(urllib.urlopen(url)).getroot()
+		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
 		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc))
 		if records_count > 0 :
 			format = tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="a"]', ns_marc).text + ' ' + tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="d"]', ns_marc).text
@@ -80,41 +86,41 @@ def main() :
 		format = ''
 		logging.error('Wrong url / host unknown : ' + url)
 		print 'Wrong url / host unknown : ' + url
-	ET.SubElement(docdc, 'format', {'language' : language}).text = format
-	ET.SubElement(docdc, 'source', {'language' : language}).text = tree.find('.//mods:identifier[@type="callnumber"]', ns).text
-	ET.SubElement(docdc, 'language').text = language
+	etree.SubElement(docdc, 'format', {'language' : language}).text = format
+	etree.SubElement(docdc, 'source', {'language' : language}).text = tree.find('.//mods:identifier[@type="callnumber"]', ns).text
+	etree.SubElement(docdc, 'language').text = language
 	for geographic in tree.findall('.//mods:geographic', ns) :
-		ET.SubElement(docdc, 'coverage', {'language' : language}).text = geographic.text
+		etree.SubElement(docdc, 'coverage', {'language' : language}).text = geographic.text
 	for temporal in tree.findall('.//mods:temporal', ns) :
-		ET.SubElement(docdc, 'coverage', {'language' : language}).text = temporal.text
-	ET.SubElement(docdc, 'rights', {'language' : language}).text = rights
-	docmeta = ET.SubElement(data, 'DocMeta')
-	ET.SubElement(docmeta, 'identifiantDocProducteur').text = tree.find('.//mods:recordIdentifier', ns).text
+		etree.SubElement(docdc, 'coverage', {'language' : language}).text = temporal.text
+	etree.SubElement(docdc, 'rights', {'language' : language}).text = rights
+	docmeta = etree.SubElement(data, 'DocMeta')
+	etree.SubElement(docmeta, 'identifiantDocProducteur').text = tree.find('.//mods:recordIdentifier', ns).text
 	if tree.find('.//mods:note[@type="cataloging"]', ns) in type.keys() :
-		ET.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
-	ET.SubElement(docmeta, 'serviceVersant').text = serviceVersant
-	ET.SubElement(docmeta, 'planClassement', {'language' : language}).text = planClassement.decode('utf8')
+		etree.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
+	etree.SubElement(docmeta, 'serviceVersant').text = serviceVersant
+	etree.SubElement(docmeta, 'planClassement', {'language' : language}).text = planClassement.decode('utf8')
 	for file in tree.findall('.//mets:file', ns) :
 		# List only the not compressed files, ie. those in "master" or "ocr" folder
 		if 'file://master/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') or 'file://ocr/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') :
-			fichmeta = ET.SubElement(data, 'FichMeta')
+			fichmeta = etree.SubElement(data, 'FichMeta')
 			if file.get('MIMETYPE') in mimetype :
-				ET.SubElement(fichmeta, 'formatFichier').text = mimetype[file.get('MIMETYPE')]
+				etree.SubElement(fichmeta, 'formatFichier').text = mimetype[file.get('MIMETYPE')]
 			else :
 				logging.error('Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.')
 				print 'Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.'
-			ET.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/')
+			etree.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/')
 			# If checksum doesn't exist (for .jpg file by example), download file and calculate the MD5 checksum
 			if file.get('CHECKSUM') is None :
 				image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder)
 				image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://view/', image_folder + folder_separator)
 				# Download this image into the image folder
 				if downloadImage(image_url, image_path) :
-					ET.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
+					etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
 				else :
 					pass
 			else :
-				ET.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
+				etree.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
 	# Clear image folder content
 	clearFolder(image_folder)
 	writeSipFile(data)
@@ -153,8 +159,8 @@ def md5(fname) :
 def writeSipFile(data) :
 	# Write results into file
 	logging.info('Write results in file')
-	tree = ET.ElementTree(data)
-	tree.write(sip_file_path, encoding='UTF-8')
+	tree = etree.ElementTree(data)
+	tree.write(sip_file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
 	logging.info('End')
 
 #
