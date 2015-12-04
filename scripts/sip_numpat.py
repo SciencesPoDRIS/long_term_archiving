@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python sip_numpat.py path/to/METS.xml
+# Execution example : python scripts/sip_numpat.py path/to/METS.xml
 
 #
 # Libs
@@ -15,6 +15,7 @@ folder_separator = '/'
 log_folder = 'log'
 log_level = logging.DEBUG
 sip_folder = 'sips'
+sip_file_name = 'sip.xml'
 image_folder = 'images'
 conf_folder = 'conf'
 conf_file = conf_folder + folder_separator + 'conf.json'
@@ -89,28 +90,31 @@ def main() :
 	ET.SubElement(docdc, 'rights', {'language' : language}).text = rights
 	docmeta = ET.SubElement(data, 'DocMeta')
 	ET.SubElement(docmeta, 'identifiantDocProducteur').text = tree.find('.//mods:recordIdentifier', ns).text
-	ET.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
+	if tree.find('.//mods:note[@type="cataloging"]', ns) in type.keys() :
+		ET.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
 	ET.SubElement(docmeta, 'serviceVersant').text = serviceVersant
 	ET.SubElement(docmeta, 'planClassement', {'language' : language}).text = planClassement.decode('utf8')
 	for file in tree.findall('.//mets:file', ns) :
-		fichmeta = ET.SubElement(data, 'FichMeta')
-		if file.get('MIMETYPE') in mimetype :
-			ET.SubElement(fichmeta, 'formatFichier').text = mimetype[file.get('MIMETYPE')]
-		else :
-			logging.error('Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.')
-			print 'Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.'
-		ET.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', '').replace('file://ocr/', '').replace('file://view/', '')
-		# If checksum doesn't exist (for .jpg file by example), download file and calculate the MD5 checksum
-		if file.get('CHECKSUM') is None :
-			image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder)
-			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://view/', image_folder + folder_separator)
-			# Download this image into the image folder
-			if downloadImage(image_url, image_path) :
-				ET.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
+		# List only the not compressed files, ie. those in "master" or "ocr" folder
+		if 'file://master/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') or 'file://ocr/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') :
+			fichmeta = ET.SubElement(data, 'FichMeta')
+			if file.get('MIMETYPE') in mimetype :
+				ET.SubElement(fichmeta, 'formatFichier').text = mimetype[file.get('MIMETYPE')]
 			else :
-				pass
-		else :
-			ET.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
+				logging.error('Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.')
+				print 'Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.'
+			ET.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/')
+			# If checksum doesn't exist (for .jpg file by example), download file and calculate the MD5 checksum
+			if file.get('CHECKSUM') is None :
+				image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder)
+				image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://view/', image_folder + folder_separator)
+				# Download this image into the image folder
+				if downloadImage(image_url, image_path) :
+					ET.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
+				else :
+					pass
+			else :
+				ET.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
 	# Clear image folder content
 	clearFolder(image_folder)
 	writeSipFile(data)
@@ -150,7 +154,7 @@ def writeSipFile(data) :
 	# Write results into file
 	logging.info('Write results in file')
 	tree = ET.ElementTree(data)
-	tree.write(sip_file, encoding='UTF-8')
+	tree.write(sip_file_path, encoding='UTF-8')
 	logging.info('End')
 
 #
@@ -173,12 +177,12 @@ if __name__ == '__main__':
 	if len(sys.argv) < 2 :
 		logging.error('Arguments error')
 		print 'Arguments error'
-		print 'Correct usage : ' + sys.argv[0] + ' "path/to/METS.xml"'
+		print 'Correct usage : scripts/' + sys.argv[0] + ' "path/to/METS.xml"'
 	else :
 		# Create batch folder, log file and sip file
 		batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
 		log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
-		sip_file = sip_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.xml')
+		sip_file_path = sip_folder + folder_separator + sip_file_name
 		# Init logs
 		logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
 		logging.info('Start')
