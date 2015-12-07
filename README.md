@@ -7,7 +7,14 @@ Python version needed : 2.5 or after
 
 ## Install
 
-Rename the file conf/conf.default.json into conf/conf.json and edit it to put your own server url
+Rename the file conf/conf.default.json into conf/conf.json and edit it to put your own SRU/SRW server url
+
+
+## How to use it ?
+
+long_term_preservation can be used with any system compatible with python 2.5 by invoking the command
+
+`python scripts/sip_numpat.py "path/to/folder/to/archive"`
 
 
 ## Credits
