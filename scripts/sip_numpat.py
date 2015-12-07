@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/sip_numpat.py path/to/METS.xml
+# Execution example : python scripts/sip_numpat.py "path/to/folder/to/archive"
 
 #
 # Libs
 #
-import codecs, hashlib, json, logging, os, sys, urllib, urllib2
+import codecs, hashlib, json, logging, os, shutil, sys, urllib, urllib2
 from lxml import etree
 
 #
@@ -53,10 +53,10 @@ mimetype = {
 #
 # Programm
 #
-def main() :
+def generate_sip_from_mets(archive_folder, mets_file) :
 	data = ''
 	# Load METS file
-	tree = etree.parse(sys.argv[1]).getroot()
+	tree = etree.parse(archive_folder + mets_file).getroot()
 	data = etree.Element('pac', nsmap = nsmap, attrib = {'{' + xsi + '}schemaLocation' : xsi_schemalocation})
 	docdc = etree.SubElement(data, 'DocDC')
 	title = tree.find('.//mods:nonSort', ns).text + tree.find('.//mods:title', ns).text
@@ -123,7 +123,8 @@ def main() :
 				etree.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
 	# Clear image folder content
 	clearFolder(image_folder)
-	writeSipFile(data)
+	sip_file_path = archive_folder + folder_separator + sip_file_name
+	writeSipFile(sip_file_path, data)
 
 # Download an image from its image_url if it exists into the image_path
 def downloadImage(image_url, image_path) :
@@ -156,17 +157,57 @@ def md5(fname) :
 			hash.update(chunk)
 	return hash.hexdigest()
 
-def writeSipFile(data) :
+def writeSipFile(sip_file_path, data) :
 	# Write results into file
 	logging.info('Write results in file')
 	tree = etree.ElementTree(data)
 	tree.write(sip_file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
 	logging.info('End')
 
+def create_structure(archive_folder) :
+	# If exists, delete "ill" folder
+	if os.path.exists(archive_folder + 'ill') :
+		shutil.rmtree(archive_folder + 'ill')
+	# If exists, delete "illview" folder
+	if os.path.exists(archive_folder + 'illview') :
+		shutil.rmtree(archive_folder + 'illview')
+	# If exists, delete "view" folder
+	if os.path.exists(archive_folder + 'view') :
+		shutil.rmtree(archive_folder + 'view')
+	# If not exists, create DEPOT folder
+	if not os.path.exists(archive_folder + 'DEPOT') :
+		os.makedirs(archive_folder + 'DEPOT')
+	# If not exists, create DESC folder into DEPOT folder
+	if not os.path.exists(archive_folder + 'DEPOT' + folder_separator + 'DESC') :
+		os.makedirs(archive_folder + 'DEPOT' + folder_separator + 'DESC')
+	for parent, dirnames, filenames in os.walk(archive_folder):
+		for fn in filenames :
+			# If exists, delete .pdf file at the root of the folder
+			# And if exists, recursively delete ".DS_Store" files (for MAC)
+			if fn.lower().endswith('.pdf') or fn.lower() == '.ds_store' :
+				os.remove(os.path.join(parent, fn))
+			# If exists, move METS file into /DEPOT/DESC
+			elif fn.lower().endswith('.xml') :
+				if not 'DEPOT' in parent :
+					mets_file = fn
+					shutil.move(archive_folder + mets_file, archive_folder + 'DEPOT' + folder_separator + 'DESC' + folder_separator + mets_file)
+			# Else move others files into /DEPOT
+			else :
+				if not 'DEPOT' in parent :
+					shutil.move(archive_folder + fn, archive_folder + 'DEPOT' + folder_separator + fn)
+		# Move all folders into /DEPOT, except those "DEPOT" itself
+		for dn in dirnames :
+			if dn != 'DEPOT' and not parent.endswith(folder_separator + 'DEPOT') :
+				shutil.move(archive_folder + dn, archive_folder + 'DEPOT' + folder_separator + dn)
+	# If not exists, create sip.xml from METS file into DEPOT/DESC folder
+	if not os.path.exists(archive_folder + sip_file_name) :
+		generate_sip_from_mets(archive_folder, 'DEPOT' + folder_separator + 'DESC' + folder_separator + mets_file)
+	# TODO : Send it to server through SFTP
+
 #
 # Main
 #
-if __name__ == '__main__':
+if __name__ == '__main__' :
 	# Check that log folder exists, else create it
 	if not os.path.exists(log_folder) :
 		os.makedirs(log_folder)
@@ -177,19 +218,19 @@ if __name__ == '__main__':
 	clearFolder(image_folder)
 	# Load conf file
 	logging.info('Load conf file')
-	with open(conf_file) as json_file:
+	with open(conf_file) as json_file :
 		conf = json.load(json_file)
 	# Check that the METS file is passed as argument
 	if len(sys.argv) < 2 :
 		logging.error('Arguments error')
 		print 'Arguments error'
-		print 'Correct usage : scripts/' + sys.argv[0] + ' "path/to/METS.xml"'
+		print 'Correct usage : scripts/' + sys.argv[0] + ' "path/to/folder/to/archive"'
 	else :
-		# Create batch folder, log file and sip file
-		batch_folder = sys.argv[1].split(folder_separator)[-1].split('.')[0]
+		# Get archive folder path
+		archive_folder = sys.argv[1]
+		# Create log file path
 		log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
-		sip_file_path = sip_folder + folder_separator + sip_file_name
 		# Init logs
 		logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
 		logging.info('Start')
-		main()
+		create_structure(archive_folder)
