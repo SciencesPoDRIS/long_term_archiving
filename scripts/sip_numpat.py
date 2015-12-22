@@ -5,7 +5,7 @@
 #
 # Libs
 #
-import codecs, hashlib, json, logging, os, shutil, sys, urllib, urllib2
+import codecs, hashlib, json, logging, os, paramiko, re, shutil, sys, urllib, urllib2
 from lxml import etree
 
 #
@@ -53,7 +53,72 @@ mimetype = {
 #
 # Programm
 #
+
+# Send archive folder through SFTP
+def sendArchive(archive_path) :
+	# Open connection
+	transport = paramiko.Transport((conf['ftp_server'], int(conf['ftp_port'])))
+	transport.connect(username = conf['ftp_user'], password = conf['ftp_password'])
+	sftp = paramiko.SFTPClient.from_transport(transport)
+	root_folder_path = archive_path.replace('/Users/anne.lhote/Downloads/', conf['ftp_path'])[:-1]
+	sftp.mkdir(root_folder_path, 0770)
+	# Send file through SFTP
+	for dirpath, dirnames, filenames in os.walk(archive_path) :
+		remote_folder_path = os.path.join(conf['ftp_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
+		# Create remote directory
+		for dirname in dirnames :
+			folder_path = os.path.join(dirpath, dirname).replace('/Users/anne.lhote/Downloads/', conf['ftp_path'])
+			sftp.mkdir(folder_path, 0770)
+		for filename in filenames :
+			local_file_path = os.path.join(dirpath, filename)
+			remote_file_path = os.path.join(dirpath, filename).replace('/Users/anne.lhote/Downloads/', conf['ftp_path'])
+			sftp.put(local_file_path, remote_file_path)
+	# Close connection
+	sftp.close()
+	transport.close()
+
+# Download an image from its image_url if it exists into the image_path
+def downloadImage(image_url, image_path) :
+	try :
+		req = urllib2.Request(image_url)
+		response = urllib2.urlopen(req)
+		urllib.urlretrieve(image_url, image_path)
+		return True
+	except Exception, e :
+		logging.error('Image url does\'nt exist : ' + image_url)
+		print 'Image url does\'nt exist : ' + image_url
+		return False
+
+# Calculate the MD5 checksum for the file fname
+def md5(fname) :
+	hash = hashlib.md5()
+	with open(fname, 'rb') as f :
+		for chunk in iter(lambda: f.read(4096), b""):
+			hash.update(chunk)
+	return hash.hexdigest()
+
+# Clear a folder from its content
+def clearFolder(folder_path) :
+	for file in os.listdir(folder_path) :
+		file_path = os.path.join(folder_path, file)
+		try :
+			if os.path.isfile(file_path):
+				os.unlink(file_path)
+		except Exception, e :
+			logging.error('Folder does\'nt exist : ' + folder_path)
+			print 'Folder does\'nt exist : ' + folder_path
+
+# Write SIP results into result file
+def writeSipFile(sip_file_path, data) :
+	logging.info('Write SIP into file')
+	tree = etree.ElementTree(data)
+	tree.write(sip_file_path, encoding = 'UTF-8', pretty_print = True, xml_declaration = True)
+	logging.info('End')
+
+# Generate the SIP file according to a METS file
 def generate_sip_from_mets(archive_folder, mets_file) :
+	batch_folder = archive_folder.split(folder_separator)[-2]
+	logging.info('Generate SIP file from METS file')
 	data = ''
 	# Load METS file
 	tree = etree.parse(archive_folder + mets_file).getroot()
@@ -72,7 +137,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 	else :
 		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
 		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
-	url_title = title.lower().encode('utf-8').replace(' ', '%20').replace('é', 'e')
+	url_title = urllib.quote(re.sub(r'([^\s\w\']|_)+', '', title.lower().encode('utf-8').replace('é', 'e')), safe='')
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	try :
 		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
@@ -82,6 +147,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 		else :
 			format = ''
 			logging.info('No format to add for document : ' + title)
+			print 'No format to add for document : ' + title
 	except Exception, e :
 		format = ''
 		logging.error('Wrong url / host unknown : ' + url)
@@ -100,6 +166,11 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 		etree.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
 	etree.SubElement(docmeta, 'serviceVersant').text = serviceVersant
 	etree.SubElement(docmeta, 'planClassement', {'language' : language}).text = planClassement.decode('utf8')
+	# Add METS file as XML file
+	fichmeta = etree.SubElement(data, 'FichMeta')
+	etree.SubElement(fichmeta, 'formatFichier').text = 'XML'
+	etree.SubElement(fichmeta, 'nomFichier').text = mets_file.replace('DEPOT/', '')
+	etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(archive_folder + mets_file)
 	for file in tree.findall('.//mets:file', ns) :
 		# List only the not compressed files, ie. those in "master" or "ocr" folder
 		if 'file://master/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') or 'file://ocr/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') :
@@ -109,62 +180,24 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 			else :
 				logging.error('Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.')
 				print 'Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.'
-			etree.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/')
-			# If checksum doesn't exist (for .jpg file by example), download file and calculate the MD5 checksum
-			if file.get('CHECKSUM') is None :
-				image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder)
-				image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://view/', image_folder + folder_separator)
-				# Download this image into the image folder
-				if downloadImage(image_url, image_path) :
-					etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
-				else :
-					pass
+			etree.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/').replace('file://ocr/', 'master/')
+			# For all files, download it and calculate the MD5 checksum
+			image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder).replace('ocr/', 'master/')
+			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'images/').replace('file://ocr/', 'images/')
+			# Download all images into the 'images' folder
+			if downloadImage(image_url, image_path) :
+				etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
 			else :
-				etree.SubElement(fichmeta, 'empreinteOri', {'type' : file.get('CHECKSUMTYPE')}).text = file.get('CHECKSUM')
+				pass
 	# Clear image folder content
 	clearFolder(image_folder)
 	sip_file_path = archive_folder + folder_separator + sip_file_name
 	writeSipFile(sip_file_path, data)
+	sendArchive(archive_folder)
 
-# Download an image from its image_url if it exists into the image_path
-def downloadImage(image_url, image_path) :
-	try :
-		req = urllib2.Request(image_url)
-		response = urllib2.urlopen(req)
-		urllib.urlretrieve(image_url, image_path)
-		return True
-	except Exception, e :
-		logging.error('Image url does\'nt exist : ' + image_url)
-		print 'Image url does\'nt exist : ' + image_url
-		return False
-
-# Clear a folder from its content
-def clearFolder(folder_path) :
-	for file in os.listdir(folder_path) :
-		file_path = os.path.join(folder_path, file)
-		try :
-			if os.path.isfile(file_path):
-				os.unlink(file_path)
-		except Exception, e :
-			logging.error('Folder does\'nt exist : ' + folder_path)
-			print 'Folder does\'nt exist : ' + folder_path
-
-# Calculate the MD5 checksum for the file fname
-def md5(fname) :
-	hash = hashlib.md5()
-	with open(fname, 'rb') as f :
-		for chunk in iter(lambda: f.read(4096), b""):
-			hash.update(chunk)
-	return hash.hexdigest()
-
-def writeSipFile(sip_file_path, data) :
-	# Write results into file
-	logging.info('Write results in file')
-	tree = etree.ElementTree(data)
-	tree.write(sip_file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
-	logging.info('End')
-
+# Create the tree structure for the archived folder, as waited by the CINES platform
 def create_structure(archive_folder) :
+	logging.info('Create folder structure')
 	# If exists, delete "ill" folder
 	if os.path.exists(archive_folder + 'ill') :
 		shutil.rmtree(archive_folder + 'ill')
@@ -202,7 +235,6 @@ def create_structure(archive_folder) :
 	# If not exists, create sip.xml from METS file into DEPOT/DESC folder
 	if not os.path.exists(archive_folder + sip_file_name) :
 		generate_sip_from_mets(archive_folder, 'DEPOT' + folder_separator + 'DESC' + folder_separator + mets_file)
-	# TODO : Send it to server through SFTP
 
 #
 # Main
