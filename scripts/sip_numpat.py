@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/sip_numpat.py "path/to/folder/to/archive"
+# Execution example : python scripts/sip_numpat.py
 
 #
 # Libs
@@ -16,7 +16,7 @@ log_folder = 'log'
 log_level = logging.DEBUG
 sip_folder = 'sips'
 sip_file_name = 'sip.xml'
-image_folder = 'images'
+download_folder = 'download'
 conf_folder = 'conf'
 conf_file = conf_folder + folder_separator + 'conf.json'
 # Namespaces
@@ -38,6 +38,7 @@ ns_marc = {
 # Constantes
 language = 'fra'
 description = 'Non renseigné'
+publisher = 's.n.'
 type = {
 	'book' : 'Monographie'
 }
@@ -60,18 +61,19 @@ def sendArchive(archive_path) :
 	transport = paramiko.Transport((conf['ftp_server'], int(conf['ftp_port'])))
 	transport.connect(username = conf['ftp_user'], password = conf['ftp_password'])
 	sftp = paramiko.SFTPClient.from_transport(transport)
-	root_folder_path = archive_path.replace('/Users/anne.lhote/Downloads/', conf['ftp_path'])[:-1]
+	root_folder_path = archive_path.replace(conf['archive_folder'], conf['ftp_path'])
 	sftp.mkdir(root_folder_path, 0770)
 	# Send file through SFTP
 	for dirpath, dirnames, filenames in os.walk(archive_path) :
 		remote_folder_path = os.path.join(conf['ftp_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
-		# Create remote directory
+		# Create remote directories
 		for dirname in dirnames :
-			folder_path = os.path.join(dirpath, dirname).replace('/Users/anne.lhote/Downloads/', conf['ftp_path'])
+			folder_path = os.path.join(dirpath, dirname).replace(conf['archive_folder'], conf['ftp_path'])
 			sftp.mkdir(folder_path, 0770)
+		# Create remote files
 		for filename in filenames :
 			local_file_path = os.path.join(dirpath, filename)
-			remote_file_path = os.path.join(dirpath, filename).replace('/Users/anne.lhote/Downloads/', conf['ftp_path'])
+			remote_file_path = os.path.join(dirpath, filename).replace(conf['archive_folder'], conf['ftp_path'])
 			sftp.put(local_file_path, remote_file_path)
 	# Close connection
 	sftp.close()
@@ -117,27 +119,33 @@ def writeSipFile(sip_file_path, data) :
 
 # Generate the SIP file according to a METS file
 def generate_sip_from_mets(archive_folder, mets_file) :
-	batch_folder = archive_folder.split(folder_separator)[-2]
+	batch_folder = archive_folder.split(folder_separator)[-1]
 	logging.info('Generate SIP file from METS file')
 	data = ''
 	# Load METS file
-	tree = etree.parse(archive_folder + mets_file).getroot()
+	tree = etree.parse(os.path.join(archive_folder, mets_file)).getroot()
 	data = etree.Element('pac', nsmap = nsmap, attrib = {'{' + xsi + '}schemaLocation' : xsi_schemalocation})
 	docdc = etree.SubElement(data, 'DocDC')
-	title = tree.find('.//mods:nonSort', ns).text + tree.find('.//mods:title', ns).text
+	title = ''
+	if len(tree.findall('.//mods:nonSort', ns)) > 0 :
+		title += tree.find('.//mods:nonSort', ns).text
+	title += tree.find('.//mods:title', ns).text
 	etree.SubElement(docdc, 'title', {'language' : language}).text = title
 	etree.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
 	for topic in tree.findall('.//mods:topic', ns) :
 		etree.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
 	etree.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
-	etree.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
+	if len(tree.findall('.//mods:publisher', ns)) > 0 :
+		etree.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
+	else :
+		etree.SubElement(docdc, 'publisher').text = publisher
 	etree.SubElement(docdc, 'date').text = tree.find('.//mods:dateIssued', ns).text
 	if tree.find('.//mods:genre[@authority="marcgt"]', ns).text in type.keys() :
 		etree.SubElement(docdc, 'type', {'language' : language}).text = type[tree.find('.//mods:genre[@authority="marcgt"]', ns).text]
 	else :
 		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
 		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
-	url_title = urllib.quote(re.sub(r'([^\s\w\']|_)+', '', title.lower().encode('utf-8').replace('é', 'e')), safe='')
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', title.lower().encode('utf-8').replace('é', 'e')), safe='')
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	try :
 		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
@@ -147,7 +155,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 		else :
 			format = ''
 			logging.info('No format to add for document : ' + title)
-			print 'No format to add for document : ' + title
+			logging.info('The url is probably wrong : ' + url)
 	except Exception, e :
 		format = ''
 		logging.error('Wrong url / host unknown : ' + url)
@@ -170,7 +178,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 	fichmeta = etree.SubElement(data, 'FichMeta')
 	etree.SubElement(fichmeta, 'formatFichier').text = 'XML'
 	etree.SubElement(fichmeta, 'nomFichier').text = mets_file.replace('DEPOT/', '')
-	etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(archive_folder + mets_file)
+	etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(os.path.join(archive_folder, mets_file))
 	for file in tree.findall('.//mets:file', ns) :
 		# List only the not compressed files, ie. those in "master" or "ocr" folder
 		if 'file://master/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') or 'file://ocr/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') :
@@ -179,18 +187,17 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 				etree.SubElement(fichmeta, 'formatFichier').text = mimetype[file.get('MIMETYPE')]
 			else :
 				logging.error('Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.')
-				print 'Mimetype missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in mimetypes dictionnary.'
 			etree.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/').replace('file://ocr/', 'master/')
 			# For all files, download it and calculate the MD5 checksum
 			image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder).replace('ocr/', 'master/')
-			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'images/').replace('file://ocr/', 'images/')
-			# Download all images into the 'images' folder
+			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', download_folder + folder_separator).replace('file://ocr/', download_folder + folder_separator)
+			# Download all images into the 'download' folder
 			if downloadImage(image_url, image_path) :
 				etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
 			else :
 				pass
-	# Clear image folder content
-	clearFolder(image_folder)
+	# Clear 'download' folder content
+	clearFolder(download_folder)
 	sip_file_path = archive_folder + folder_separator + sip_file_name
 	writeSipFile(sip_file_path, data)
 	sendArchive(archive_folder)
@@ -199,20 +206,20 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 def create_structure(archive_folder) :
 	logging.info('Create folder structure')
 	# If exists, delete "ill" folder
-	if os.path.exists(archive_folder + 'ill') :
-		shutil.rmtree(archive_folder + 'ill')
+	if os.path.exists(os.path.join(archive_folder, 'ill')) :
+		shutil.rmtree(os.path.join(archive_folder, 'ill'))
 	# If exists, delete "illview" folder
-	if os.path.exists(archive_folder + 'illview') :
-		shutil.rmtree(archive_folder + 'illview')
+	if os.path.exists(os.path.join(archive_folder, 'illview')) :
+		shutil.rmtree(os.path.join(archive_folder, 'illview'))
 	# If exists, delete "view" folder
-	if os.path.exists(archive_folder + 'view') :
-		shutil.rmtree(archive_folder + 'view')
+	if os.path.exists(os.path.join(archive_folder, 'view')) :
+		shutil.rmtree(os.path.join(archive_folder, 'view'))
 	# If not exists, create DEPOT folder
-	if not os.path.exists(archive_folder + 'DEPOT') :
-		os.makedirs(archive_folder + 'DEPOT')
+	if not os.path.exists(os.path.join(archive_folder, 'DEPOT')) :
+		os.makedirs(os.path.join(archive_folder, 'DEPOT'))
 	# If not exists, create DESC folder into DEPOT folder
-	if not os.path.exists(archive_folder + 'DEPOT' + folder_separator + 'DESC') :
-		os.makedirs(archive_folder + 'DEPOT' + folder_separator + 'DESC')
+	if not os.path.exists(os.path.join(archive_folder, 'DEPOT', 'DESC')) :
+		os.makedirs(os.path.join(archive_folder, 'DEPOT', 'DESC'))
 	for parent, dirnames, filenames in os.walk(archive_folder):
 		for fn in filenames :
 			# If exists, delete .pdf file at the root of the folder
@@ -223,18 +230,18 @@ def create_structure(archive_folder) :
 			elif fn.lower().endswith('.xml') :
 				if not 'DEPOT' in parent :
 					mets_file = fn
-					shutil.move(archive_folder + mets_file, archive_folder + 'DEPOT' + folder_separator + 'DESC' + folder_separator + mets_file)
+					shutil.move(os.path.join(archive_folder, mets_file), os.path.join(archive_folder, 'DEPOT', 'DESC', mets_file))
 			# Else move others files into /DEPOT
 			else :
 				if not 'DEPOT' in parent :
-					shutil.move(archive_folder + fn, archive_folder + 'DEPOT' + folder_separator + fn)
+					shutil.move(os.path.join(archive_folder, fn), os.path.join(archive_folder, 'DEPOT', fn))
 		# Move all folders into /DEPOT, except those "DEPOT" itself
 		for dn in dirnames :
 			if dn != 'DEPOT' and not parent.endswith(folder_separator + 'DEPOT') :
-				shutil.move(archive_folder + dn, archive_folder + 'DEPOT' + folder_separator + dn)
+				shutil.move(os.path.join(archive_folder, dn), os.path.join(archive_folder, 'DEPOT', dn))
 	# If not exists, create sip.xml from METS file into DEPOT/DESC folder
 	if not os.path.exists(archive_folder + sip_file_name) :
-		generate_sip_from_mets(archive_folder, 'DEPOT' + folder_separator + 'DESC' + folder_separator + mets_file)
+		generate_sip_from_mets(archive_folder, os.path.join('DEPOT', 'DESC', mets_file))
 
 #
 # Main
@@ -244,25 +251,27 @@ if __name__ == '__main__' :
 	if not os.path.exists(log_folder) :
 		os.makedirs(log_folder)
 	# Check that image folder exists, else create it
-	if not os.path.exists(image_folder) :
-		os.makedirs(image_folder)
-	# Clear image folder content
-	clearFolder(image_folder)
+	if not os.path.exists(download_folder) :
+		os.makedirs(download_folder)
+	# Create log file path
+	log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
+	# Init logs
+	logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
+	logging.info('Start')
+	# Clear 'download' folder content
+	logging.info('Clear \'download\' folder content')
+	clearFolder(download_folder)
 	# Load conf file
 	logging.info('Load conf file')
 	with open(conf_file) as json_file :
 		conf = json.load(json_file)
 	# Check that the METS file is passed as argument
-	if len(sys.argv) < 2 :
+	if len(sys.argv) < 1 :
 		logging.error('Arguments error')
 		print 'Arguments error'
-		print 'Correct usage : scripts/' + sys.argv[0] + ' "path/to/folder/to/archive"'
+		print 'Correct usage : scripts/' + sys.argv[0]
 	else :
-		# Get archive folder path
-		archive_folder = sys.argv[1]
-		# Create log file path
-		log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
-		# Init logs
-		logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
-		logging.info('Start')
-		create_structure(archive_folder)
+		for item in os.listdir(conf['archive_folder']) :
+			# Remove mac files
+			if item != '.DS_Store' :
+				create_structure(os.path.join(conf['archive_folder'], item))
