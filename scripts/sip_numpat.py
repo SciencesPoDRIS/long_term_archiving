@@ -257,7 +257,7 @@ if __name__ == '__main__' :
 	# Create log file path
 	log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
 	# Init logs
-	logging.basicConfig(filename = log_file, filemode = 'w+', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
+	logging.basicConfig(filename = log_file, filemode = 'a+', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
 	logging.info('Start')
 	# Clear 'download' folder content
 	logging.info('Clear \'download\' folder content')
