@@ -57,6 +57,7 @@ mimetype = {
 
 # Send archive folder through SFTP
 def sendArchive(archive_path) :
+	logging.info('Send archive to server through FTP for folder : ' + archive_path)
 	# Open connection
 	transport = paramiko.Transport((conf['ftp_server'], int(conf['ftp_port'])))
 	transport.connect(username = conf['ftp_user'], password = conf['ftp_password'])
@@ -119,8 +120,8 @@ def writeSipFile(sip_file_path, data) :
 
 # Generate the SIP file according to a METS file
 def generate_sip_from_mets(archive_folder, mets_file) :
+	logging.info('Generate SIP file from METS file for folder : ' + archive_folder)
 	batch_folder = archive_folder.split(folder_separator)[-1]
-	logging.info('Generate SIP file from METS file')
 	data = ''
 	# Load METS file
 	tree = etree.parse(os.path.join(archive_folder, mets_file)).getroot()
@@ -204,7 +205,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 
 # Create the tree structure for the archived folder, as waited by the CINES platform
 def create_structure(archive_folder) :
-	logging.info('Create folder structure')
+	logging.info('Create folder structure for folder : ' + archive_folder)
 	# If exists, delete "ill" folder
 	if os.path.exists(os.path.join(archive_folder, 'ill')) :
 		shutil.rmtree(os.path.join(archive_folder, 'ill'))
@@ -256,7 +257,7 @@ if __name__ == '__main__' :
 	# Create log file path
 	log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
 	# Init logs
-	logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
+	logging.basicConfig(filename = log_file, filemode = 'w+', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
 	logging.info('Start')
 	# Clear 'download' folder content
 	logging.info('Clear \'download\' folder content')
