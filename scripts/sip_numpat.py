@@ -82,6 +82,7 @@ def sendArchive(archive_path) :
 
 # Download an image from its image_url if it exists into the image_path
 def downloadImage(image_url, image_path) :
+	logging.info('Download an image from its image_url : ' + image_url)
 	try :
 		req = urllib2.Request(image_url)
 		response = urllib2.urlopen(req)
@@ -94,6 +95,7 @@ def downloadImage(image_url, image_path) :
 
 # Calculate the MD5 checksum for the file fname
 def md5(fname) :
+	logging.info('Calculate the MD5 checksum for the file : ' + fname)
 	hash = hashlib.md5()
 	with open(fname, 'rb') as f :
 		for chunk in iter(lambda: f.read(4096), b""):
