@@ -1,24 +1,36 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/sip_numpat.py
 
 #
 # Libs
 #
-import codecs, hashlib, json, logging, os, paramiko, re, shutil, sys, urllib, urllib2
+import codecs
+import ftptool
+import hashlib
+import json
+import logging
 from lxml import etree
+import os
+import paramiko
+import re
+import shutil
+import sys
+import urllib
+import urllib2
 
 #
 # Config
 #
 folder_separator = '/'
+download_folder = 'download'
+blacklisted_folders_file = 'blacklistedFolders.txt'
+blacklisted_folders = []
+forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
-sip_folder = 'sips'
-sip_file_name = 'sip.xml'
-download_folder = 'download'
 conf_folder = 'conf'
-conf_file = conf_folder + folder_separator + 'conf.json'
+conf_file = os.path.join(conf_folder, 'conf.json')
+sip_file_name = 'sip.xml'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
 xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'
@@ -52,33 +64,66 @@ mimetype = {
 }
 
 #
-# Programm
+# Functions
 #
 
-# Send archive folder through SFTP
-def sendArchive(archive_path) :
-	logging.info('Send archive to server through FTP for folder : ' + archive_path)
-	# Open connection
-	transport = paramiko.Transport((conf['ftp_server'], int(conf['ftp_port'])))
-	transport.connect(username = conf['ftp_user'], password = conf['ftp_password'])
-	sftp = paramiko.SFTPClient.from_transport(transport)
-	root_folder_path = archive_path.replace(conf['archive_folder'], conf['ftp_path'])
-	sftp.mkdir(root_folder_path, 0770)
-	# Send file through SFTP
-	for dirpath, dirnames, filenames in os.walk(archive_path) :
-		remote_folder_path = os.path.join(conf['ftp_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
-		# Create remote directories
-		for dirname in dirnames :
-			folder_path = os.path.join(dirpath, dirname).replace(conf['archive_folder'], conf['ftp_path'])
-			sftp.mkdir(folder_path, 0770)
-		# Create remote files
-		for filename in filenames :
-			local_file_path = os.path.join(dirpath, filename)
-			remote_file_path = os.path.join(dirpath, filename).replace(conf['archive_folder'], conf['ftp_path'])
-			sftp.put(local_file_path, remote_file_path)
-	# Close connection
-	sftp.close()
-	transport.close()
+# Create a new folder into folder_path
+# @return True if a new folder has been created, else False
+def createFolder(folder_path) :
+	# Check if folder already exists
+	if not os.path.exists(folder_path) :
+		os.mkdir(folder_path)
+		return True
+	else :
+		return False
+
+# Delete the folder into folder_path
+# @return True if the folder has been deleted, else False
+def removeFolder(folder_path) :
+	if os.path.exists(folder_path) :
+		shutil.rmtree(folder_path)
+		return True
+	else :
+		return False
+
+# Download a whole folder tree from remote_folder_path into local_folder_path through FTP
+def downloadFolder(ftp_host, remote_folder_path, local_folder_path) :
+	logging.info('Download the folder to local : ' + remote_folder_path)
+	ftp_host.mirror_to_local(remote_folder_path, local_folder_path)
+
+# Create the tree structure for the archived folder, as waited by the CINES platform
+def createStructure(local_folder_path) :
+	logging.info('Create structure for folder : ' + local_folder_path)
+	# If exists, delete "ill" folder
+	removeFolder(os.path.join(local_folder_path, 'ill'))
+	# If exists, delete "illview" folder
+	removeFolder(os.path.join(local_folder_path, 'illview'))
+	# If exists, delete "view" folder
+	removeFolder(os.path.join(local_folder_path, 'view'))
+	# If not exists, create DEPOT folder
+	createFolder(os.path.join(local_folder_path, 'DEPOT'))
+	# If not exists, create DESC folder into DEPOT folder
+	createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
+	for root, dirs, files in os.walk(local_folder_path):
+		for file in files :
+			# If exists, delete .pdf file at the root of the folder
+			# And if exists, recursively delete ".DS_Store" files (for MAC)
+			if file.lower().endswith('.pdf') or file.lower() == '.ds_store' :
+				os.remove(os.path.join(root, file))
+			# If exists, move METS file into /DEPOT/DESC
+			elif file.lower().endswith('.xml') :
+				if not 'DEPOT' in root :
+					mets_file = file
+					shutil.move(os.path.join(local_folder_path, mets_file), os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file))
+			# Else move others files into /DEPOT
+			else :
+				if not 'DEPOT' in root :
+					shutil.move(os.path.join(local_folder_path, file), os.path.join(local_folder_path, 'DEPOT', file))
+		# Move all folders into /DEPOT, except those "DEPOT" itself
+		for dir in dirs :
+			if dir != 'DEPOT' and not root.endswith('/DEPOT') :
+				shutil.move(os.path.join(local_folder_path, dir), os.path.join(local_folder_path, 'DEPOT', dir))
+	return mets_file
 
 # Download an image from its image_url if it exists into the image_path
 def downloadImage(image_url, image_path) :
@@ -117,17 +162,16 @@ def clearFolder(folder_path) :
 def writeSipFile(sip_file_path, data) :
 	logging.info('Write SIP into file')
 	tree = etree.ElementTree(data)
-	tree.write(sip_file_path, encoding = 'UTF-8', pretty_print = True, xml_declaration = True)
-	logging.info('End')
+	tree.write(sip_file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
 
 # Generate the SIP file according to a METS file
-def generate_sip_from_mets(archive_folder, mets_file) :
-	logging.info('Generate SIP file from METS file for folder : ' + archive_folder)
-	batch_folder = archive_folder.split(folder_separator)[-1]
+def generateSipFromMets(local_folder_path, mets_file) :
+	logging.info('Generate SIP file from METS file for folder : ' + local_folder_path)
+	batch_folder = local_folder_path.split('/')[-1]
 	data = ''
 	# Load METS file
-	tree = etree.parse(os.path.join(archive_folder, mets_file)).getroot()
-	data = etree.Element('pac', nsmap = nsmap, attrib = {'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	tree = etree.parse(os.path.join(local_folder_path, mets_file)).getroot()
+	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
 	docdc = etree.SubElement(data, 'DocDC')
 	title = ''
 	if len(tree.findall('.//mods:nonSort', ns)) > 0 :
@@ -181,7 +225,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 	fichmeta = etree.SubElement(data, 'FichMeta')
 	etree.SubElement(fichmeta, 'formatFichier').text = 'XML'
 	etree.SubElement(fichmeta, 'nomFichier').text = mets_file.replace('DEPOT/', '')
-	etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(os.path.join(archive_folder, mets_file))
+	etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(os.path.join(local_folder_path, mets_file))
 	for file in tree.findall('.//mets:file', ns) :
 		# List only the not compressed files, ie. those in "master" or "ocr" folder
 		if 'file://master/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') or 'file://ocr/' in file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href') :
@@ -193,7 +237,7 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 			etree.SubElement(fichmeta, 'nomFichier').text = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', 'master/').replace('file://ocr/', 'master/')
 			# For all files, download it and calculate the MD5 checksum
 			image_url = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file:/', 'http://drd-archives01.sciences-po.fr/ArchivesNumPat/Lot1/' + batch_folder).replace('ocr/', 'master/')
-			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', download_folder + folder_separator).replace('file://ocr/', download_folder + folder_separator)
+			image_path = file.find('.//mets:FLocat', ns).get('{http://www.w3.org/1999/xlink}href').replace('file://master/', download_folder + '/').replace('file://ocr/', download_folder + '/')
 			# Download all images into the 'download' folder
 			if downloadImage(image_url, image_path) :
 				etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(image_path)
@@ -201,80 +245,82 @@ def generate_sip_from_mets(archive_folder, mets_file) :
 				pass
 	# Clear 'download' folder content
 	clearFolder(download_folder)
-	sip_file_path = archive_folder + folder_separator + sip_file_name
+	sip_file_path = os.path.join(local_folder_path, sip_file_name)
 	writeSipFile(sip_file_path, data)
-	sendArchive(archive_folder)
 
-# Create the tree structure for the archived folder, as waited by the CINES platform
-def create_structure(archive_folder) :
-	logging.info('Create folder structure for folder : ' + archive_folder)
-	# If exists, delete "ill" folder
-	if os.path.exists(os.path.join(archive_folder, 'ill')) :
-		shutil.rmtree(os.path.join(archive_folder, 'ill'))
-	# If exists, delete "illview" folder
-	if os.path.exists(os.path.join(archive_folder, 'illview')) :
-		shutil.rmtree(os.path.join(archive_folder, 'illview'))
-	# If exists, delete "view" folder
-	if os.path.exists(os.path.join(archive_folder, 'view')) :
-		shutil.rmtree(os.path.join(archive_folder, 'view'))
-	# If not exists, create DEPOT folder
-	if not os.path.exists(os.path.join(archive_folder, 'DEPOT')) :
-		os.makedirs(os.path.join(archive_folder, 'DEPOT'))
-	# If not exists, create DESC folder into DEPOT folder
-	if not os.path.exists(os.path.join(archive_folder, 'DEPOT', 'DESC')) :
-		os.makedirs(os.path.join(archive_folder, 'DEPOT', 'DESC'))
-	for parent, dirnames, filenames in os.walk(archive_folder):
-		for fn in filenames :
-			# If exists, delete .pdf file at the root of the folder
-			# And if exists, recursively delete ".DS_Store" files (for MAC)
-			if fn.lower().endswith('.pdf') or fn.lower() == '.ds_store' :
-				os.remove(os.path.join(parent, fn))
-			# If exists, move METS file into /DEPOT/DESC
-			elif fn.lower().endswith('.xml') :
-				if not 'DEPOT' in parent :
-					mets_file = fn
-					shutil.move(os.path.join(archive_folder, mets_file), os.path.join(archive_folder, 'DEPOT', 'DESC', mets_file))
-			# Else move others files into /DEPOT
-			else :
-				if not 'DEPOT' in parent :
-					shutil.move(os.path.join(archive_folder, fn), os.path.join(archive_folder, 'DEPOT', fn))
-		# Move all folders into /DEPOT, except those "DEPOT" itself
-		for dn in dirnames :
-			if dn != 'DEPOT' and not parent.endswith(folder_separator + 'DEPOT') :
-				shutil.move(os.path.join(archive_folder, dn), os.path.join(archive_folder, 'DEPOT', dn))
-	# If not exists, create sip.xml from METS file into DEPOT/DESC folder
-	if not os.path.exists(archive_folder + sip_file_name) :
-		generate_sip_from_mets(archive_folder, os.path.join('DEPOT', 'DESC', mets_file))
+# Send archive folder to CINES through SFTP
+def sendCinesArchive(local_folder_path) :
+	logging.info('Send archive to server through FTP for folder : ' + local_folder_path)
+	# Open connection
+	transport = paramiko.Transport((conf['ftp_cines_server'], int(conf['ftp_cines_port'])))
+	transport.connect(username=conf['ftp_cines_user'], password=conf['ftp_cines_password'])
+	sftp = paramiko.SFTPClient.from_transport(transport)
+	root_folder_path = local_folder_path.replace(conf['local_path'], conf['remote_cines_path'])
+	sftp.mkdir(root_folder_path, 0770)
+	# Send file through SFTP
+	for dirpath, dirnames, filenames in os.walk(local_folder_path) :
+		remote_folder_path = os.path.join(conf['remote_cines_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
+		# Create remote directories
+		for dirname in dirnames :
+			folder_path = os.path.join(dirpath, dirname).replace(conf['local_path'], conf['remote_cines_path'])
+			sftp.mkdir(folder_path, 0770)
+		# Create remote files
+		for filename in filenames :
+			local_file_path = os.path.join(dirpath, filename)
+			remote_file_path = os.path.join(dirpath, filename).replace(conf['local_path'], conf['remote_cines_path'])
+			sftp.put(local_file_path, remote_file_path)
+	# Close connection
+	sftp.close()
+	transport.close()
 
-#
-# Main
-#
+def readBlacklistedFolders() :
+	with open(blacklisted_folders_file, 'rb') as f :
+		for l in f.readlines() :
+			blacklisted_folders.append(l.replace('\n', ''))
+
+def writeAsBlacklistedFolder(folder) :
+	logging.info('Write folder as treated on so as blacklisted : ' + folder)
+	data = folder + '\n'
+	with codecs.open(blacklisted_folders_file, 'a+', 'utf8') as f :
+		f.write(data.decode('utf8'))
+	f.close()
+
 if __name__ == '__main__' :
 	# Check that log folder exists, else create it
 	if not os.path.exists(log_folder) :
 		os.makedirs(log_folder)
-	# Check that image folder exists, else create it
-	if not os.path.exists(download_folder) :
-		os.makedirs(download_folder)
 	# Create log file path
-	log_file = log_folder + folder_separator + sys.argv[0].split(folder_separator)[-1].replace('.py', '.log')
+	log_file = os.path.join(log_folder, sys.argv[0].replace('.py', '.log'))
 	# Init logs
-	logging.basicConfig(filename = log_file, filemode = 'a+', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
-	logging.info('Start')
-	# Clear 'download' folder content
-	logging.info('Clear \'download\' folder content')
-	clearFolder(download_folder)
+	logging.basicConfig(filename=log_file, filemode='a+', format='%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=log_level)
+	logging.info('Start script')
 	# Load conf file
 	logging.info('Load conf file')
 	with open(conf_file) as json_file :
 		conf = json.load(json_file)
-	# Check that the METS file is passed as argument
-	if len(sys.argv) < 1 :
-		logging.error('Arguments error')
-		print 'Arguments error'
-		print 'Correct usage : scripts/' + sys.argv[0]
-	else :
-		for item in os.listdir(conf['archive_folder']) :
-			# Remove mac files
-			if item != '.DS_Store' :
-				create_structure(os.path.join(conf['archive_folder'], item))
+	# Connect to server through FTP
+	ftp_host = ftptool.FTPHost.connect(conf['ftp_server'], user=conf['ftp_user'], password=conf['ftp_password'])
+	# List all files and folders from remote_path
+	(subdirs, files) = ftp_host.listdir(conf['remote_path'])
+	# Filters all forbidden folders
+	readBlacklistedFolders()
+	subdirs = [x for x in subdirs if x not in forbidden_folders + blacklisted_folders]
+	# Check that local_path already exists
+	createFolder(conf['local_path'])
+	for subdir in subdirs[0:1] :
+		local_folder_path = os.path.join(conf['local_path'], subdir)
+		remote_folder_path = os.path.join(conf['remote_path'], subdir)
+		# Create subdir locally into local_path
+		createFolder(local_folder_path)
+		# Download subdir locally
+		downloadFolder(ftp_host, remote_folder_path, local_folder_path)
+		# Create awaited folder structure for CINES
+		mets_file = createStructure(local_folder_path)
+		# Generate SIP.xml from the METS.xml file
+		generateSipFromMets(local_folder_path, os.path.join('DEPOT', 'DESC', mets_file))
+		# Send the folder to CINES
+		# Todo : send only one folder
+		sendCinesArchive(local_folder_path)
+		# Write the folder as blacklisted folder into the file
+		writeAsBlacklistedFolder(subdir)
+	logging.info('End script')
