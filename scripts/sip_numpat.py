@@ -23,7 +23,7 @@ import urllib2
 #
 folder_separator = '/'
 download_folder = 'download'
-blacklisted_folders_file = 'blacklistedFolders.txt'
+blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
 forbidden_folders = ['.', '..']
 log_folder = 'log'
