@@ -22,3 +22,8 @@ image
 # Conf file
 #
 conf/conf.json
+
+#
+# List of blacklisted folders
+#
+blacklistedFolders
