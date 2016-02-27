@@ -49,6 +49,7 @@ ns_marc = {
 }
 # Constantes
 language = 'fra'
+subject = 'Non renseigné'
 description = 'Non renseigné'
 publisher = 's.n.'
 type = {
@@ -166,6 +167,7 @@ def writeSipFile(sip_file_path, data) :
 
 # Generate the SIP file according to a METS file
 def generateSipFromMets(local_folder_path, mets_file) :
+	# Log
 	logging.info('Generate SIP file from METS file for folder : ' + local_folder_path)
 	batch_folder = local_folder_path.split('/')[-1]
 	data = ''
@@ -173,58 +175,86 @@ def generateSipFromMets(local_folder_path, mets_file) :
 	tree = etree.parse(os.path.join(local_folder_path, mets_file)).getroot()
 	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
 	docdc = etree.SubElement(data, 'DocDC')
+	# Title tag
 	title = ''
 	if len(tree.findall('.//mods:nonSort', ns)) > 0 :
 		title += tree.find('.//mods:nonSort', ns).text
 	title += tree.find('.//mods:title', ns).text
 	etree.SubElement(docdc, 'title', {'language' : language}).text = title
-	etree.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
-	for topic in tree.findall('.//mods:topic', ns) :
-		etree.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
-	etree.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
-	if len(tree.findall('.//mods:publisher', ns)) > 0 :
-		etree.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
-	else :
-		etree.SubElement(docdc, 'publisher').text = publisher
-	etree.SubElement(docdc, 'date').text = tree.find('.//mods:dateIssued', ns).text
-	if tree.find('.//mods:genre[@authority="marcgt"]', ns).text in type.keys() :
-		etree.SubElement(docdc, 'type', {'language' : language}).text = type[tree.find('.//mods:genre[@authority="marcgt"]', ns).text]
-	else :
-		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
-		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
+	# Load catalog via protocol SRU/SRW
 	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', title.lower().encode('utf-8').replace('é', 'e')), safe='')
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	try :
 		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
 		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc))
-		if records_count > 0 :
-			format = tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="a"]', ns_marc).text + ' ' + tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="d"]', ns_marc).text
-		else :
-			format = ''
-			logging.info('No format to add for document : ' + title)
-			logging.info('The url is probably wrong : ' + url)
 	except Exception, e :
 		format = ''
-		logging.error('Wrong url / host unknown : ' + url)
-		print 'Wrong url / host unknown : ' + url
+		logging.error('Wrong url or host unknown : ' + url)
+	# Creator tag
+	etree.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
+	# Subject tag
+	# Use MODS if mods:topic exists
+	topics = []
+	if len(tree.findall('.//mods:topic', ns)) > 0 :
+		topics = tree.findall('.//mods:topic', ns)
+	# Else use SRU/SRW
+	elif records_count in locals() and records_count > 0 :
+		topics = tree_marc.findall('.//ns1:datafield[@tag="606"]/ns1:subfield', ns_marc)
+	else :
+		topics = [subject.decode('utf8')]
+	for topic in topics :
+		etree.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
+	# Description tag
+	etree.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
+	# Publisher tag
+	if len(tree.findall('.//mods:publisher', ns)) > 0 :
+		etree.SubElement(docdc, 'publisher').text = tree.find('.//mods:publisher', ns).text
+	else :
+		etree.SubElement(docdc, 'publisher').text = publisher
+	# Date tag
+	etree.SubElement(docdc, 'date').text = tree.find('.//mods:dateIssued', ns).text
+	# Type tag
+	if tree.find('.//mods:genre[@authority="marcgt"]', ns).text in type.keys() :
+		etree.SubElement(docdc, 'type', {'language' : language}).text = type[tree.find('.//mods:genre[@authority="marcgt"]', ns).text]
+	else :
+		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
+		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
+	# Format tag
+	if records_count in locals() and records_count > 0 :
+		format = tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="a"]', ns_marc).text + ' ' + tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="d"]', ns_marc).text
+	else :
+		format = ''
+		logging.info('No format to add for document : ' + title)
+		logging.info('The url is probably wrong : ' + url)
 	etree.SubElement(docdc, 'format', {'language' : language}).text = format
+	# Source tag
 	etree.SubElement(docdc, 'source', {'language' : language}).text = tree.find('.//mods:identifier[@type="callnumber"]', ns).text
+	# Language tag
 	etree.SubElement(docdc, 'language').text = language
+	# Coverage tag
 	for geographic in tree.findall('.//mods:geographic', ns) :
 		etree.SubElement(docdc, 'coverage', {'language' : language}).text = geographic.text
 	for temporal in tree.findall('.//mods:temporal', ns) :
 		etree.SubElement(docdc, 'coverage', {'language' : language}).text = temporal.text
+	# Rights tag
 	etree.SubElement(docdc, 'rights', {'language' : language}).text = rights
 	docmeta = etree.SubElement(data, 'DocMeta')
+	# IdentifiantDocProducteur tag
 	etree.SubElement(docmeta, 'identifiantDocProducteur').text = tree.find('.//mods:recordIdentifier', ns).text
+	# NoteDocument tag
 	if tree.find('.//mods:note[@type="cataloging"]', ns) in type.keys() :
 		etree.SubElement(docmeta, 'noteDocument', {'language' : language}).text = tree.find('.//mods:note[@type="cataloging"]', ns).text
+	# ServiceVersant tag
 	etree.SubElement(docmeta, 'serviceVersant').text = serviceVersant
+	# PlanClassement tag
 	etree.SubElement(docmeta, 'planClassement', {'language' : language}).text = planClassement.decode('utf8')
 	# Add METS file as XML file
 	fichmeta = etree.SubElement(data, 'FichMeta')
+	# FormatFichier tag
 	etree.SubElement(fichmeta, 'formatFichier').text = 'XML'
+	# NomFichier tag
 	etree.SubElement(fichmeta, 'nomFichier').text = mets_file.replace('DEPOT/', '')
+	# EmpreinteOri tag
 	etree.SubElement(fichmeta, 'empreinteOri', {'type' : 'MD5'}).text = md5(os.path.join(local_folder_path, mets_file))
 	for file in tree.findall('.//mets:file', ns) :
 		# List only the not compressed files, ie. those in "master" or "ocr" folder
@@ -319,7 +349,7 @@ if __name__ == '__main__' :
 		# Generate SIP.xml from the METS.xml file
 		generateSipFromMets(local_folder_path, os.path.join('DEPOT', 'DESC', mets_file))
 		# Send the folder to CINES
-		# Todo : send only one folder
+		# ToDo : send only one folder
 		sendCinesArchive(local_folder_path)
 		# Write the folder as blacklisted folder into the file
 		writeAsBlacklistedFolder(subdir)
