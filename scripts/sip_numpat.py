@@ -349,7 +349,7 @@ if __name__ == '__main__' :
 		# Generate SIP.xml from the METS.xml file
 		generateSipFromMets(local_folder_path, os.path.join('DEPOT', 'DESC', mets_file))
 		# Send the folder to CINES
-		# ToDo : send only one folder
+		# ToDo : send only one folder (???)
 		sendCinesArchive(local_folder_path)
 		# Write the folder as blacklisted folder into the file
 		writeAsBlacklistedFolder(subdir)
