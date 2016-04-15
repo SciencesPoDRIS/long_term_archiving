@@ -315,6 +315,11 @@ def writeAsBlacklistedFolder(folder) :
 		f.write(data.decode('utf8'))
 	f.close()
 
+
+#
+# Main
+#
+
 if __name__ == '__main__' :
 	# Check that log folder exists, else create it
 	if not os.path.exists(log_folder) :
