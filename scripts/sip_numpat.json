@@ -1,0 +1,9 @@
+{
+	"tags" : [{
+		"name" : "title",
+		"xpath" : ".//mods:title",
+		"attributes" : {
+			"language" : "fra"
+		}
+	}]
+}
