@@ -5,7 +5,7 @@
 # Libs
 #
 import codecs
-import ftptool
+from ftplib import FTP
 import hashlib
 import json
 import logging
@@ -87,10 +87,30 @@ def removeFolder(folder_path) :
 	else :
 		return False
 
-# Download a whole folder tree from remote_folder_path into local_folder_path through FTP
-def downloadFolder(ftp_host, remote_folder_path, local_folder_path) :
+# Download the remote_folder_path into the conf['local_path']
+def ftpDownloadRemoteFolder(remote_folder_path) :
 	logging.info('Download the folder to local : ' + remote_folder_path)
-	ftp_host.mirror_to_local(remote_folder_path, local_folder_path)
+	# Change current directory
+	ftp.cwd(remote_folder_path)
+	# Walk through the remote folder content
+	contents = []
+	ftp.retrlines('LIST', contents.append)
+	for content in contents :
+		words = content.split(None, 8)
+		content_name = words[-1].lstrip()
+		# If it is a directory
+		if words[0][0] == 'd' :
+			if content_name not in forbidden_folders :
+				# Create local folder
+				createFolder(os.path.join(conf['local_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name))
+				# Download remote folder content
+				ftpDownloadRemoteFolder(os.path.join(conf['remote_path'], remote_folder_path, content_name))
+		# If it is a file
+		else :
+			ftp.cwd(remote_folder_path)
+			# Download file
+			local_filename = os.path.join(conf['local_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name)
+			ftp.retrbinary('RETR ' + content_name, open(local_filename, 'w').write)
 
 # Create the tree structure for the archived folder, as waited by the CINES platform
 def createStructure(local_folder_path) :
@@ -191,7 +211,17 @@ def generateSipFromMets(local_folder_path, mets_file) :
 		format = ''
 		logging.error('Wrong url or host unknown : ' + url)
 	# Creator tag
-	etree.SubElement(docdc, 'creator').text = tree.find('.//mods:namePart[@type="given"]', ns).text + ' ' + tree.find('.//mods:namePart[@type="family"]', ns).text
+	docdc_creator = ''
+	if (len(tree.findall('.//mods:namePart[@type="given"]', ns)) > 0) or (len(tree.findall('.//mods:namePart[@type="family"]', ns)) > 0) :
+		docdc_creator += tree.find('.//mods:namePart[@type="given"]', ns).text if len(tree.findall('.//mods:namePart[@type="given"]', ns)) > 0 else ''
+		docdc_creator += ' ' if docdc_creator != '' else ''
+		docdc_creator += tree.find('.//mods:namePart[@type="family"]', ns).text if len(tree.findall('.//mods:namePart[@type="family"]', ns)) > 0 else ''
+	elif len(tree.findall('.//mods:namePart', ns)) > 0 :
+		docdc_creator += tree.find('.//mods:namePart', ns).text
+	if docdc_creator != '' :
+		etree.SubElement(docdc, 'creator').text = docdc_creator
+	else :
+		logging.error('No creator to add for document : ' + title)
 	# Subject tag
 	# Use MODS if mods:topic exists
 	topics = []
@@ -325,7 +355,7 @@ if __name__ == '__main__' :
 	if not os.path.exists(log_folder) :
 		os.makedirs(log_folder)
 	# Create log file path
-	log_file = os.path.join(log_folder, sys.argv[0].replace('.py', '.log'))
+	log_file = os.path.join(log_folder, sys.argv[0].split(folder_separator)[-1].replace('.py', '.log'))
 	# Init logs
 	logging.basicConfig(filename=log_file, filemode='a+', format='%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=log_level)
 	logging.info('Start script')
@@ -334,28 +364,35 @@ if __name__ == '__main__' :
 	with open(conf_file) as json_file :
 		conf = json.load(json_file)
 	# Connect to server through FTP
-	ftp_host = ftptool.FTPHost.connect(conf['ftp_server'], user=conf['ftp_user'], password=conf['ftp_password'])
+	ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
+	ftp.cwd(conf['remote_path'])
 	# List all files and folders from remote_path
-	(subdirs, files) = ftp_host.listdir(conf['remote_path'])
+	contents_bis = []
+	ftp.retrlines('LIST', contents_bis.append)
 	# Filters all forbidden folders
 	readBlacklistedFolders()
-	subdirs = [x for x in subdirs if x not in forbidden_folders + blacklisted_folders]
+	# contents_bis = [x for x in contents_bis if x not in forbidden_folders + blacklisted_folders]
 	# Check that local_path already exists
 	createFolder(conf['local_path'])
-	for subdir in subdirs[0:1] :
-		local_folder_path = os.path.join(conf['local_path'], subdir)
-		remote_folder_path = os.path.join(conf['remote_path'], subdir)
-		# Create subdir locally into local_path
-		createFolder(local_folder_path)
-		# Download subdir locally
-		downloadFolder(ftp_host, remote_folder_path, local_folder_path)
-		# Create awaited folder structure for CINES
-		mets_file = createStructure(local_folder_path)
-		# Generate SIP.xml from the METS.xml file
-		generateSipFromMets(local_folder_path, os.path.join('DEPOT', 'DESC', mets_file))
-		# Send the folder to CINES
-		# ToDo : send only one folder (???)
-		sendCinesArchive(local_folder_path)
-		# Write the folder as blacklisted folder into the file
-		writeAsBlacklistedFolder(subdir)
+	for subdir in contents_bis :
+		# Get folder name
+		subdir = subdir.split(None, 8)[-1].lstrip()
+		if subdir not in forbidden_folders + blacklisted_folders :
+			local_folder_path = os.path.join(conf['local_path'], subdir)
+			remote_folder_path = os.path.join(conf['remote_path'], subdir)
+			# Create subdir locally into local_path
+			createFolder(local_folder_path)
+			# Download subdir locally
+			ftpDownloadRemoteFolder(remote_folder_path)
+			# Create awaited folder structure for CINES
+			mets_file = createStructure(local_folder_path)
+			# Generate SIP.xml from the METS.xml file
+			generateSipFromMets(local_folder_path, os.path.join('DEPOT', 'DESC', mets_file))
+			# Send the folder to CINES
+			# ToDo : send only one folder (???)
+			sendCinesArchive(local_folder_path)
+			# Write the folder as blacklisted folder into the file
+			writeAsBlacklistedFolder(subdir)
+	# Close the FTP connection
+	ftp.quit()
 	logging.info('End script')
