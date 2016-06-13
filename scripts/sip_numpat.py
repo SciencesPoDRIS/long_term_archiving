@@ -47,7 +47,7 @@ ns_marc = {
 	'ns0' : 'http://docs.oasis-open.org/ns/search-ws/sruResponse',
 	'ns1' : 'http://www.loc.gov/MARC21/slim'
 }
-# Constantes
+# Constants
 language = 'fra'
 subject = 'Non renseigné'
 description = 'Non renseigné'
@@ -90,6 +90,8 @@ def removeFolder(folder_path) :
 # Download the remote_folder_path into the conf['local_path']
 def ftpDownloadRemoteFolder(remote_folder_path) :
 	logging.info('Download the folder to local : ' + remote_folder_path)
+	# Connect to server through FTP
+	ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
 	# Change current directory
 	ftp.cwd(remote_folder_path)
 	# Walk through the remote folder content
@@ -111,6 +113,7 @@ def ftpDownloadRemoteFolder(remote_folder_path) :
 			# Download file
 			local_filename = os.path.join(conf['local_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name)
 			ftp.retrbinary('RETR ' + content_name, open(local_filename, 'w').write)
+	ftp.quit()
 
 # Create the tree structure for the archived folder, as waited by the CINES platform
 def createStructure(local_folder_path) :
@@ -228,12 +231,15 @@ def generateSipFromMets(local_folder_path, mets_file) :
 	if len(tree.findall('.//mods:topic', ns)) > 0 :
 		topics = tree.findall('.//mods:topic', ns)
 	# Else use SRU/SRW
-	elif records_count in locals() and records_count > 0 :
+	elif records_count > 0 :
 		topics = tree_marc.findall('.//ns1:datafield[@tag="606"]/ns1:subfield', ns_marc)
 	else :
 		topics = [subject.decode('utf8')]
 	for topic in topics :
-		etree.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
+		if hasattr(topic, 'text') :
+			etree.SubElement(docdc, 'subject', {'language' : language}).text = topic.text
+		else :
+			etree.SubElement(docdc, 'subject', {'language' : language}).text = topic
 	# Description tag
 	etree.SubElement(docdc, 'description', {'language' : language}).text = description.decode('utf8')
 	# Publisher tag
@@ -250,13 +256,15 @@ def generateSipFromMets(local_folder_path, mets_file) :
 		logging.error('Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.')
 		print 'Type missing : ' + tree.find('.//mods:genre[@authority="marcgt"]', ns).text + ' is not in types dictionnary.'
 	# Format tag
-	if records_count in locals() and records_count > 0 :
-		format = tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="a"]', ns_marc).text + ' ' + tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="d"]', ns_marc).text
-	else :
-		format = ''
+	try :
+		if records_count > 0 :
+			format = tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="a"]', ns_marc).text + ' ' + tree_marc.find('.//ns1:datafield[@tag="215"]/ns1:subfield[@code="d"]', ns_marc).text
+			etree.SubElement(docdc, 'format', {'language' : language}).text = format
+		else :
+			logging.info('No record for this requested url : ' + url)
+	except NameError :
 		logging.info('No format to add for document : ' + title)
 		logging.info('The url is probably wrong : ' + url)
-	etree.SubElement(docdc, 'format', {'language' : language}).text = format
 	# Source tag
 	etree.SubElement(docdc, 'source', {'language' : language}).text = tree.find('.//mods:identifier[@type="callnumber"]', ns).text
 	# Language tag
@@ -369,9 +377,10 @@ if __name__ == '__main__' :
 	# List all files and folders from remote_path
 	contents_bis = []
 	ftp.retrlines('LIST', contents_bis.append)
+	# Close the FTP connection
+	ftp.quit()
 	# Filters all forbidden folders
 	readBlacklistedFolders()
-	# contents_bis = [x for x in contents_bis if x not in forbidden_folders + blacklisted_folders]
 	# Check that local_path already exists
 	createFolder(conf['local_path'])
 	for subdir in contents_bis :
@@ -393,6 +402,4 @@ if __name__ == '__main__' :
 			sendCinesArchive(local_folder_path)
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
-	# Close the FTP connection
-	ftp.quit()
 	logging.info('End script')
