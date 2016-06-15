@@ -45,7 +45,8 @@ ns = {
 }
 ns_marc = {
 	'ns0' : 'http://docs.oasis-open.org/ns/search-ws/sruResponse',
-	'ns1' : 'http://www.loc.gov/MARC21/slim'
+	'ns1' : 'http://www.loc.gov/MARC21/slim',
+	'zs'  : 'http://docs.oasis-open.org/ns/search-ws/sruResponse'
 }
 # Constants
 language = 'fra'
@@ -209,7 +210,7 @@ def generateSipFromMets(local_folder_path, mets_file) :
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	try :
 		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
-		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc))
+		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc)) + len(tree_marc.findall('.//zs:recordData', ns_marc))
 	except Exception, e :
 		format = ''
 		logging.error('Wrong url or host unknown : ' + url)
