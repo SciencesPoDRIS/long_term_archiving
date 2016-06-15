@@ -205,15 +205,6 @@ def generateSipFromMets(local_folder_path, mets_file) :
 		title += tree.find('.//mods:nonSort', ns).text
 	title += tree.find('.//mods:title', ns).text
 	etree.SubElement(docdc, 'title', {'language' : language}).text = title
-	# Load catalog via protocol SRU/SRW
-	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', title.lower().encode('utf-8').replace('é', 'e')), safe='')
-	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
-	try :
-		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
-		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc)) + len(tree_marc.findall('.//zs:recordData', ns_marc))
-	except Exception, e :
-		format = ''
-		logging.error('Wrong url or host unknown : ' + url)
 	# Creator tag
 	docdc_creator = ''
 	if (len(tree.findall('.//mods:namePart[@type="given"]', ns)) > 0) or (len(tree.findall('.//mods:namePart[@type="family"]', ns)) > 0) :
@@ -226,6 +217,16 @@ def generateSipFromMets(local_folder_path, mets_file) :
 		etree.SubElement(docdc, 'creator').text = docdc_creator
 	else :
 		logging.error('No creator to add for document : ' + title)
+	# Load catalog via protocol SRU/SRW
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', title.lower().encode('utf-8').replace('é', 'e')), safe='')
+	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', docdc_creator.lower().encode('utf-8').replace('é', 'e')), safe='')
+	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '%20and%20dc.creator%3D' + url_creator + '&maximumRecords=200&recordSchema=unimarcxml'
+	try :
+		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
+		records_count = len(tree_marc.findall('.//ns0:recordData', ns_marc)) + len(tree_marc.findall('.//zs:recordData', ns_marc))
+	except Exception, e :
+		format = ''
+		logging.error('Wrong url or host unknown : ' + url)
 	# Subject tag
 	# Use MODS if mods:topic exists
 	topics = []
