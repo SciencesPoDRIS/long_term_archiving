@@ -10,7 +10,7 @@ Python version needed : 2.5 or after
 * rename the file conf/conf.default.json into conf/conf.json and edit it to put your own SRU/SRW server url
 * `mkvirtualenv long_term_archiving`
 * `pip install ftptool`
-*` pip install six`
+* ` pip install six`
 * `pip install lxml`
 * `pip install paramiko`
 
@@ -24,7 +24,7 @@ long_term_preservation can be used with any system compatible with python 2.5 by
 ## How to create a config json file that will build the XML from another XML ?
 
 
-each method has an attribute "method" that is one of these values : "xpath"
+each method has an attribute "method" that is one of these values : "xpath", "srusrw"
 each method has an attribute "paths" that is th paths to access the value. This attibutes is an array and the successive values matches are concatenated
 those methods are tested sequentially and the first that match a value is the correct one (the next ones are not executed)
 
