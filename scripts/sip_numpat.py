@@ -227,15 +227,15 @@ def generateSipFromMets(local_folder_path, mets_file) :
 	except Exception, e :
 		format = ''
 		logging.error('Wrong url or host unknown : ' + url)
-	# Subject tag
+	# Subject tag {1, n}
 	# Use MODS if mods:topic exists
 	topics = []
-	if len(tree.findall('.//mods:topic', ns)) > 0 :
+	if len(topics) == 0 and len(tree.findall('.//mods:topic', ns)) > 0 :
 		topics = tree.findall('.//mods:topic', ns)
 	# Else use SRU/SRW
-	elif records_count > 0 :
+	if len(topics) == 0 and records_count > 0 :
 		topics = tree_marc.findall('.//ns1:datafield[@tag="606"]/ns1:subfield', ns_marc)
-	else :
+	if len(topics) == 0 :
 		topics = [subject.decode('utf8')]
 	for topic in topics :
 		if hasattr(topic, 'text') :
@@ -400,7 +400,6 @@ if __name__ == '__main__' :
 			# Generate SIP.xml from the METS.xml file
 			generateSipFromMets(local_folder_path, os.path.join('DEPOT', 'DESC', mets_file))
 			# Send the folder to CINES
-			# ToDo : send only one folder (???)
 			sendCinesArchive(local_folder_path)
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
