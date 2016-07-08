@@ -1,8 +1,8 @@
 # long_term_preservation
 
-Versionning of the sip files for the CINES
+Versionning of the sip files for the [CINES](http://www.cines.fr).
 
-Python version needed : 2.5 or after
+Python version needed : 2.5 or after.
 
 
 ## Install
@@ -10,7 +10,7 @@ Python version needed : 2.5 or after
 * rename the file conf/conf.default.json into conf/conf.json and edit it to put your own SRU/SRW server url
 * `mkvirtualenv long_term_archiving`
 * `pip install ftptool`
-* ` pip install six`
+* `pip install six`
 * `pip install lxml`
 * `pip install paramiko`
 
@@ -53,6 +53,6 @@ default_value	no	If nothing match, set default value as content tag	String	"Non 
 
 ## Licence
 
-This code is produces under the licence LGPL and CECILL-C.
+This code is produced under the licence LGPL and CECILL-C.
 
 Please feel free to reuse and modify this code.
