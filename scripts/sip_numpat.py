@@ -1,9 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
 #
 # Libs
 #
+
 import codecs
 from ftplib import FTP
 import hashlib
@@ -18,9 +20,11 @@ import sys
 import urllib
 import urllib2
 
+
 #
 # Config
 #
+
 folder_separator = '/'
 download_folder = 'download'
 blacklisted_folders_file = 'blacklistedFolders'
@@ -64,6 +68,7 @@ mimetype = {
 	'image/xml' : 'XML',
 	'image/jpeg' : 'JPEG'
 }
+
 
 #
 # Functions
