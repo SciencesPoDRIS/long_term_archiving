@@ -27,3 +27,8 @@ conf/conf.json
 # List of blacklisted folders
 #
 blacklistedFolders
+
+#
+# Compiled python files
+#
+*.pyc
