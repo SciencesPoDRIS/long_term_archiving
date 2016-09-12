@@ -9,8 +9,6 @@ Python version needed : 2.5 or after.
 
 * rename the file conf/conf.default.json into conf/conf.json and edit it to put your own SRU/SRW server url
 * `mkvirtualenv long_term_archiving`
-* `pip install ftptool`
-* `pip install six`
 * `pip install lxml`
 * `pip install paramiko`
 
