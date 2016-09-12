@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/tools.py
+# Execution example : python scripts/tools.py mets_file output_file json_file
 
 
 #
@@ -74,7 +74,7 @@ def type_filter(values) :
 	return [type[str(values[0].text)]]
 
 def concat_filter(values) :
-	return [' '.join(str(value.text) for value in values)]
+	return [' '.join(value.text for value in values)]
 
 def first_filter(values) :
 	return [values[0].text]
@@ -145,7 +145,9 @@ def get_node_values(node, element) :
 			# Set filter logic for this method
 			filter = access_method['filter']
 			for xpath in access_method['paths'] :
-				values += [tree_marc.find(xpath, ns_marc)]
+				xpath_value = tree_marc.find(xpath, ns_marc)
+				if xpath_value is not None :
+					values += [tree_marc.find(xpath, ns_marc)]
 	# Implement the filter logic
 	# TODO : check that this function exists
 	if len(values) > 0 :
@@ -174,10 +176,8 @@ def create_node(node_parent, node, element = None) :
 		values = get_node_values(node, element)
 		for value in values :
 			new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
-	elif 'default_value' in node and (not 'value' in node or ('value' in node and len(values) == 0)) :
+	if 'default_value' in node and (not 'value' in node or ('value' in node and len(values) == 0)) :
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
-	else :
-		logging.error('This node has to have either a \'children\', a \'value\' or a \'default_value\' attribute : ' + node['name'])
 
 def xml2xml(input_file, output_file, json_file, conf_json) :
 	global conf
@@ -190,13 +190,17 @@ def xml2xml(input_file, output_file, json_file, conf_json) :
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
 	# Load catalog via protocol SRU/SRW
-	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e')), safe='')
+	# Remove text within parentheses
+	url_title = re.sub(r'\(.*?\)', '', get_title())
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', url_title.lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('œ', 'oe')), safe='')
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
+	logging.info('SRUSRW URL : ' + url)
 	try :
 		global tree_marc
 		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
 		global records_count
 		records_count = len(tree_marc.xpath('.//ns0:recordData', namespaces = ns_marc))
+		logging.info('SRUSRW count : ' + str(records_count))
 	except Exception, e :
 		format = ''
 		logging.error('Wrong url or host unknown : ' + url)
@@ -207,13 +211,12 @@ def xml2xml(input_file, output_file, json_file, conf_json) :
 	write_xml_file(output_file, data)
 
 def main() :
+	mets_file = sys.argv[1]
+	output_file = sys.argv[2]
+	json_file = sys.argv[3]
 	# Load conf file
 	with open(conf_file) as conf_f :
 		conf_json = json.load(conf_f)
-	mets_file = os.path.join(scripts_folder, 'mets.xml')
-	output_file = os.path.join(scripts_folder, 'sip.xml')
-	# json_file = os.path.join(scripts_folder, sys.argv[0].split(folder_separator)[-1].replace('.py', '.json'))
-	json_file = 'scripts/numpat.json'
 	# Transform XML into another XML according to a json file
 	xml2xml(mets_file, output_file, json_file, conf_json)
 
