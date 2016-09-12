@@ -126,7 +126,7 @@
             "value": [{
                 "method": "xpath",
                 "paths": [".//mods:note[@type=\"cataloging\"]"],
-                "filter": "type"
+                "filter": "first"
             }]
         }, {
             "name": "serviceVersant",
@@ -163,19 +163,19 @@
         }]
     }, {
         "name": "FichMeta",
-        "repeat": ".//mets:file[@MIMETYPE='image/jp2'] | .//mets:file[@MIMETYPE='image/xml']",
+        "repeat": ".//mets:file[contains(mets:FLocat/@xlink:href, 'file://master/')] | .//mets:file[contains(mets:FLocat/@xlink:href, 'file://ocr/')]",
         "children": [{
             "name": "formatFichier",
             "value": [{
                 "method": "xpath",
-                "paths": [".//mets:FLocat/@xlink:href"],
+                "paths": [".//mets:FLocat/@xlink:href[contains(., 'file://master/')]", ".//mets:FLocat/@xlink:href[contains(., 'file://ocr/')]"],
                 "filter": "format"
             }]
         }, {
             "name": "nomFichier",
             "value": [{
                 "method": "xpath",
-                "paths": [".//mets:FLocat/@xlink:href"],
+                "paths": [".//mets:FLocat/@xlink:href[contains(., 'file://master/')]", ".//mets:FLocat/@xlink:href[contains(., 'file://ocr/')]"],
                 "filter": "filename"
             }]
         }, {
@@ -185,7 +185,7 @@
             },
             "value": [{
                 "method": "xpath",
-                "paths": [".//mets:FLocat/@xlink:href"],
+                "paths": [".//mets:FLocat/@xlink:href[contains(., 'file://master/')]", ".//mets:FLocat/@xlink:href[contains(., 'file://ocr/')]"],
                 "filter": "md5"
             }]
         }]
