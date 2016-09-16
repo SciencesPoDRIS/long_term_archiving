@@ -26,6 +26,7 @@ folder_separator = '/'
 download_folder = 'download'
 blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
+whitelisted_folders = ['sc_0000966895_00000001419661', 'sc_0000968076_00000001352550', 'sc_0000973086_00000001367289', 'sc_0000973132_00000001554159', 'sc_0000978018_00000001299944']
 forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
@@ -208,6 +209,7 @@ if __name__ == '__main__' :
 	with open(conf_file) as conf_f :
 		conf = json.load(conf_f)
 	# Connect to server through FTP
+	logging.info('Connect to server through FTP')
 	ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
 	ftp.cwd(conf['remote_path'])
 	# List all files and folders from remote_path
@@ -220,10 +222,11 @@ if __name__ == '__main__' :
 	# Check that local_path already exists
 	createFolder(conf['local_path'])
 	# for subdir in contents_bis :
-	for subdir in contents_bis[:3] :
+	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
-		if subdir not in forbidden_folders + blacklisted_folders :
+		# if subdir not in forbidden_folders + blacklisted_folders :
+		if subdir in whitelisted_folders :
 			local_folder_path = os.path.join(conf['local_path'], subdir)
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
 			# Create subdir locally into local_path
@@ -242,5 +245,5 @@ if __name__ == '__main__' :
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
 			# Delete locally downloaded subdir
-			removeFolder(local_folder_path)
+			# removeFolder(local_folder_path)
 	logging.info('End script')
