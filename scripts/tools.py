@@ -193,8 +193,8 @@ def xml2xml(input_file, output_file, json_file, conf_json) :
 	# Remove text within parentheses
 	url_title = re.sub(r'\(.*?\)', '', get_title())
 	url_title = urllib.quote(re.sub(r'([^\s\w\']|_)+', '', url_title.lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('œ', 'oe').replace('ô', 'o')), safe='')
-	# Truncate title after 160 letters
-	url_title = url_title[0:160]
+	# Truncate title after 160 letters and remove the last word that may be truncated
+	url_title = '%20'.join(url_title[0:160].split('%20')[0:-1])
 	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	logging.info('SRUSRW URL : ' + url)
 	try :
