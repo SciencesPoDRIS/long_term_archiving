@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/tools.py mets_file output_file json_file
+# Execution example : python tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file
 
 
 #
 # Libs
 #
 
+import datetime
 import hashlib
 import json
 import logging
@@ -27,6 +28,7 @@ scripts_folder = 'scripts'
 download_folder = 'download'
 conf_folder = 'conf'
 conf_file = os.path.join(conf_folder, 'conf.json')
+tree_marc_singleton = None
 
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
@@ -38,7 +40,8 @@ nsmap = {
 ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
 	'mets' : 'http://www.loc.gov/METS/',
-	'xlink' : 'http://www.w3.org/1999/xlink'
+	'xlink' : 'http://www.w3.org/1999/xlink',
+	'ddi' : 'ddi:codebook:2_2'
 }
 ns_marc = {
 	'ns0' : 'http://docs.oasis-open.org/ns/search-ws/sruResponse',
@@ -58,10 +61,28 @@ format = {
 # Functions
 #
 
-# Write SIP results into result file
-def write_xml_file(file_path, data) :
-	tree = etree.ElementTree(data)
-	tree.write(file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
+# Singleton : get the srusrw tree
+# Load catalog via protocol SRU/SRW
+def get_srusrw_tree() :
+	global tree_marc_singleton
+	global records_count
+	# If tree_marc_singleton is not instanciated, load the catalog
+	if tree_marc_singleton is None :
+		srusrw_url = get_srusrw_url()
+		try :
+			tree_marc_singleton = etree.parse(urllib.urlopen(srusrw_url)).getroot()
+			records_count = len(tree_marc.xpath('.//ns0:recordData', namespaces = ns_marc))
+			logging.info('SRUSRW count : ' + str(records_count))
+		except Exception, e :
+			logging.error('Wrong url or host unknown : ' + srusrw_url)
+	return tree_marc_singleton
+
+# Build the SRU/SRW url to query the library catalog
+def get_srusrw_url() :
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e')), safe='')
+	srusrw_url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
+	logging.info('SRUSRW URL : ' + srusrw_url)
+	return srusrw_url
 
 def get_title() :
 	title = ''
@@ -69,6 +90,11 @@ def get_title() :
 		title += tree.find('.//mods:nonSort', ns).text
 	title += tree.find('.//mods:title', ns).text
 	return title
+
+# Write SIP results into result file
+def write_xml_file(file_path, data) :
+	tree = etree.ElementTree(data)
+	tree.write(file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
 
 def type_filter(values) :
 	return [type[str(values[0].text)]]
@@ -103,6 +129,9 @@ def format_filter(values) :
 
 def get_mets_file_filter(values) :
 	return ['DESC/' + values[0].text + '.xml']
+
+def current_date_filter():
+	return str(datetime.date.today())
 
 # Download an image from its image_url if it exists into the image_path
 def download_image(image_url, image_path) :
@@ -142,6 +171,7 @@ def get_node_values(node, element) :
 					values += element.xpath(xpath, namespaces = ns)
 		# Implement logic for the SRU/SRW protocol
 		elif len(values) == 0 and access_method['method'] == 'srusrw' and records_count > 0 :
+			tree_marc = get_srusrw_tree()
 			# Set filter logic for this method
 			filter = access_method['filter']
 			for xpath in access_method['paths'] :
@@ -176,12 +206,15 @@ def create_node(node_parent, node, element = None) :
 		values = get_node_values(node, element)
 		for value in values :
 			new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
+	elif 'filter' in node :
+		value = eval(node['filter'] + '_filter()')
+		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
+	else :
+		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or a "value" attribute.')
 	if 'default_value' in node and (not 'value' in node or ('value' in node and len(values) == 0)) :
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
 
-def xml2xml(input_file, output_file, json_file, conf_json) :
-	global conf
-	conf = conf_json
+def xml2xml(input_file, output_file, json_file) :
 	# Load input_file
 	global tree
 	tree = etree.parse(input_file).getroot()
@@ -191,21 +224,21 @@ def xml2xml(input_file, output_file, json_file, conf_json) :
 		meta_json = json.load(json_f)
 	# Load catalog via protocol SRU/SRW
 	# Remove text within parentheses
-	url_title = re.sub(r'\(.*?\)', '', get_title())
-	url_title = urllib.quote(re.sub(r'([^\s\w\']|_)+', '', url_title.lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('œ', 'oe').replace('ô', 'o')), safe='')
+	# url_title = re.sub(r'\(.*?\)', '', get_title())
+	# url_title = urllib.quote(re.sub(r'([^\s\w\']|_)+', '', url_title.lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('œ', 'oe').replace('ô', 'o')), safe='')
 	# Truncate title after 160 letters and remove the last word that may be truncated
-	url_title = '%20'.join(url_title[0:160].split('%20')[0:-1])
-	url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
-	logging.info('SRUSRW URL : ' + url)
-	try :
-		global tree_marc
-		tree_marc = etree.parse(urllib.urlopen(url)).getroot()
-		global records_count
-		records_count = len(tree_marc.xpath('.//ns0:recordData', namespaces = ns_marc))
-		logging.info('SRUSRW count : ' + str(records_count))
-	except Exception, e :
-		format = ''
-		logging.error('Wrong url or host unknown : ' + url)
+	# url_title = '%20'.join(url_title[0:160].split('%20')[0:-1])
+	# url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
+	# logging.info('SRUSRW URL : ' + url)
+	# try :
+	# 	global tree_marc
+	# 	tree_marc = etree.parse(urllib.urlopen(url)).getroot()
+	# 	global records_count
+	# 	records_count = len(tree_marc.xpath('.//ns0:recordData', namespaces = ns_marc))
+	# 	logging.info('SRUSRW count : ' + str(records_count))
+	# except Exception, e :
+	# 	format = ''
+	# 	logging.error('Wrong url or host unknown : ' + url)
 	# Start the creation of the XML with the 'root' tag of the JSON file
 	for node in meta_json['root'] :
 		create_node(data, node)
@@ -213,14 +246,24 @@ def xml2xml(input_file, output_file, json_file, conf_json) :
 	write_xml_file(output_file, data)
 
 def main() :
-	mets_file = sys.argv[1]
-	output_file = sys.argv[2]
-	json_file = sys.argv[3]
-	# Load conf file
-	with open(conf_file) as conf_f :
-		conf_json = json.load(conf_f)
-	# Transform XML into another XML according to a json file
-	xml2xml(mets_file, output_file, json_file, conf_json)
+	global conf
+	# Check if sys.argv is a list
+	if not isinstance(sys.argv, list) :
+		logging.error('sys.argv is not an array. Please check your command line')
+		sys.exit()
+	# Check if the number of arguments is correct
+	elif len(sys.argv) != 4 :
+		logging.error('Wrong number of args. Your command line should look like : python tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file')
+		sys.exit()
+	else :
+		mets_file = sys.argv[1]
+		output_file = sys.argv[2]
+		json_file = sys.argv[3]
+		# Load conf file
+		with open(conf_file) as conf_f :
+			conf = json.load(conf_f)
+		# Transform XML into another XML according to a json file
+		xml2xml(mets_file, output_file, json_file)
 
 
 #
