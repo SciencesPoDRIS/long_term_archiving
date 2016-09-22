@@ -74,7 +74,7 @@ def type_filter(values) :
 	return [type[str(values[0].text)]]
 
 def concat_filter(values) :
-	return [' '.join(value.text for value in values)]
+	return [' '.join(value.text for value in values if value.text is not None)]
 
 def first_filter(values) :
 	return [values[0].text]
@@ -137,9 +137,9 @@ def get_node_values(node, element) :
 			# Iterate over xpaths
 			for xpath in access_method['paths'] :
 				# Extract values
-				lalilou = tree if element is None else element
-				if len(lalilou.xpath(xpath, namespaces = ns)) > 0 :
-					values += lalilou.xpath(xpath, namespaces = ns)
+				element = tree if element is None else element
+				if len(element.xpath(xpath, namespaces = ns)) > 0 :
+					values += element.xpath(xpath, namespaces = ns)
 		# Implement logic for the SRU/SRW protocol
 		elif len(values) == 0 and access_method['method'] == 'srusrw' and records_count > 0 :
 			# Set filter logic for this method
