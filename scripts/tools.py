@@ -29,6 +29,7 @@ download_folder = 'download'
 conf_folder = 'conf'
 conf_file = os.path.join(conf_folder, 'conf.json')
 tree_marc_singleton = None
+records_count = 0
 
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
@@ -65,7 +66,7 @@ format = {
 # Load catalog via protocol SRU/SRW
 def get_srusrw_tree() :
 	global tree_marc_singleton
-	global records_count
+	records_count = 0
 	# If tree_marc_singleton is not instanciated, load the catalog
 	if tree_marc_singleton is None :
 		srusrw_url = get_srusrw_url()
