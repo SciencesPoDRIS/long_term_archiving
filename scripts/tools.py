@@ -224,7 +224,8 @@ def create_node(node_parent, node, element = None) :
 	else :
 		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
 
-def xml2xml(input_file, output_file, json_file) :
+def xml2xml(input_file, output_file, json_file, conf) :
+	global conf
 	# Load input_file
 	global tree
 	tree = etree.parse(input_file).getroot()
@@ -239,7 +240,6 @@ def xml2xml(input_file, output_file, json_file) :
 	write_xml_file(output_file, data)
 
 def main() :
-	global conf
 	# Check if sys.argv is a list
 	if not isinstance(sys.argv, list) :
 		logging.error('sys.argv is not an array. Please check your command line')
@@ -256,7 +256,7 @@ def main() :
 		with open(conf_file) as conf_f :
 			conf = json.load(conf_f)
 		# Transform XML into another XML according to a json file
-		xml2xml(mets_file, output_file, json_file)
+		xml2xml(mets_file, output_file, json_file, conf)
 
 
 #
