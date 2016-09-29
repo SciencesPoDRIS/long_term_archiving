@@ -225,7 +225,6 @@ def create_node(node_parent, node, element = None) :
 		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
 
 def xml2xml(input_file, output_file, json_file, conf) :
-	global conf
 	# Load input_file
 	global tree
 	tree = etree.parse(input_file).getroot()

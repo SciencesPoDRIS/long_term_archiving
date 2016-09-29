@@ -26,7 +26,7 @@ folder_separator = '/'
 download_folder = 'download'
 blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
-whitelisted_folders = ['sc_0000966895_00000001419661', 'sc_0000968076_00000001352550', 'sc_0000973086_00000001367289', 'sc_0000973132_00000001554159', 'sc_0000978018_00000001299944']
+whitelisted_folders = ['sc_0001068347_00000001367771', 'sc_0001068519_00000001367789', 'sc_0001068639_00000001381135', 'sc_0001068641_00000001364801', 'sc_0001068677_00000001367831']
 forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
@@ -238,7 +238,7 @@ if __name__ == '__main__' :
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
-			json_file = 'scripts/numpat.json'
+			json_file = 'scripts/matching.json'
 			tools.xml2xml(mets_file_path, sip_file_path, json_file, conf)
 			# Send the folder to CINES
 			sendCinesArchive(local_folder_path)
