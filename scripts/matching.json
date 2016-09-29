@@ -47,16 +47,14 @@
             "name" : "publisher",
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//mods:publisher"],
-                "filter" : "first"
+                "paths" : [".//mods:publisher"]
             }],
             "default_value" : "s.n."
         }, {
             "name" : "date",
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//mods:dateIssued"],
-                "filter" : "first"
+                "paths" : [".//mods:dateIssued"]
             }]
         }, {
             "name" : "type",
@@ -86,8 +84,7 @@
             },
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//mods:identifier[@type=\"callnumber\"]"],
-                "filter" : "first"
+                "paths" : [".//mods:identifier[@type=\"callnumber\"]"]
             }]
         }, {
             "name" : "language",
@@ -115,8 +112,7 @@
             "name" : "identifiantDocProducteur",
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//mods:recordIdentifier"],
-                "filter" : "first"
+                "paths" : [".//mods:recordIdentifier"]
             }]
         }, {
             "name" : "noteDocument",
@@ -125,8 +121,7 @@
             },
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//mods:note[@type=\"cataloging\"]"],
-                "filter" : "first"
+                "paths" : [".//mods:note[@type=\"cataloging\"]"]
             }]
         }, {
             "name" : "serviceVersant",

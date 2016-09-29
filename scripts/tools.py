@@ -102,10 +102,9 @@ def type_filter(values) :
 def concat_filter(values) :
 	return [' '.join(value.text for value in values if value.text is not None)]
 
-def first_filter(values) :
-	return [values[0].text]
-
 def all_filter(values) :
+	print 'all'
+	print [value.text for value in values]
 	return [value.text for value in values]
 
 def filename_filter(values) :
@@ -157,12 +156,14 @@ def md5(fname) :
 def get_node_values(node, element) :
 	values = []
 	contents = []
+	filter = ''
 	for access_method in node['value'] :
 		# If values is empty, pass through next access method
 		# Implement logic for xpath
 		if len(values) == 0 and access_method['method'] == 'xpath' :
 			# Set filter logic for this method
-			filter = access_method['filter']
+			if filter in access_method :
+				filter = access_method['filter']
 			# Iterate over xpaths
 			for xpath in access_method['paths'] :
 				# Extract values
@@ -173,15 +174,21 @@ def get_node_values(node, element) :
 		elif len(values) == 0 and access_method['method'] == 'srusrw' and records_count > 0 :
 			tree_marc = get_srusrw_tree()
 			# Set filter logic for this method
-			filter = access_method['filter']
+			if filter in access_method:
+				filter = access_method['filter']
 			for xpath in access_method['paths'] :
 				xpath_value = tree_marc.find(xpath, ns_marc)
 				if xpath_value is not None :
 					values += [tree_marc.find(xpath, ns_marc)]
 	# Implement the filter logic
 	# TODO : check that this function exists
-	if len(values) > 0 :
+	if len(values) > 0 and filter != '' :
 		contents = eval(filter + '_filter(values)')
+	# If no filter is provided, by default return the content of the first matching element
+	elif filter == '' :
+		contents = [values[0].text]
+	else :
+		logging.error('Node "' + node['name'] + '" has a problem with the filter attribute.')
 	return contents
 
 # Build the node (name, value, children...) and add it to the tree
@@ -204,15 +211,18 @@ def create_node(node_parent, node, element = None) :
 	# else get the node values and create as many nodes as return by the get_node_values function
 	elif 'value' in node :
 		values = get_node_values(node, element)
+		print 'value'
+		print node
+		print values
 		for value in values :
 			new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
 	elif 'filter' in node :
 		value = eval(node['filter'] + '_filter()')
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
-	else :
-		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or a "value" attribute.')
-	if 'default_value' in node and (not 'value' in node or ('value' in node and len(values) == 0)) :
+	elif 'default_value' in node and (not 'value' in node or ('value' in node and len(values) == 0)) :
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
+	else :
+		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
 
 def xml2xml(input_file, output_file, json_file) :
 	# Load input_file
@@ -222,23 +232,6 @@ def xml2xml(input_file, output_file, json_file) :
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
-	# Load catalog via protocol SRU/SRW
-	# Remove text within parentheses
-	# url_title = re.sub(r'\(.*?\)', '', get_title())
-	# url_title = urllib.quote(re.sub(r'([^\s\w\']|_)+', '', url_title.lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('œ', 'oe').replace('ô', 'o')), safe='')
-	# Truncate title after 160 letters and remove the last word that may be truncated
-	# url_title = '%20'.join(url_title[0:160].split('%20')[0:-1])
-	# url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
-	# logging.info('SRUSRW URL : ' + url)
-	# try :
-	# 	global tree_marc
-	# 	tree_marc = etree.parse(urllib.urlopen(url)).getroot()
-	# 	global records_count
-	# 	records_count = len(tree_marc.xpath('.//ns0:recordData', namespaces = ns_marc))
-	# 	logging.info('SRUSRW count : ' + str(records_count))
-	# except Exception, e :
-	# 	format = ''
-	# 	logging.error('Wrong url or host unknown : ' + url)
 	# Start the creation of the XML with the 'root' tag of the JSON file
 	for node in meta_json['root'] :
 		create_node(data, node)
