@@ -66,13 +66,13 @@ format = {
 # Load catalog via protocol SRU/SRW
 def get_srusrw_tree() :
 	global tree_marc_singleton
-	records_count = 0
+	global records_count
 	# If tree_marc_singleton is not instanciated, load the catalog
 	if tree_marc_singleton is None :
 		srusrw_url = get_srusrw_url()
 		try :
 			tree_marc_singleton = etree.parse(urllib.urlopen(srusrw_url)).getroot()
-			records_count = len(tree_marc.xpath('.//ns0:recordData', namespaces = ns_marc))
+			records_count = len(tree_marc_singleton.xpath('.//ns0:recordData', namespaces = ns_marc))
 			logging.info('SRUSRW count : ' + str(records_count))
 		except Exception, e :
 			logging.error('Wrong url or host unknown : ' + srusrw_url)
@@ -104,8 +104,6 @@ def concat_filter(values) :
 	return [' '.join(value.text for value in values if value.text is not None)]
 
 def all_filter(values) :
-	print 'all'
-	print [value.text for value in values]
 	return [value.text for value in values]
 
 def filename_filter(values) :
@@ -163,7 +161,7 @@ def get_node_values(node, element) :
 		# Implement logic for xpath
 		if len(values) == 0 and access_method['method'] == 'xpath' :
 			# Set filter logic for this method
-			if filter in access_method :
+			if 'filter' in access_method :
 				filter = access_method['filter']
 			# Iterate over xpaths
 			for xpath in access_method['paths'] :
@@ -172,21 +170,22 @@ def get_node_values(node, element) :
 				if len(element.xpath(xpath, namespaces = ns)) > 0 :
 					values += element.xpath(xpath, namespaces = ns)
 		# Implement logic for the SRU/SRW protocol
-		elif len(values) == 0 and access_method['method'] == 'srusrw' and records_count > 0 :
+		elif len(values) == 0 and access_method['method'] == 'srusrw' :
 			tree_marc = get_srusrw_tree()
-			# Set filter logic for this method
-			if filter in access_method:
-				filter = access_method['filter']
-			for xpath in access_method['paths'] :
-				xpath_value = tree_marc.find(xpath, ns_marc)
-				if xpath_value is not None :
-					values += [tree_marc.find(xpath, ns_marc)]
+			if records_count > 0 :
+				# Set filter logic for this method
+				if 'filter' in access_method:
+					filter = access_method['filter']
+				for xpath in access_method['paths'] :
+					xpath_value = tree_marc.find(xpath, ns_marc)
+					if xpath_value is not None :
+						values += [tree_marc.find(xpath, ns_marc)]
 	# Implement the filter logic
 	# TODO : check that this function exists
 	if len(values) > 0 and filter != '' :
 		contents = eval(filter + '_filter(values)')
 	# If no filter is provided, by default return the content of the first matching element
-	elif filter == '' :
+	elif len(values) > 0 and filter == '' :
 		contents = [values[0].text]
 	else :
 		logging.error('Node "' + node['name'] + '" has a problem with the filter attribute.')
@@ -212,9 +211,6 @@ def create_node(node_parent, node, element = None) :
 	# else get the node values and create as many nodes as return by the get_node_values function
 	elif 'value' in node :
 		values = get_node_values(node, element)
-		print 'value'
-		print node
-		print values
 		for value in values :
 			new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
 	elif 'filter' in node :
@@ -225,9 +221,11 @@ def create_node(node_parent, node, element = None) :
 	else :
 		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
 
-def xml2xml(input_file, output_file, json_file, conf) :
+def xml2xml(input_file, output_file, json_file, conf_arg) :
 	# Load input_file
 	global tree
+	global conf
+	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
 	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
 	# Load meta_json file
@@ -254,9 +252,9 @@ def main() :
 		json_file = sys.argv[3]
 		# Load conf file
 		with open(conf_file) as conf_f :
-			conf = json.load(conf_f)
+			conf_arg = json.load(conf_f)
 		# Transform XML into another XML according to a json file
-		xml2xml(mets_file, output_file, json_file, conf)
+		xml2xml(mets_file, output_file, json_file, conf_arg)
 
 
 #
