@@ -97,6 +97,10 @@ def write_xml_file(file_path, data) :
 	tree = etree.ElementTree(data)
 	tree.write(file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
 
+# Return the content of the first element
+def first_filter(values) :
+	return [values[0].text]
+
 def type_filter(values) :
 	return [type[str(values[0].text)]]
 
@@ -128,6 +132,16 @@ def format_filter(values) :
 def get_mets_file_filter(values) :
 	return ['DESC/' + values[0].text + '.xml']
 
+# For each value, split file name with '_', get the language as 
+# TO BE DONE
+def bequali_get_languages_filter(values) :
+	tmp = []
+	for x in values :
+		print x
+	# 	if x not in tmp :
+	# 		tmp.append(x)
+	return tmp
+
 def current_date_filter():
 	return str(datetime.date.today())
 
@@ -155,7 +169,8 @@ def md5(fname) :
 def get_node_values(node, element) :
 	values = []
 	contents = []
-	filter = ''
+	# By default filter is first_filter
+	filter = 'first'
 	for access_method in node['value'] :
 		# If values is empty, pass through next access method
 		# Implement logic for xpath
@@ -182,11 +197,8 @@ def get_node_values(node, element) :
 						values += [tree_marc.find(xpath, ns_marc)]
 	# Implement the filter logic
 	# TODO : check that this function exists
-	if len(values) > 0 and filter != '' :
+	if len(values) > 0 :
 		contents = eval(filter + '_filter(values)')
-	# If no filter is provided, by default return the content of the first matching element
-	elif len(values) > 0 and filter == '' :
-		contents = [values[0].text]
 	else :
 		logging.error('Node "' + node['name'] + '" has a problem with the filter attribute.')
 	return contents
@@ -195,7 +207,6 @@ def get_node_values(node, element) :
 def create_node(node_parent, node, element = None) :
 	node_name = node['name']
 	node_attributes = node['attributes'] if 'attributes' in node else {}
-	# if node has children, create them
 	if 'repeat' in node :
 		repeats = tree.xpath(node['repeat'], namespaces = ns)
 		# Delete the repeat attribute
@@ -203,12 +214,13 @@ def create_node(node_parent, node, element = None) :
 		for repeat in repeats :
 			# Recall the function to create the node
 			create_node(node_parent, node, repeat)
+	# If node has children, create them
 	elif 'children' in node :
 		node_children = node['children']
 		new_node = etree.SubElement(node_parent, node_name, node_attributes)
 		for node_child in node_children :
 			create_node(new_node, node_child, element)
-	# else get the node values and create as many nodes as return by the get_node_values function
+	# Else get the node values and create as many nodes as return by the get_node_values function
 	elif 'value' in node :
 		values = get_node_values(node, element)
 		for value in values :
