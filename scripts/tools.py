@@ -7,6 +7,7 @@
 # Libs
 #
 
+import copy
 import datetime
 import hashlib
 import json
@@ -203,17 +204,18 @@ def get_node_values(node, element) :
 		logging.error('Node "' + node['name'] + '" has a problem with the filter attribute.')
 	return contents
 
-# Build the node (name, value, children...) and add it to the tree
-def create_node(node_parent, node, element = None) :
+# Build the node (name, value, children...) and add it to the node_parent
+def create_node(node_parent, node, element) :
 	node_name = node['name']
 	node_attributes = node['attributes'] if 'attributes' in node else {}
 	if 'repeat' in node :
-		repeats = tree.xpath(node['repeat'], namespaces = ns)
-		# Delete the repeat attribute
-		del node['repeat']
+		repeats = element.xpath(node['repeat'], namespaces = ns)
 		for repeat in repeats :
-			# Recall the function to create the node
-			create_node(node_parent, node, repeat)
+			# Delete the repeat attribute
+			tmp = copy.deepcopy(node)
+			del tmp['repeat']
+			# Recall the function to create the node after a deep copy
+			create_node(node_parent, tmp, repeat)
 	# If node has children, create them
 	elif 'children' in node :
 		node_children = node['children']
@@ -245,7 +247,7 @@ def xml2xml(input_file, output_file, json_file, conf_arg) :
 		meta_json = json.load(json_f)
 	# Start the creation of the XML with the 'root' tag of the JSON file
 	for node in meta_json['root'] :
-		create_node(data, node)
+		create_node(data, node, tree)
 	# Write result into output_file
 	write_xml_file(output_file, data)
 
