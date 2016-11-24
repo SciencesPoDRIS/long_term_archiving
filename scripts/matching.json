@@ -33,7 +33,7 @@
                 "filter" : "all"
             }, {
                 "method" : "srusrw",
-                "paths" : [".//ns1:datafield[@tag=\"606\"]/ns1:subfield"],
+                "paths" : [".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=(\"a\",\"y\", \"x\")]", ".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"x\"]"],
                 "filter" : "all"
             }],
             "default_value" : "Non renseigné"
@@ -97,6 +97,10 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:geographic", ".//mods:temporal"],
+                "filter" : "all"
+            }, {
+                "method" : "srusrw",
+                "paths" : [".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=(\"a\",\"z\")]"],
                 "filter" : "all"
             }]
         }, {
