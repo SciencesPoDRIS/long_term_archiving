@@ -21,7 +21,8 @@
                 "method" : "xpath",
                 "paths" : [".//mods:namePart"],
                 "filter" : "concat"
-            }]
+            }],
+            "default_value" : "Non renseigné"
         }, {
             "name" : "subject",
             "attributes" : {
