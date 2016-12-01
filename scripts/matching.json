@@ -34,7 +34,7 @@
                 "filter" : "all"
             }, {
                 "method" : "srusrw",
-                "paths" : [".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=(\"a\",\"y\", \"x\")]", ".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"x\"]"],
+                "paths" : [".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=\"a\"]", ".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=\"y\"]", ".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=\"x\"]", ".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"x\"]"],
                 "filter" : "all"
             }],
             "default_value" : "Non renseigné"
@@ -101,7 +101,7 @@
                 "filter" : "all"
             }, {
                 "method" : "srusrw",
-                "paths" : [".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=(\"a\",\"z\")]"],
+                "paths" : [".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"a\"]", ".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"z\"]"],
                 "filter" : "all"
             }]
         }, {
