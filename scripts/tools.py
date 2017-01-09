@@ -50,7 +50,8 @@ ns_marc = {
 }
 # Constants
 type = {
-	'book' : 'Monographie'
+	'book' : 'Monographie',
+	'map' : 'Carte'
 }
 format = {
 	'jp2' : 'JPEG2000',
