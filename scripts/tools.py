@@ -92,6 +92,8 @@ def get_title() :
 	if len(tree.xpath('.//mods:nonSort', namespaces = ns)) > 0 :
 		title += tree.find('.//mods:nonSort', ns).text
 	title += tree.find('.//mods:title', ns).text
+	# Truncate title after question mark
+	title = title.split('?')[0]
 	return title
 
 def get_creator() :
