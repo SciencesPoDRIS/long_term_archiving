@@ -83,7 +83,10 @@ def get_srusrw_tree() :
 def get_srusrw_url() :
 	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e')), safe='')
 	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e')), safe='')
-	srusrw_url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query=dc.creator%3D' + url_creator + '%20and%20dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
+	srusrw_url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query='
+	if url_creator != '' :
+		srusrw_url += 'dc.creator%3D' + url_creator + '%20and%20'
+	srusrw_url += 'dc.title%3D' + url_title + '&maximumRecords=200&recordSchema=unimarcxml'
 	logging.info('SRUSRW URL : ' + srusrw_url)
 	return srusrw_url
 
@@ -97,7 +100,10 @@ def get_title() :
 	return title
 
 def get_creator() :
-	return tree.find('.//mods:namePart[@type="family"]', ns).text
+	creator = ''
+	if len(tree.xpath('.//mods:namePart[@type="family"]', namespaces = ns)) > 0 :
+		creator += tree.find('.//mods:namePart[@type="family"]', ns).text
+	return creator
 
 # Write SIP results into result file
 def write_xml_file(file_path, data) :
