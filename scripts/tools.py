@@ -235,8 +235,6 @@ def create_node(node_parent, node, element = None) :
 	elif 'filter' in node :
 		value = eval(node['filter'] + '_filter()')
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
-	else :
-		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" attribute.')
 	if 'default_value' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
 
