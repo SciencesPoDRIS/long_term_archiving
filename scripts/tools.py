@@ -81,8 +81,8 @@ def get_srusrw_tree() :
 
 # Build the SRU/SRW url to query the library catalog
 def get_srusrw_url() :
-	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e')), safe='')
-	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e')), safe='')
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n')), safe='')
+	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n')), safe='')
 	srusrw_url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query='
 	if url_creator != '' :
 		srusrw_url += 'dc.creator%3D' + url_creator + '%20and%20'
