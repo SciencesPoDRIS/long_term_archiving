@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file
+# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file
 
 
 #
@@ -16,6 +16,7 @@ from lxml import etree
 import os
 import re
 import sys
+import time
 import urllib
 import urllib2
 
@@ -38,6 +39,9 @@ xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xs
 nsmap = {
 	None : 'http://www.cines.fr/pac/sip',
 	'xsi' : xsi
+}
+nsmap_seda = {
+	None : 'fr:gouv:culture:archivesdefrance:seda:v1.0'
 }
 ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
@@ -135,13 +139,13 @@ def get_mets_file_filter(values) :
 
 # For each value, split file name with '_', get the language as 
 # TO BE DONE
-def bequali_get_languages_filter(values) :
-	tmp = []
-	for x in values :
-		print x
-	# 	if x not in tmp :
-	# 		tmp.append(x)
-	return tmp
+# def bequali_get_languages_filter(values) :
+# 	tmp = []
+# 	for x in values :
+# 		print x
+# 	# 	if x not in tmp :
+# 	# 		tmp.append(x)
+# 	return tmp
 
 def current_date_filter():
 	return str(datetime.date.today())
@@ -205,9 +209,32 @@ def get_node_values(node, element) :
 	return contents
 
 # Build the node (name, value, children...) and add it to the node_parent
-def create_node(node_parent, node, element) :
+def create_node(node_parent, node, element, recursive = False) :
 	node_name = node['name']
 	node_attributes = node['attributes'] if 'attributes' in node else {}
+	# if 'recursive' in node :
+	# 	recursives = element.xpath(node['recursive'], namespaces = ns)
+	# 	for recursive in recursives :
+	# 		# Delete the repeat attribute
+	# 		tmp = copy.deepcopy(node)
+	# 		del tmp['recursive']
+	# 		# Recall the function to create the node
+	# 		new_node = create_node(node_parent, tmp, recursive)
+	# 		create_node(new_node, node, recursive)
+	# if 'recursive' in node or recursive :
+	# 	if 'recursive' in node :
+	# 		recursives = element.xpath(node['recursive'], namespaces = ns)
+	# 	else :
+	# 		print 'recursive'
+	# 		print node
+	# 		recursives = []
+	# 	for recursive in recursives :
+	# 		# Delete the recursive attribute
+	# 		tmp = copy.deepcopy(node)
+	# 		del tmp['recursive']
+	# 		# Recall the function to create the node after a deep copy
+	# 		new_node = create_node(node_parent, tmp, recursive)
+	# 		create_node(new_node, tmp, recursive, True)
 	if 'repeat' in node :
 		repeats = element.xpath(node['repeat'], namespaces = ns)
 		for repeat in repeats :
@@ -215,7 +242,7 @@ def create_node(node_parent, node, element) :
 			tmp = copy.deepcopy(node)
 			del tmp['repeat']
 			# Recall the function to create the node after a deep copy
-			create_node(node_parent, tmp, repeat)
+			new_node = create_node(node_parent, tmp, repeat)
 	# If node has children, create them
 	elif 'children' in node :
 		node_children = node['children']
@@ -234,6 +261,10 @@ def create_node(node_parent, node, element) :
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
 	else :
 		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
+		new_node = False
+	if 'recursive' in node :
+		print new_node
+	# return new_node
 
 def xml2xml(input_file, output_file, json_file, conf_arg) :
 	# Load input_file
@@ -241,7 +272,8 @@ def xml2xml(input_file, output_file, json_file, conf_arg) :
 	global conf
 	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
-	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	# data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
