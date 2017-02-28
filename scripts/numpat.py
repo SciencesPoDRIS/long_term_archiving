@@ -22,11 +22,13 @@ import tools
 # Config
 #
 
+# Complete with the folders number
+# whitelisted_folders = ['sc_0000354761_00000000390999', 'sc_0000397026_00000001066004', 'sc_0000611205_00000000309875']
+whitelisted_folders = []
 folder_separator = '/'
 download_folder = 'download'
 blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
-whitelisted_folders = []
 forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
@@ -245,5 +247,5 @@ if __name__ == '__main__' :
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
 			# Delete locally downloaded subdir
-			# removeFolder(local_folder_path)
+			removeFolder(local_folder_path)
 	logging.info('End script')
