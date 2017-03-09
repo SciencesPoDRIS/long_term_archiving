@@ -25,7 +25,6 @@ import urllib2
 
 folder_separator = '/'
 scripts_folder = 'scripts'
-download_folder = 'download'
 conf_folder = 'conf'
 conf_file = os.path.join(conf_folder, 'conf.json')
 tree_marc_singleton = None
@@ -129,13 +128,13 @@ def filename_filter(values) :
 def md5_filter(values) :
 	# For a file, download it and return the MD5 checksum
 	image_url = 'http://' + conf['ftp_server'] + conf['remote_path'] + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'master' + folder_separator + values[0].split(folder_separator)[-1]
-	image_path = values[0].replace('file://master/', conf['local_path'] + folder_separator + download_folder + folder_separator).replace('file://ocr/', conf['local_path'] + folder_separator + download_folder + folder_separator)
+	image_path = values[0].replace('file://master/', conf['local_path'] + folder_separator + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'DEPOT' + folder_separator + 'master' + folder_separator).replace('file://ocr/', conf['local_path'] + folder_separator + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'DEPOT' + folder_separator + 'master' + folder_separator)
 	if download_image(image_url, image_path) :
 		return [md5(image_path)]
 
 def md5xml_filter(values) :
 	image_url = 'http://' + conf['ftp_server'] + conf['remote_path'] + values[0].text + folder_separator + values[0].text + '.xml'
-	image_path = conf['local_path'] + folder_separator + download_folder + folder_separator + values[0].text + '.xml'
+	image_path = conf['local_path'] + folder_separator + values[0].text + folder_separator + 'DEPOT' + folder_separator + 'DESC' + folder_separator + values[0].text + '.xml'
 	if download_image(image_url, image_path) :
 		return [md5(image_path)]
 
@@ -166,7 +165,7 @@ def download_image(image_url, image_path) :
 		urllib.urlretrieve(image_url, image_path)
 		return True
 	except Exception, e :
-		logging.error('Image url does\'nt exist : ' + image_url)
+		logging.error('Image url doesn\'t exist : ' + image_url)
 		return False
 
 # Calculate the MD5 checksum for the file fname
