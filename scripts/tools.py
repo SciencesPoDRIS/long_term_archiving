@@ -182,15 +182,15 @@ def md5(fname) :
 def get_node_values(node, element) :
 	values = []
 	contents = []
-	# By default filter is first_filter
-	filter = 'first'
+	# By default filters is first_filter, so get only the content of the first occurrence
+	filters = ['first']
 	for access_method in node['value'] :
 		# If values is empty, pass through next access method
 		# Implement logic for xpath
 		if len(values) == 0 and access_method['method'] == 'xpath' :
 			# Set filter logic for this method
-			if 'filter' in access_method :
-				filter = access_method['filter']
+			if 'filters' in access_method :
+				filters = access_method['filters']
 			# Iterate over xpaths
 			for xpath in access_method['paths'] :
 				# Extract values
@@ -202,18 +202,20 @@ def get_node_values(node, element) :
 			tree_marc = get_srusrw_tree()
 			if records_count > 0 :
 				# Set filter logic for this method
-				if 'filter' in access_method:
-					filter = access_method['filter']
+				if 'filters' in access_method:
+					filters = access_method['filters']
 				for xpath in access_method['paths'] :
 					xpath_value = tree_marc.find(xpath, ns_marc)
 					if xpath_value is not None :
 						values += [tree_marc.find(xpath, ns_marc)]
-	# Implement the filter logic
+	# Implement the filters logic
 	# TODO : check that this function exists
 	if len(values) > 0 :
-		contents = eval(filter + '_filter(values)')
+		contents = values
+		for filter in filters :
+			contents = eval(filter + '_filter(contents)')
 	else :
-		logging.error('Node "' + node['name'] + '" has a problem with the filter attribute.')
+		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
 # Build the node (name, value, children...) and add it to the tree
@@ -238,8 +240,13 @@ def create_node(node_parent, node, element = None) :
 		values = get_node_values(node, element)
 		for value in values :
 			new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
-	elif 'filter' in node :
-		value = eval(node['filter'] + '_filter()')
+	elif 'filters' in node :
+		value = ''
+		for filter in filters :
+			if value == '' :
+				value = eval(node['filter'] + '_filter()')
+			else :
+				value = eval(node['filter'] + '_filter(value)')
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
 	if 'default_value' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
 		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
