@@ -145,6 +145,9 @@ def format_filter(values) :
 def get_mets_file_filter(values) :
 	return ['DESC/' + values[0].text + '.xml']
 
+def split_filter(values) :
+	return values[0].split(' ')
+
 # For each value, split file name with '_', get the language as 
 # TO BE DONE
 def bequali_get_languages_filter(values) :
