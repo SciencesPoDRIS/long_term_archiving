@@ -235,7 +235,33 @@ def create_node(node_parent, node, element, recursive = False) :
 	# 		# Recall the function to create the node after a deep copy
 	# 		new_node = create_node(node_parent, tmp, recursive)
 	# 		create_node(new_node, tmp, recursive, True)
-	if 'repeat' in node :
+	if 'recursive' in node :
+		# Collect all nodes
+		# recursives = element.xpath(node['recursive'], namespaces = ns)
+		#for recursive in recursives :
+		#	etree.SubElement(node_parent, node_name)
+		# node['value'] = [{
+			# "method": "xpath",
+			# "paths": node['recursive']
+		# }]
+		# del node['recursive']
+		# create_node(node_parent, node, element)
+		print 'RECURSIVE'
+		tmp = copy.deepcopy(node)
+		tmp['value'] = [{
+			"method": "xpath",
+			"paths": node['recursive']
+		}]
+		if 'children' in tmp :
+			print tmp
+			print tmp['children']
+			print tmp['recursive']
+			# Add recursivity
+			# tmp['children']['recursive'] = tmp['recursive']
+		recursive = element.xpath(tmp['recursive'], namespaces = ns)
+		del tmp['recursive']
+		new_node = create_node(node_parent, tmp, recursive[0])
+	elif 'repeat' in node :
 		repeats = element.xpath(node['repeat'], namespaces = ns)
 		for repeat in repeats :
 			# Delete the repeat attribute
@@ -262,8 +288,6 @@ def create_node(node_parent, node, element, recursive = False) :
 	else :
 		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
 		new_node = False
-	if 'recursive' in node :
-		print new_node
 	# return new_node
 
 def xml2xml(input_file, output_file, json_file, conf_arg) :
