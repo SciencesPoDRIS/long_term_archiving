@@ -251,8 +251,9 @@ def create_node(node_parent, node, element = None) :
 			else :
 				value = eval(node['filter'] + '_filter(value)')
 		etree.SubElement(node_parent, node_name, node_attributes).text = value
-	if 'default_value' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
-		etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
+	if 'default_values' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
+		for default_value in node['default_values'] :
+			etree.SubElement(node_parent, node_name, node_attributes).text = default_value
 
 def xml2xml(input_file, output_file, json_file, conf_arg) :
 	# Load input_file
