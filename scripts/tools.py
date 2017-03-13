@@ -41,7 +41,8 @@ ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
 	'mets' : 'http://www.loc.gov/METS/',
 	'xlink' : 'http://www.w3.org/1999/xlink',
-	'ddi' : 'ddi:codebook:2_2'
+	'ddi' : 'ddi:codebook:2_2',
+	'dc' : 'http://purl.org/dc/elements/1.1/'
 }
 ns_marc = {
 	'ns0' : 'http://docs.oasis-open.org/ns/search-ws/sruResponse',
