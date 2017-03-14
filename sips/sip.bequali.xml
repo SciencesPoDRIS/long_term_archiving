@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ArchiveTransfer xmlns="fr:gouv:culture:archivesdefrance:seda:v1.0">
+  <ArchiveTransfer>
+    <Date>2017-03-14</Date>
+    <TransferIdentifier>cdsp_bequali_sp5</TransferIdentifier>
+    <ArchivalAgency>
+      <Identification schemeAgencyName="INSEE" schemeName="SIRET">19341594000017</Identification>
+      <Name>Centre Informatique National de l'Enseignement Supérieur</Name>
+    </ArchivalAgency>
+    <TransferringAgency>
+      <Identification schemeAgencyName="INSEE" schemeName="SIRET">40180089013</Identification>
+      <Name>CDSP - UMS828</Name>
+    </TransferringAgency>
+    <Archive>
+      <ArchivalAgreement>TO BE DONE</ArchivalAgreement>
+      <ArchivalProfile>TO BE DONE</ArchivalProfile>
+      <DescriptionLanguage>fra</DescriptionLanguage>
+      <Name>Représentation du champ social, attitudes politiques et changements socio-économiques</Name>
+      <OriginatingAgencyArchiveIdentifier>cdsp_bequali_sp5</OriginatingAgencyArchiveIdentifier>
+      <TransferringAgencyArchiveIdentifier>cdsp_bequali_sp5</TransferringAgencyArchiveIdentifier>
+      <ContentDescription>
+        <Description>Enquête réalisée entre 1978 et 1980 sous la direction de Jean-Marie Donégani, Guy Michelat et Michel Simon pour le Comité d'organisation des recherches apppliquées sur le développement économique et social (CORDES) et faisant écho à une autre recherche de démarche quantitative menée en 1966. Le terrain a été réalisé en 1978, juste avant les élections législatives, sur la base d'entretiens non directifs conduits par Claude Nédélec et Jean-Marie Donégani. L'analyse typologique qui en a découlé a conduit à la parution d'un rapport en 1980 intitulé "Représentation du champ social, attitudes politiques et changements socio-économiques". </Description>
+        <DescriptionLevel listVersionID="edition 2009">Item</DescriptionLevel>
+        <Language listVersionID="edition 2011">fra</Language>
+        <LatestDate>A REVOIR APRES EVOLUTION DE L'EAD</LatestDate>
+        <OldestDate>A REVOIR APRES EVOLUTION DE L'EAD</OldestDate>
+        <Keyword>
+          <KeywordContent>Opinions politiques</KeywordContent>
+          <KeywordContent>Attitudes politiques</KeywordContent>
+          <KeywordContent>Religion</KeywordContent>
+          <KeywordContent>Classe</KeywordContent>
+          <KeywordContent>1978</KeywordContent>
+          <KeywordContent>1980</KeywordContent>
+        </Keyword>
+        <OriginatingAgency>
+          <Description>Equipex Dime SHS</Description>
+          <Identification schemeName="TVA">40180089013</Identification>
+          <Name>Sciences Po | CDSP | beQuali</Name>
+        </OriginatingAgency>
+        <OtherMetadata>Michelat, Guy</OtherMetadata>
+      </ContentDescription>
+      <AccessRestrictionRule>
+        <Code listVersionID="edition 2009">AR048</Code>
+        <StartDate>2016-06-29</StartDate>
+      </AccessRestrictionRule>
+      <AppraisalRule>
+        <Code listVersionID="edition 2009">conserver</Code>
+        <Duration>0</Duration>
+        <StartDate>TO BE DONE</StartDate>
+      </AppraisalRule>
+      <ArchiveObject>
+        <ContentDescription>
+          <Description>A REPRENDRE</Description>
+          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
+          <Language listVersionID="listVersionID">TO BE DONE</Language>
+          <LatestDate>A VOIR PLUS TARD</LatestDate>
+          <OldestDate>A VOIR PLUS TARD</OldestDate>
+        </ContentDescription>
+      </ArchiveObject>
+    </Archive>
+  </ArchiveTransfer>
+</ArchiveTransfer>
