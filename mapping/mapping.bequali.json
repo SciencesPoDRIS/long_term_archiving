@@ -1,0 +1,193 @@
+{
+    "root": [{
+        "name": "ArchiveTransfer",
+        "children": [{
+            "name": "Date",
+            "filters": ["current_date"]
+        }, {
+            "name": "TransferIdentifier",
+            "value": [{
+                "method": "xpath",
+                "paths": [".//ddi:IDNo"]
+            }]
+        }, {
+            "name": "ArchivalAgency",
+            "children": [{
+                "name": "Identification",
+                "default_values": ["19341594000017"],
+                "attributes": {
+                    "schemeName": "SIRET",
+                    "schemeAgencyName": "INSEE"
+                }
+            }, {
+                "name": "Name",
+                "default_values": ["Centre Informatique National de l'Enseignement Supérieur"]
+            }]
+        }, {
+            "name": "TransferringAgency",
+            "children": [{
+                "name": "Identification",
+                "default_values": ["40180089013"],
+                "attributes": {
+                    "schemeName": "SIRET",
+                    "schemeAgencyName": "INSEE"
+                }
+            }, {
+                "name": "Name",
+                "default_values": ["CDSP - UMS828"]
+            }]
+        }, {
+            "name": "Archive",
+            "children": [{
+                "name": "ArchivalAgreement",
+                "default_values": ["TO BE DONE"]
+            }, {
+                "name": "ArchivalProfile",
+                "default_values": ["TO BE DONE"]
+            }, {
+                "name": "DescriptionLanguage",
+                "default_values": ["fra"]
+            }, {
+                "name": "Name",
+                "value": [{
+                    "method": "xpath",
+                    "paths": [".//ddi:stdyDscr/ddi:citation/ddi:titlStmt/ddi:titl"]
+                }]
+            }, {
+                "name": "OriginatingAgencyArchiveIdentifier",
+                "value": [{
+                    "method": "xpath",
+                    "paths": [".//ddi:IDNo"]
+                }]
+            }, {
+                "name": "TransferringAgencyArchiveIdentifier",
+                "value": [{
+                    "method": "xpath",
+                    "paths": [".//ddi:IDNo"]
+                }]
+            }, {
+                "name": "ContentDescription",
+                "children": [{
+                    "name": "Description",
+                    "value": [{
+                        "method": "xpath",
+                        "paths": [".//ddi:abstract"]
+                    }]
+                }, {
+                    "name": "DescriptionLevel",
+                    "default_values": ["Item"],
+                    "attributes": {
+                        "listVersionID": "edition 2009"
+                    }
+                }, {
+                    "name": "Language",
+                    "default_values": ["fra"],
+                    "attributes": {
+                        "listVersionID": "edition 2011"
+                    }
+                }, {
+                    "name": "LatestDate",
+                    "default_values": ["A REVOIR APRES EVOLUTION DE L'EAD"]
+                }, {
+                    "name": "OldestDate",
+                    "default_values": ["A REVOIR APRES EVOLUTION DE L'EAD"]
+                }, {
+                    "name": "Keyword",
+                    "children": [{
+                        "name": "KeywordContent",
+                        "value": [{
+                            "method": "xpath",
+                            "paths": [".//ddi:keyword"],
+                            "filters": ["all"]
+                        }]
+                    }]
+                }, {
+                    "name": "OriginatingAgency",
+                    "children": [{
+                        "name": "Description",
+                        "default_values": ["Equipex Dime SHS"]
+                    }, {
+                        "name": "Identification",
+                        "attributes": {
+                            "schemeName": "TVA"
+                        },
+                        "default_values": ["40180089013"]
+                    }, {
+                        "name": "Name",
+                        "default_values": ["Sciences Po | CDSP | beQuali"]
+                    }]
+                }, {
+                    "name": "OtherMetadata",
+                    "value": [{
+                        "method": "xpath",
+                        "paths": [".//acqinfo/chronlist/chronitem/event/persname[@source=\"annuaire_producteurs\"]"]
+                    }]
+                }]
+            }, {
+                "name": "AccessRestrictionRule",
+                "children": [{
+                    "name": "Code",
+                    "attributes": {
+                        "listVersionID": "edition 2009"
+                    },
+                    "default_values": ["AR048"]
+                }, {
+                    "name": "StartDate",
+                    "value": [{
+                        "method": "xpath",
+                        "paths": [".//acqinfo/chronlist/chronitem/date"]
+                    }]
+                }]
+            }, {
+                "name": "AppraisalRule",
+                "children": [{
+                    "name": "Code",
+                    "attributes": {
+                        "listVersionID": "edition 2009"
+                    },
+                    "default_values": ["conserver"]
+                }, {
+                    "name": "Duration",
+                    "default_values": ["0"]
+                }, {
+                    "name": "StartDate",
+                    "default_values": ["TO BE DONE"]
+                }]
+            }, {
+                "name": "ArchiveObject",
+                "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]",
+                "children": [{
+                    "name": "Name",
+                    "value": [{
+                        "method": "xpath",
+                        "paths": ["./did/unittitle"]
+                        }]
+                    }, {
+                    "name": "ContentDescription",
+                    "children": [{
+                        "name": "Description",
+                        "default_values": ["A REPRENDRE"]
+                    }, {
+                        "name": "DescriptionLevel",
+                        "default_values": ["A REPRENDRE"],
+                        "attributes": {
+                            "listVersionID": "edition 2009"
+                        }
+                    }, {
+                        "name": "Language",
+                        "default_values": ["TO BE DONE"],
+                        "attributes": {
+                            "listVersionID": "listVersionID"
+                        }
+                    }, {
+                        "name": "LatestDate",
+                        "default_values": ["A VOIR PLUS TARD"]
+                    }, {
+                        "name": "OldestDate",
+                        "default_values": ["A VOIR PLUS TARD"]
+                    }]
+                }]
+            }]
+        }]
+    }]
+}

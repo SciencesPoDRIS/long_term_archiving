@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file
+# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file
 
 
 #
 # Libs
 #
 
+import copy
 import datetime
 import hashlib
 import json
@@ -15,6 +16,7 @@ from lxml import etree
 import os
 import re
 import sys
+import time
 import urllib
 import urllib2
 
@@ -36,6 +38,9 @@ xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xs
 nsmap = {
 	None : 'http://www.cines.fr/pac/sip',
 	'xsi' : xsi
+}
+nsmap_seda = {
+	None : 'fr:gouv:culture:archivesdefrance:seda:v1.0'
 }
 ns = {
 	'mods' : 'http://www.loc.gov/mods/v3',
@@ -162,13 +167,13 @@ def get_source_filter(values) :
 
 # For each value, split file name with '_', get the language as 
 # TO BE DONE
-def bequali_get_languages_filter(values) :
-	tmp = []
-	for x in values :
-		print x
-	# 	if x not in tmp :
-	# 		tmp.append(x)
-	return tmp
+# def bequali_get_languages_filter(values) :
+# 	tmp = []
+# 	for x in values :
+# 		print x
+# 	# 	if x not in tmp :
+# 	# 		tmp.append(x)
+# 	return tmp
 
 def current_date_filter():
 	return str(datetime.date.today())
@@ -203,7 +208,7 @@ def get_node_values(node, element) :
 		# If values is empty, pass through next access method
 		# Implement logic for xpath
 		if len(values) == 0 and access_method['method'] == 'xpath' :
-			# Set filter logic for this method
+			# Set filters logic for this method
 			if 'filters' in access_method :
 				filters = access_method['filters']
 			# Iterate over xpaths
@@ -216,7 +221,7 @@ def get_node_values(node, element) :
 		elif len(values) == 0 and access_method['method'] == 'srusrw' :
 			tree_marc = get_srusrw_tree()
 			if records_count > 0 :
-				# Set filter logic for this method
+				# Set filters logic for this method
 				if 'filters' in access_method:
 					filters = access_method['filters']
 				for xpath in access_method['paths'] :
@@ -233,10 +238,11 @@ def get_node_values(node, element) :
 		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
-# Build the node (name, value, children...) and add it to the tree
-def create_node(node_parent, node, element = None) :
+# Build the node (name, value, children...) and add it to the node_parent
+def create_node(node_parent, node, element, recursive = False) :
 	node_name = node['name']
 	node_attributes = node['attributes'] if 'attributes' in node else {}
+	# If node has children, create them
 	if 'repeat' in node :
 		repeats = tree.xpath(node['repeat'], namespaces = ns)
 		# Delete the repeat attribute
@@ -244,7 +250,6 @@ def create_node(node_parent, node, element = None) :
 		for repeat in repeats :
 			# Recall the function to create the node
 			create_node(node_parent, node, repeat)
-	# If node has children, create them
 	elif 'children' in node :
 		node_children = node['children']
 		new_node = etree.SubElement(node_parent, node_name, node_attributes)
@@ -273,13 +278,14 @@ def xml2xml(input_file, output_file, json_file, conf_arg) :
 	global conf
 	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
-	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	# data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
 	# Start the creation of the XML with the 'root' tag of the JSON file
 	for node in meta_json['root'] :
-		create_node(data, node)
+		create_node(data, node, tree)
 	# Write result into output_file
 	write_xml_file(output_file, data)
 
