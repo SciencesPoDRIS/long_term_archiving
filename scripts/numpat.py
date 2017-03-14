@@ -240,7 +240,7 @@ if __name__ == '__main__' :
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
-			json_file = 'scripts/matching.json'
+			json_file = 'scripts/mapping.json'
 			tools.xml2xml(mets_file_path, sip_file_path, json_file, conf)
 			# Send the folder to CINES
 			sendCinesArchive(local_folder_path)
