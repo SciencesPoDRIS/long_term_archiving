@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<pac xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cines.fr/pac/sip" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
+  <DocDC>
+    <title language="fra">France élections législatives 1973, Ain, 01ere circonscription, 1er tour, Professions de foi</title>
+    <creator>Fondation Nationale des Sciences Politiques</creator>
+    <subject language="fra">France</subject>
+    <subject language="fra">élections</subject>
+    <subject language="fra">législatives</subject>
+    <subject language="fra">1973</subject>
+    <subject language="fra">documents</subject>
+    <subject language="fra">électoraux</subject>
+    <description language="fra">Ce fonds d'archives électorales couvre les élections de 1958 à 2002. Il contient des professions de foi et des bulletins de vote des candidats.</description>
+    <publisher>SciencesPo CEVIPOF</publisher>
+    <date>1973-03-04</date>
+    <type language="fra">Affiches</type>
+    <type language="fra">Banderoles</type>
+    <type language="fra">Discours et programmes électoraux</type>
+    <type language="fra">Tracts</type>
+  </DocDC>
+</pac>
