@@ -34,7 +34,7 @@ log_folder = 'log'
 log_level = logging.DEBUG
 conf_folder = 'conf'
 conf_file = os.path.join(conf_folder, 'conf.json')
-sip_file_name = 'sip.xml'
+sip_file_name = 'sip.numpat.xml'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
 xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'
@@ -240,7 +240,7 @@ if __name__ == '__main__' :
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
-			json_file = 'scripts/mapping.json'
+			json_file = 'mapping/mapping.numpat.json'
 			tools.xml2xml(mets_file_path, sip_file_path, json_file, conf)
 			# Send the folder to CINES
 			sendCinesArchive(local_folder_path)

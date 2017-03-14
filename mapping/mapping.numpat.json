@@ -9,20 +9,20 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:nonSort", ".//mods:title"],
-                "filter" : "concat"
+                "filters" : ["concat"]
             }]
         }, {
             "name" : "creator",
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:namePart[@type=\"given\"]", ".//mods:namePart[@type=\"family\"]"],
-                "filter" : "concat"
+                "filters" : ["concat"]
             }, {
                 "method" : "xpath",
                 "paths" : [".//mods:namePart"],
-                "filter" : "concat"
+                "filters" : ["concat"]
             }],
-            "default_value" : "Non renseigné"
+            "default_values" : ["Non renseigné"]
         }, {
             "name" : "subject",
             "attributes" : {
@@ -31,26 +31,26 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:topic"],
-                "filter" : "all"
+                "filters" : ["all"]
             }, {
                 "method" : "srusrw",
                 "paths" : [".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=\"a\"]", ".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=\"y\"]", ".//ns1:datafield[@tag=\"606\"]/ns1:subfield[@code=\"x\"]", ".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"x\"]"],
-                "filter" : "all"
+                "filters" : ["all"]
             }],
-            "default_value" : "Non renseigné"
+            "default_values" : ["Non renseigné"]
         }, {
             "name" : "description",
             "attributes" : {
                 "language" : "fra"
             },
-            "default_value" : "Non renseigné"
+            "default_values" : ["Non renseigné"]
         }, {
             "name" : "publisher",
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:publisher"]
             }],
-            "default_value" : "s.n."
+            "default_values" : ["s.n."]
         }, {
             "name" : "date",
             "value" : [{
@@ -65,7 +65,7 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:genre[@authority=\"marcgt\"]"],
-                "filter" : "type"
+                "filters" : ["type"]
             }]
         }, {
             "name" : "format",
@@ -75,9 +75,9 @@
             "value" : [{
                 "method" : "srusrw",
                 "paths" : [".//ns1:datafield[@tag=\"215\"]/ns1:subfield[@code=\"a\"]", ".//ns1:datafield[@tag=\"215\"]/ns1:subfield[@code=\"d\"]"],
-                "filter" : "concat"
+                "filters" : ["concat"]
             }],
-            "default_value" : ""
+            "default_values" : [""]
         }, {
             "name" : "source",
             "attributes" : {
@@ -89,7 +89,7 @@
             }]
         }, {
             "name" : "language",
-            "default_value" : "fra"
+            "default_values" : ["fra"]
         }, {
             "name" : "coverage",
             "attributes" : {
@@ -98,18 +98,18 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:geographic", ".//mods:temporal"],
-                "filter" : "all"
+                "filters" : ["all"]
             }, {
                 "method" : "srusrw",
                 "paths" : [".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"a\"]", ".//ns1:datafield[@tag=\"607\"]/ns1:subfield[@code=\"z\"]"],
-                "filter" : "all"
+                "filters" : ["all"]
             }]
         }, {
             "name" : "rights",
             "attributes" : {
                 "language" : "fra"
             },
-            "default_value" : "Libre de droits"
+            "default_values" : ["Libre de droits"]
         }]
     }, {
         "name" : "DocMeta",
@@ -130,25 +130,25 @@
             }]
         }, {
             "name" : "serviceVersant",
-            "default_value" : "Fondation Nationale des Sciences Politiques"
+            "default_values" : ["Fondation Nationale des Sciences Politiques"]
         }, {
             "name" : "planClassement",
             "attributes" : {
                 "language" : "fra"
             },
-            "default_value" : "Numérisation patrimoniale"
+            "default_values" : ["Numérisation patrimoniale"]
         }]
     }, {
         "name" : "FichMeta",
         "children" : [{
             "name" : "formatFichier",
-            "default_value" : "XML"
+            "default_values" : ["XML"]
         }, {
             "name" : "nomFichier",
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:recordIdentifier"],
-                "filter" : "get_mets_file"
+                "filters" : ["get_mets_file"]
             }]
         }, {
             "name" : "empreinteOri",
@@ -158,7 +158,7 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mods:recordIdentifier"],
-                "filter" : "md5xml"
+                "filters" : ["md5xml"]
             }]
         }]
     }, {
@@ -169,14 +169,14 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mets:FLocat/@xlink:href[contains(., 'file://master/')]", ".//mets:FLocat/@xlink:href[contains(., 'file://ocr/')]"],
-                "filter" : "format"
+                "filters" : ["format"]
             }]
         }, {
             "name" : "nomFichier",
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mets:FLocat/@xlink:href[contains(., 'file://master/')]", ".//mets:FLocat/@xlink:href[contains(., 'file://ocr/')]"],
-                "filter" : "filename"
+                "filters" : ["filename"]
             }]
         }, {
             "name" : "empreinteOri",
@@ -186,7 +186,7 @@
             "value" : [{
                 "method" : "xpath",
                 "paths" : [".//mets:FLocat/@xlink:href[contains(., 'file://master/')]", ".//mets:FLocat/@xlink:href[contains(., 'file://ocr/')]"],
-                "filter" : "md5"
+                "filters" : ["md5"]
             }]
         }]
     }]
