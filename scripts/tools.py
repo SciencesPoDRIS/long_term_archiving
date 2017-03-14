@@ -174,15 +174,15 @@ def md5(fname) :
 def get_node_values(node, element) :
 	values = []
 	contents = []
-	# By default filter is first_filter
-	filter = 'first'
+	# By default filters is first_filter
+	filters = ['first']
 	for access_method in node['value'] :
 		# If values is empty, pass through next access method
 		# Implement logic for xpath
 		if len(values) == 0 and access_method['method'] == 'xpath' :
-			# Set filter logic for this method
-			if 'filter' in access_method :
-				filter = access_method['filter']
+			# Set filters logic for this method
+			if 'filters' in access_method :
+				filters = access_method['filters']
 			# Iterate over xpaths
 			for xpath in access_method['paths'] :
 				# Extract values
@@ -193,83 +193,35 @@ def get_node_values(node, element) :
 		elif len(values) == 0 and access_method['method'] == 'srusrw' :
 			tree_marc = get_srusrw_tree()
 			if records_count > 0 :
-				# Set filter logic for this method
-				if 'filter' in access_method:
-					filter = access_method['filter']
+				# Set filters logic for this method
+				if 'filters' in access_method:
+					filters = access_method['filters']
 				for xpath in access_method['paths'] :
 					xpath_value = tree_marc.find(xpath, ns_marc)
 					if xpath_value is not None :
 						values += [tree_marc.find(xpath, ns_marc)]
-	# Implement the filter logic
+	# Implement the filters logic
 	# TODO : check that this function exists
 	if len(values) > 0 :
-		contents = eval(filter + '_filter(values)')
+		contents = values
+		for filter in filters :
+			contents = eval(filter + '_filter(contents)')
 	else :
-		logging.error('Node "' + node['name'] + '" has a problem with the filter attribute.')
+		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
 # Build the node (name, value, children...) and add it to the node_parent
 def create_node(node_parent, node, element, recursive = False) :
 	node_name = node['name']
 	node_attributes = node['attributes'] if 'attributes' in node else {}
-	# if 'recursive' in node :
-	# 	recursives = element.xpath(node['recursive'], namespaces = ns)
-	# 	for recursive in recursives :
-	# 		# Delete the repeat attribute
-	# 		tmp = copy.deepcopy(node)
-	# 		del tmp['recursive']
-	# 		# Recall the function to create the node
-	# 		new_node = create_node(node_parent, tmp, recursive)
-	# 		create_node(new_node, node, recursive)
-	# if 'recursive' in node or recursive :
-	# 	if 'recursive' in node :
-	# 		recursives = element.xpath(node['recursive'], namespaces = ns)
-	# 	else :
-	# 		print 'recursive'
-	# 		print node
-	# 		recursives = []
-	# 	for recursive in recursives :
-	# 		# Delete the recursive attribute
-	# 		tmp = copy.deepcopy(node)
-	# 		del tmp['recursive']
-	# 		# Recall the function to create the node after a deep copy
-	# 		new_node = create_node(node_parent, tmp, recursive)
-	# 		create_node(new_node, tmp, recursive, True)
-	if 'recursive' in node :
-		# Collect all nodes
-		# recursives = element.xpath(node['recursive'], namespaces = ns)
-		#for recursive in recursives :
-		#	etree.SubElement(node_parent, node_name)
-		# node['value'] = [{
-			# "method": "xpath",
-			# "paths": node['recursive']
-		# }]
-		# del node['recursive']
-		# create_node(node_parent, node, element)
-		print 'RECURSIVE'
-		tmp = copy.deepcopy(node)
-		tmp['value'] = [{
-			"method": "xpath",
-			"paths": node['recursive']
-		}]
-		if 'children' in tmp :
-			print tmp
-			print tmp['children']
-			print tmp['recursive']
-			# Add recursivity
-			# tmp['children']['recursive'] = tmp['recursive']
-		recursive = element.xpath(tmp['recursive'], namespaces = ns)
-		del tmp['recursive']
-		new_node = create_node(node_parent, tmp, recursive[0])
-	elif 'repeat' in node :
-		repeats = element.xpath(node['repeat'], namespaces = ns)
-		for repeat in repeats :
-			# Delete the repeat attribute
-			tmp = copy.deepcopy(node)
-			del tmp['repeat']
-			# Recall the function to create the node after a deep copy
-			new_node = create_node(node_parent, tmp, repeat)
 	# If node has children, create them
+	if 'repeat' in node :
+		repeats = tree.xpath(node['repeat'], namespaces = ns)
+		# Delete the repeat attribute
+		del node['repeat']
+		for repeat in repeats :
+			# Recall the function to create the node
+			create_node(node_parent, node, repeat)
 	elif 'children' in node :
 		node_children = node['children']
 		new_node = etree.SubElement(node_parent, node_name, node_attributes)
@@ -279,16 +231,18 @@ def create_node(node_parent, node, element, recursive = False) :
 	elif 'value' in node :
 		values = get_node_values(node, element)
 		for value in values :
-			new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
-	elif 'filter' in node :
-		value = eval(node['filter'] + '_filter()')
-		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = value
-	elif 'default_value' in node and (not 'value' in node or ('value' in node and len(values) == 0)) :
-		new_node = etree.SubElement(node_parent, node_name, node_attributes).text = node['default_value']
-	else :
-		logging.error('Node "' + node_name + '" should have either a "repeat" or "children" or "value" or "default_value" attribute.')
-		new_node = False
-	# return new_node
+			etree.SubElement(node_parent, node_name, node_attributes).text = value
+	elif 'filters' in node :
+		value = ''
+		for filter in node['filters'] :
+			if value == '' :
+				value = eval(filter + '_filter()')
+			else :
+				value = eval(filter + '_filter(value)')
+		etree.SubElement(node_parent, node_name, node_attributes).text = value
+	if 'default_values' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
+		for default_value in node['default_values'] :
+			etree.SubElement(node_parent, node_name, node_attributes).text = default_value
 
 def xml2xml(input_file, output_file, json_file, conf_arg) :
 	# Load input_file
