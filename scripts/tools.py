@@ -257,11 +257,11 @@ def create_node(node_parent, node, element = None) :
 			etree.SubElement(node_parent, node_name, node_attributes).text = value
 	elif 'filters' in node :
 		value = ''
-		for filter in filters :
+		for filter in node['filters'] :
 			if value == '' :
-				value = eval(node['filter'] + '_filter()')
+				value = eval(filter + '_filter()')
 			else :
-				value = eval(node['filter'] + '_filter(value)')
+				value = eval(filter + '_filter(value)')
 		etree.SubElement(node_parent, node_name, node_attributes).text = value
 	if 'default_values' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
 		for default_value in node['default_values'] :
