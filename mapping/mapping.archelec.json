@@ -1,0 +1,49 @@
+{
+    "root" : [{
+        "name" : "DocDC",
+        "children" : [{
+                "name" : "title",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//dc:title"]
+                }]
+            }, {
+                "name" : "creator",
+                "default_values" : ["Fondation Nationale des Sciences Politiques"]
+            }, {
+                "name" : "subject",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//dc:subject[1]"],
+                    "filters" : ["first", "split"]
+                }]
+            }, {
+                "name" : "description",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "default_values" : ["Ce fonds d'archives électorales couvre les élections de 1958 à 2002. Il contient des professions de foi et des bulletins de vote des candidats."]
+            }, {
+                "name" : "publisher",
+                "default_values" : ["SciencesPo CEVIPOF"]
+            }, {
+                "name" : "date",
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//dc:date"]
+                }]
+            }, {
+                "name" : "type",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "default_values" : ["Affiches", "Banderoles", "Discours et programmes électoraux", "Tracts"]
+            }]
+    }]
+}
