@@ -21,7 +21,7 @@
                 "value" : [{
                     "method" : "xpath",
                     "paths" : [".//dc:subject[1]"],
-                    "filters" : ["first", "split"]
+                    "filters" : ["first", "split", "lowercase"]
                 }]
             }, {
                 "name" : "description",
@@ -44,6 +44,80 @@
                     "language" : "fra"
                 },
                 "default_values" : ["Affiches", "Banderoles", "Discours et programmes électoraux", "Tracts"]
+            }, {
+                "name" : "format",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//mets:file[@MIMETYPE=\"image/jp2\"]"],
+                    "filters" : ["count_JPEG2000"]
+                }]
+            }, {
+                "name" : "format",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//mets:file[@MIMETYPE=\"application/pdf\"]"],
+                    "filters" : ["count_PDF"]
+                }]
+            }, {
+                "name" : "source",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//dc:identifier"],
+                    "filters" : ["first", "get_source"]
+                }]
+            }, {
+                "name" : "language",
+                "default_values" : ["fra"]
+            }, {
+                "name" : "coverage",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//dc:coverage"],
+                    "filters" : ["first", "split"]
+                }]
+            }, {
+                "name" : "rights",
+                "attributes" : {
+                    "language" : "fra"
+                },
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//mets:dmdSec[1]//*/dc:rights"],
+                    "filters" : ["all"]
+                }]
             }]
+    }, {
+        "name" : "DocMeta",
+        "children" : [{
+            "name" : "identifiantDocProducteur",
+            "value" : [{
+                "method" : "xpath",
+                "paths" : [".//dc:identifier"]
+            }]
+        }, {
+            "name" : "serviceVersant",
+            "default_values" : ["Fondation Nationale des Sciences Politiques"]
+        }, {
+            "name" : "planClassement",
+            "attributes" : {
+                "language" : "fra"
+            },
+            "value" : [{
+                "method" : "xpath",
+                "paths" : [".//dc:identifier"]
+            }]
+        }]
     }]
 }

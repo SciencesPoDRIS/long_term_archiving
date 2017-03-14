@@ -148,6 +148,18 @@ def get_mets_file_filter(values) :
 def split_filter(values) :
 	return values[0].split(' ')
 
+def lowercase_filter(values) :
+	return [x.lower() for x in values]
+
+def count_JPEG2000_filter(values) :
+	return [str(len(values)) + ' documents JPG2000']
+
+def count_PDF_filter(values) :
+	return [str(len(values)) + ' documents PDF']
+
+def get_source_filter(values) :
+	return [values[0].split('_')[0]]
+
 # For each value, split file name with '_', get the language as 
 # TO BE DONE
 def bequali_get_languages_filter(values) :

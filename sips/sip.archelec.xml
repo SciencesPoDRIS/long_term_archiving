@@ -3,7 +3,7 @@
   <DocDC>
     <title language="fra">France élections législatives 1973, Ain, 01ere circonscription, 1er tour, Professions de foi</title>
     <creator>Fondation Nationale des Sciences Politiques</creator>
-    <subject language="fra">France</subject>
+    <subject language="fra">france</subject>
     <subject language="fra">élections</subject>
     <subject language="fra">législatives</subject>
     <subject language="fra">1973</subject>
@@ -16,5 +16,18 @@
     <type language="fra">Banderoles</type>
     <type language="fra">Discours et programmes électoraux</type>
     <type language="fra">Tracts</type>
+    <format language="fra">2748 documents JPG2000</format>
+    <format language="fra">184 documents PDF</format>
+    <source language="fra">EL065</source>
+    <language>fra</language>
+    <coverage language="fra">France</coverage>
+    <coverage language="fra">Ain</coverage>
+    <rights language="fra">domaine public</rights>
+    <rights language="fra">Creative Commons CC BY-SA 3.0 FR</rights>
   </DocDC>
+  <DocMeta>
+    <identifiantDocProducteur>EL065_L_1973_03_001_01_1_PF</identifiantDocProducteur>
+    <serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
+    <planClassement language="fra">EL065_L_1973_03_001_01_1_PF</planClassement>
+  </DocMeta>
 </pac>
