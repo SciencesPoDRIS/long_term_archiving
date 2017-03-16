@@ -34,7 +34,7 @@ log_folder = 'log'
 log_level = logging.DEBUG
 conf_folder = 'conf'
 conf_file = os.path.join(conf_folder, 'conf.json')
-sip_file_name = 'sip.numpat.xml'
+sip_file_name = 'sip.xml'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
 xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'

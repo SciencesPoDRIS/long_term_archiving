@@ -278,8 +278,8 @@ def xml2xml(input_file, output_file, json_file, conf_arg) :
 	global conf
 	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
-	# data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
-	data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
+	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	# data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
