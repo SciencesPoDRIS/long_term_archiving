@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file
+# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/mapping.file
 
 
 #
@@ -18,7 +18,6 @@ import re
 import sys
 import time
 import urllib
-import urllib2
 
 
 #
@@ -115,6 +114,8 @@ def write_xml_file(file_path, data) :
 	tree = etree.ElementTree(data)
 	tree.write(file_path, encoding='UTF-8', pretty_print=True, xml_declaration=True)
 
+# Filters
+
 # Return the content of the first element
 def first_filter(values) :
 	return [values[0].text]
@@ -165,27 +166,57 @@ def count_PDF_filter(values) :
 def get_source_filter(values) :
 	return [values[0].split('_')[0]]
 
-# For each value, split file name with '_', get the language as 
-# TO BE DONE
-# def bequali_get_languages_filter(values) :
-# 	tmp = []
-# 	for x in values :
-# 		print x
-# 	# 	if x not in tmp :
-# 	# 		tmp.append(x)
-# 	return tmp
+# Archelec Filter
+def plan_classement_filter(values) :
+	# Project name
+	plan_classement = u'Archives électorales/'
+	identifier = values[0].text.split('_')
+	# Add election type
+	if identifier[1] == 'L' :
+		plan_classement += u'Législatives/'
+	elif identifier[1] == 'P' :
+		plan_classement += u'Présidentielles/'
+	else :
+		logging.error('planClassement value is not supported : ' + identifier[1])
+	# Add year
+	plan_classement += identifier[2] + '/'
+	# Add month
+	plan_classement += identifier[3] + '/'
+	# Add department
+	plan_classement += identifier[4]
+	return [plan_classement]
 
 def current_date_filter():
 	return str(datetime.date.today())
 
+# Archelec Filter
+def format_fichier_filter(values) :
+	if values[0] == 'image/jp2' :
+		result = 'JPEG2000'
+	elif values[0] == 'application/pdf' :
+		result = 'PDF'
+	else :
+		logging.error('formatFichier value is not supported : ' + values[0])
+	return [result]
+
+# Archelec Filter
+def nom_fichier_filter(values) :
+	return ['/'.join(values[0].replace('file://', '').split('/')[2:])]
+
+# Archelec Filter
+def md5archelec_filter(values) :
+	# For a file, download it into local path and return the MD5 checksum
+	image_url = values[0].replace('file://', 'http://drd-archives01.sciences-po.fr/ArchivesArchElec/ELECTION%20LOT_00/LOT_00/').replace('.PDF', '.pdf').replace('.JP2', '.jp2').replace('.JPG', '.jpg')
+	image_path = conf['local_path'] + folder_separator + values[0].split('/')[-1]
+	if download_image(image_url, image_path) :
+		return [md5(image_path)]
+
 # Download an image from its image_url if it exists into the image_path
 def download_image(image_url, image_path) :
 	try :
-		req = urllib2.Request(image_url)
-		response = urllib2.urlopen(req)
 		urllib.urlretrieve(image_url, image_path)
 		return True
-	except Exception, e :
+	except Exception as e :
 		logging.error('Image url doesn\'t exist : ' + image_url)
 		return False
 
@@ -249,6 +280,9 @@ def create_node(node_parent, node, element, recursive = False) :
 		del node['repeat']
 		for repeat in repeats :
 			# Recall the function to create the node
+			# print repeat
+			# print repeat.tag
+			# print repeat.attrib
 			create_node(node_parent, node, repeat)
 	elif 'children' in node :
 		node_children = node['children']
