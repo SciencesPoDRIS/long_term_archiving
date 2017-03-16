@@ -116,7 +116,36 @@
             },
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//dc:identifier"]
+                "paths" : [".//dc:identifier"],
+                "filters" : ["plan_classement"]
+            }]
+        }]
+    }, {
+        "name" : "FichMeta",
+        "repeat" : ".//mets:file",
+        "children" : [{
+            "name" : "formatFichier",
+            "value" : [{
+                "method" : "xpath",
+                "paths" : ["@MIMETYPE"],
+                "filters" : ["format_fichier"]
+            }]
+        }, {
+            "name" : "nomFichier",
+            "value" : [{
+                "method" : "xpath",
+                "paths" : ["./mets:FLocat/@xlink:href"],
+                "filters" : ["nom_fichier"]
+            }]
+        }, {
+            "name" : "empreinteOri",
+            "attributes" : {
+                "type" : "MD5"
+            },
+            "value" : [{
+                "method" : "xpath",
+                "paths" : ["./mets:FLocat/@xlink:href"],
+                "filters" : ["md5archelec"]
             }]
         }]
     }]
