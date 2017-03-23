@@ -26,7 +26,6 @@ import tools
 # whitelisted_folders = ['sc_0000354761_00000000390999', 'sc_0000397026_00000001066004', 'sc_0000611205_00000000309875']
 whitelisted_folders = []
 folder_separator = '/'
-download_folder = 'download'
 blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
 forbidden_folders = ['.', '..']
@@ -221,6 +220,8 @@ if __name__ == '__main__' :
 	ftp.quit()
 	# Filters all forbidden folders
 	readBlacklistedFolders()
+	# Delete local_path before download
+	removeFolder(conf['local_path'])
 	# Check that local_path already exists
 	createFolder(conf['local_path'])
 	# for subdir in contents_bis :
