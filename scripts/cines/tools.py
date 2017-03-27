@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/mapping.file
+# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
 
 
 #
@@ -24,10 +24,10 @@ import urllib
 # Config
 #
 
+log_folder = 'log'
+log_level = logging.DEBUG
 folder_separator = '/'
 scripts_folder = 'scripts'
-conf_folder = 'conf'
-conf_file = os.path.join(conf_folder, 'conf.json')
 tree_marc_singleton = None
 records_count = 0
 
@@ -266,6 +266,8 @@ def get_node_values(node, element) :
 		for filter in filters :
 			contents = eval(filter + '_filter(contents)')
 	else :
+		print len(values)
+		print node
 		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
@@ -324,18 +326,27 @@ def xml2xml(input_file, output_file, json_file, conf_arg) :
 	write_xml_file(output_file, data)
 
 def main() :
+	# Check that log folder exists, else create it
+	if not os.path.exists(log_folder) :
+		os.makedirs(log_folder)
+	# Create log file path
+	log_file = os.path.join(log_folder, sys.argv[0].split(folder_separator)[-1].replace('.py', '.log'))
+	# Init logs
+	logging.basicConfig(filename=log_file, filemode='a+', format='%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=log_level)
+	logging.info('Start script')
 	# Check if sys.argv is a list
 	if not isinstance(sys.argv, list) :
-		logging.error('sys.argv is not an array. Please check your command line')
+		logging.error('sys.argv is not an array. Please check your command line.')
 		sys.exit()
 	# Check if the number of arguments is correct
-	elif len(sys.argv) != 4 :
+	elif len(sys.argv) != 5 :
 		logging.error('Wrong number of args. Your command line should look like : python tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file')
 		sys.exit()
 	else :
 		mets_file = sys.argv[1]
 		output_file = sys.argv[2]
 		json_file = sys.argv[3]
+		conf_file = sys.argv[4]
 		# Load conf file
 		with open(conf_file) as conf_f :
 			conf_arg = json.load(conf_f)
