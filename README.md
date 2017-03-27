@@ -7,7 +7,7 @@ Python version needed : 2.5 or after.
 
 ## Install
 
-* rename the file conf/conf.default.json into conf/conf.numpat.json and edit it to put your own SRU/SRW server url
+* rename the file conf/conf.default.json into conf/conf.MY_PROJECT.json where MY_PROJECT is the name of my project and edit it to put your own SRU/SRW server url
 * `mkvirtualenv long_term_archiving`
 * `pip install lxml`
 * `pip install paramiko`
@@ -16,10 +16,10 @@ Python version needed : 2.5 or after.
 
 long_term_preservation can be used with any system compatible with python 2.5 by invoking the command
 
-`python scripts/long_term_archiving.py`
+`python scripts/long_term_archiving.py MY_PROJECT`
 
 
-## How to create a config json file that will build the XML from another XML ?
+## How to create a mapping json file that will build the XML from another XML ?
 
 
 each method has an attribute "method" that is one of these values : "xpath", "srusrw"

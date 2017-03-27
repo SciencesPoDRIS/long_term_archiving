@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/long_term_archiving.py
+# Execution example : python scripts/long_term_archiving.py MY_PROJECT
 
 
 #
@@ -32,7 +32,6 @@ forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
 conf_folder = 'conf'
-conf_file = os.path.join(conf_folder, 'conf.numpat.json')
 sip_file_name = 'sip.xml'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
@@ -205,9 +204,19 @@ if __name__ == '__main__' :
 	# Init logs
 	logging.basicConfig(filename=log_file, filemode='a+', format='%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=log_level)
 	logging.info('Start script')
+	# Generate path for config file and mapping file
+	my_project = sys.arg[1]
+	config_file = os.path.join(conf_folder, 'conf.' + my_project + '.json')
+	if not os.path.isfile(config_file) :
+		logging.error('Config file %s doesn\'t exist, please create it.', config_file)
+		sys.exit(0)
+	mapping_file = 'mapping/mapping.' + my_project + '.json'
+	if not os.path.isfile(mapping_file) :
+		logging.error('Mapping file %s doesn\'t exist, please create it.', config_file)
+		sys.exit(0)
 	# Load conf file
 	logging.info('Load conf file')
-	with open(conf_file) as conf_f :
+	with open(config_file) as conf_f :
 		conf = json.load(conf_f)
 	# Connect to server through FTP
 	logging.info('Connect to server through FTP')
@@ -241,8 +250,7 @@ if __name__ == '__main__' :
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
-			json_file = 'mapping/mapping.numpat.json'
-			tools.xml2xml(mets_file_path, sip_file_path, json_file, conf)
+			tools.xml2xml(mets_file_path, sip_file_path, mapping_file, conf)
 			# Send the folder to CINES
 			sendCinesArchive(local_folder_path)
 			# Write the folder as blacklisted folder into the file
