@@ -32,7 +32,6 @@ forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
 conf_folder = 'conf'
-sip_file_name = 'sip.xml'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
 xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'
@@ -207,13 +206,14 @@ if __name__ == '__main__' :
 	# Generate path for config file and mapping file
 	my_project = sys.argv[1]
 	config_file = os.path.join(conf_folder, 'conf.' + my_project + '.json')
+	mapping_file = 'mapping/mapping.' + my_project + '.json'
+	sip_file = 'sip.' + my_project + '.xml'
 	if not os.path.isfile(config_file) :
 		logging.error('Config file %s doesn\'t exist, please create it.', config_file)
-		sys.exit(0)
-	mapping_file = 'mapping/mapping.' + my_project + '.json'
+		sys.exit()
 	if not os.path.isfile(mapping_file) :
 		logging.error('Mapping file %s doesn\'t exist, please create it.', config_file)
-		sys.exit(0)
+		sys.exit()
 	# Load conf file
 	logging.info('Load conf file')
 	with open(config_file) as conf_f :
@@ -228,6 +228,11 @@ if __name__ == '__main__' :
 		ftp.retrlines('LIST', contents_bis.append)
 		# Close the FTP connection
 		ftp.quit()
+	elif conf['source'] == 'local' :
+		print 'THIS IS THE VOICE'
+	else :
+		logging.error('Config file has no \'source\' parameter or it is badly setted. The supported values are \'ftp\' ou \'source\'.')
+		sys.exit()
 	# Filters all forbidden folders
 	readBlacklistedFolders()
 	# Delete tmp_path before download
@@ -237,7 +242,7 @@ if __name__ == '__main__' :
 	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
-		# if subdir not in forbidden_folders + blacklisted_folders :
+		# if subdir in white listed folders :
 		if subdir in whitelisted_folders :
 			local_folder_path = os.path.join(conf['tmp_path'], subdir)
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
