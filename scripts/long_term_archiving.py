@@ -91,7 +91,7 @@ def removeFolder(folder_path) :
 	else :
 		return False
 
-# Download the remote_folder_path into the conf['local_path']
+# Download the remote_folder_path into the conf['tmp_path']
 def ftpDownloadRemoteFolder(remote_folder_path) :
 	logging.info('Download the folder to local : ' + remote_folder_path)
 	# Connect to server through FTP
@@ -108,14 +108,14 @@ def ftpDownloadRemoteFolder(remote_folder_path) :
 		if words[0][0] == 'd' :
 			if content_name not in forbidden_folders :
 				# Create local folder
-				createFolder(os.path.join(conf['local_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name))
+				createFolder(os.path.join(conf['tmp_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name))
 				# Download remote folder content
 				ftpDownloadRemoteFolder(os.path.join(conf['remote_path'], remote_folder_path, content_name))
 		# If it is a file
 		else :
 			ftp.cwd(remote_folder_path)
 			# Download file
-			local_filename = os.path.join(conf['local_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name)
+			local_filename = os.path.join(conf['tmp_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name)
 			ftp.retrbinary('RETR ' + content_name, open(local_filename, 'w').write)
 	ftp.quit()
 
@@ -160,19 +160,19 @@ def sendCinesArchive(local_folder_path) :
 	transport = paramiko.Transport((conf['ftp_cines_server'], int(conf['ftp_cines_port'])))
 	transport.connect(username=conf['ftp_cines_user'], password=conf['ftp_cines_password'])
 	sftp = paramiko.SFTPClient.from_transport(transport)
-	root_folder_path = local_folder_path.replace(conf['local_path'], conf['remote_cines_path'])
+	root_folder_path = local_folder_path.replace(conf['tmp_path'], conf['remote_cines_path'])
 	sftp.mkdir(root_folder_path, 0770)
 	# Send file through SFTP
 	for dirpath, dirnames, filenames in os.walk(local_folder_path) :
 		remote_folder_path = os.path.join(conf['remote_cines_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
 		# Create remote directories
 		for dirname in dirnames :
-			folder_path = os.path.join(dirpath, dirname).replace(conf['local_path'], conf['remote_cines_path'])
+			folder_path = os.path.join(dirpath, dirname).replace(conf['tmp_path'], conf['remote_cines_path'])
 			sftp.mkdir(folder_path, 0770)
 		# Create remote files
 		for filename in filenames :
 			local_file_path = os.path.join(dirpath, filename)
-			remote_file_path = os.path.join(dirpath, filename).replace(conf['local_path'], conf['remote_cines_path'])
+			remote_file_path = os.path.join(dirpath, filename).replace(conf['tmp_path'], conf['remote_cines_path'])
 			sftp.put(local_file_path, remote_file_path)
 	# Close connection
 	sftp.close()
@@ -230,18 +230,18 @@ if __name__ == '__main__' :
 		ftp.quit()
 	# Filters all forbidden folders
 	readBlacklistedFolders()
-	# Delete local_path before download
-	removeFolder(conf['local_path'])
-	# Check that local_path already exists
-	createFolder(conf['local_path'])
+	# Delete tmp_path before download
+	removeFolder(conf['tmp_path'])
+	# Check that tmp_path already exists
+	createFolder(conf['tmp_path'])
 	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
 		# if subdir not in forbidden_folders + blacklisted_folders :
 		if subdir in whitelisted_folders :
-			local_folder_path = os.path.join(conf['local_path'], subdir)
+			local_folder_path = os.path.join(conf['tmp_path'], subdir)
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
-			# Create subdir locally into local_path
+			# Create subdir locally into tmp_path
 			createFolder(local_folder_path)
 			# Download subdir locally from FTP
 			if conf['use_ftp'] :

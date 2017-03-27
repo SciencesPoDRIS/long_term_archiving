@@ -11,5 +11,5 @@
 	"ftp_cines_user" : "cines.user",
 	"ftp_cines_password" : "cines.password",
 	"remote_cines_path" : "/remote/cines/path",
-	"local_path" : "/local/path"
+	"tmp_path" : "/local/path"
 }
