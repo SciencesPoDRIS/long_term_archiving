@@ -205,7 +205,7 @@ if __name__ == '__main__' :
 	logging.basicConfig(filename=log_file, filemode='a+', format='%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=log_level)
 	logging.info('Start script')
 	# Generate path for config file and mapping file
-	my_project = sys.arg[1]
+	my_project = sys.argv[1]
 	config_file = os.path.join(conf_folder, 'conf.' + my_project + '.json')
 	if not os.path.isfile(config_file) :
 		logging.error('Config file %s doesn\'t exist, please create it.', config_file)
@@ -218,22 +218,22 @@ if __name__ == '__main__' :
 	logging.info('Load conf file')
 	with open(config_file) as conf_f :
 		conf = json.load(conf_f)
-	# Connect to server through FTP
-	logging.info('Connect to server through FTP')
-	ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
-	ftp.cwd(conf['remote_path'])
-	# List all files and folders from remote_path
-	contents_bis = []
-	ftp.retrlines('LIST', contents_bis.append)
-	# Close the FTP connection
-	ftp.quit()
+	if conf['use_ftp'] :
+		# Connect to server through FTP
+		logging.info('Connect to server through FTP')
+		ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
+		ftp.cwd(conf['remote_path'])
+		# List all files and folders from remote_path
+		contents_bis = []
+		ftp.retrlines('LIST', contents_bis.append)
+		# Close the FTP connection
+		ftp.quit()
 	# Filters all forbidden folders
 	readBlacklistedFolders()
 	# Delete local_path before download
 	removeFolder(conf['local_path'])
 	# Check that local_path already exists
 	createFolder(conf['local_path'])
-	# for subdir in contents_bis :
 	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
@@ -243,8 +243,9 @@ if __name__ == '__main__' :
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
 			# Create subdir locally into local_path
 			createFolder(local_folder_path)
-			# Download subdir locally
-			ftpDownloadRemoteFolder(remote_folder_path)
+			# Download subdir locally from FTP
+			if conf['use_ftp'] :
+				ftpDownloadRemoteFolder(remote_folder_path)
 			# Create awaited folder structure for CINES
 			mets_file = createStructure(local_folder_path)
 			# Generate SIP.xml from the METS.xml file
