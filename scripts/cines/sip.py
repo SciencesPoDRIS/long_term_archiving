@@ -308,7 +308,7 @@ def create_node(node_parent, node, element, recursive = False) :
 		for default_value in node['default_values'] :
 			etree.SubElement(node_parent, node_name, node_attributes).text = default_value
 
-def generateSip(input_file, output_file, json_file, conf_arg) :
+def generate(input_file, output_file, json_file, conf_arg) :
 	# Load input_file
 	global tree
 	global conf
@@ -351,7 +351,7 @@ def main() :
 		with open(conf_file) as conf_f :
 			conf_arg = json.load(conf_f)
 		# Transform XML into another XML according to a json file
-		generateSip(mets_file, output_file, json_file, conf_arg)
+		generate(mets_file, output_file, json_file, conf_arg)
 
 
 #
