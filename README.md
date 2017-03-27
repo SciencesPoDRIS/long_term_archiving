@@ -7,7 +7,7 @@ Python version needed : 2.5 or after.
 
 ## Install
 
-* rename the file conf/conf.default.json into conf/conf.json and edit it to put your own SRU/SRW server url
+* rename the file conf/conf.default.json into conf/conf.numpat.json and edit it to put your own SRU/SRW server url
 * `mkvirtualenv long_term_archiving`
 * `pip install lxml`
 * `pip install paramiko`
@@ -16,7 +16,7 @@ Python version needed : 2.5 or after.
 
 long_term_preservation can be used with any system compatible with python 2.5 by invoking the command
 
-`python scripts/sip_numpat.py "path/to/folder/to/archive"`
+`python scripts/sip_numpat.py`
 
 
 ## How to create a config json file that will build the XML from another XML ?
