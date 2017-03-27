@@ -16,7 +16,7 @@ Python version needed : 2.5 or after.
 
 long_term_preservation can be used with any system compatible with python 2.5 by invoking the command
 
-`python scripts/sip_numpat.py`
+`python scripts/long_term_archiving.py`
 
 
 ## How to create a config json file that will build the XML from another XML ?

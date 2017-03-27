@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/numpat.py
+# Execution example : python scripts/long_term_archiving.py
 
 
 #
