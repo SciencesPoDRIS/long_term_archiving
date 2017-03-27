@@ -15,7 +15,7 @@ import os
 import paramiko
 import shutil
 import sys
-import tools
+from cines import sip
 
 
 #
@@ -256,7 +256,7 @@ if __name__ == '__main__' :
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
-			tools.xml2xml(mets_file_path, sip_file_path, mapping_file, conf)
+			sip.xml2xml(mets_file_path, sip_file_path, mapping_file, conf)
 			# Send the folder to CINES
 			sendCinesArchive(local_folder_path)
 			# Write the folder as blacklisted folder into the file
