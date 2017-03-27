@@ -1,6 +1,6 @@
 {
 	"server_url" : "http://yourdomain.com:port",
-	"use_ftp" : 1,
+	"source" : "ftp",
 	"ftp_server" : "ftp.server.com",
 	"ftp_port" : "22",
 	"ftp_user" : "user",

@@ -218,7 +218,7 @@ if __name__ == '__main__' :
 	logging.info('Load conf file')
 	with open(config_file) as conf_f :
 		conf = json.load(conf_f)
-	if conf['use_ftp'] :
+	if conf['source'] == 'ftp' :
 		# Connect to server through FTP
 		logging.info('Connect to server through FTP')
 		ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
@@ -244,7 +244,7 @@ if __name__ == '__main__' :
 			# Create subdir locally into tmp_path
 			createFolder(local_folder_path)
 			# Download subdir locally from FTP
-			if conf['use_ftp'] :
+			if conf['source'] == 'ftp' :
 				ftpDownloadRemoteFolder(remote_folder_path)
 			# Create awaited folder structure for CINES
 			mets_file = createStructure(local_folder_path)
