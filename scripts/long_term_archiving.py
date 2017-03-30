@@ -15,7 +15,7 @@ import os
 import paramiko
 import shutil
 import sys
-from cines import sip
+from cines import sip, structure
 
 
 #
@@ -90,8 +90,8 @@ def removeFolder(folder_path) :
 	else :
 		return False
 
-# Download the remote_folder_path into the conf['tmp_path']
-def ftpDownloadRemoteFolder(remote_folder_path) :
+# Download the remote_folder_path into the local_folder_path
+def ftpDownloadRemoteFolder(remote_folder_path, local_folder_path) :
 	logging.info('Download the folder to local : ' + remote_folder_path)
 	# Connect to server through FTP
 	ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
@@ -107,14 +107,14 @@ def ftpDownloadRemoteFolder(remote_folder_path) :
 		if words[0][0] == 'd' :
 			if content_name not in forbidden_folders :
 				# Create local folder
-				createFolder(os.path.join(conf['tmp_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name))
+				createFolder(os.path.join(local_folder_path, remote_folder_path.replace(conf['remote_path'], ''), content_name))
 				# Download remote folder content
 				ftpDownloadRemoteFolder(os.path.join(conf['remote_path'], remote_folder_path, content_name))
 		# If it is a file
 		else :
 			ftp.cwd(remote_folder_path)
 			# Download file
-			local_filename = os.path.join(conf['tmp_path'], remote_folder_path.replace(conf['remote_path'], ''), content_name)
+			local_filename = os.path.join(local_folder_path, remote_folder_path.replace(conf['remote_path'], ''), content_name)
 			ftp.retrbinary('RETR ' + content_name, open(local_filename, 'w').write)
 	ftp.quit()
 
@@ -218,18 +218,20 @@ if __name__ == '__main__' :
 	logging.info('Load conf file')
 	with open(config_file) as conf_f :
 		conf = json.load(conf_f)
+	contents_bis = []
 	if conf['source'] == 'ftp' :
 		# Connect to server through FTP
 		logging.info('Connect to server through FTP')
 		ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
 		ftp.cwd(conf['remote_path'])
 		# List all files and folders from remote_path
-		contents_bis = []
 		ftp.retrlines('LIST', contents_bis.append)
 		# Close the FTP connection
 		ftp.quit()
 	elif conf['source'] == 'local' :
-		print 'THIS IS THE VOICE'
+		for root, dirs, files in os.walk(conf['local_path']):
+			for dir in dirs :
+				contents_bis.append(dir)
 	else :
 		logging.error('Config file has no \'source\' parameter or it is badly setted. The supported values are \'ftp\' ou \'source\'.')
 		sys.exit()
@@ -250,9 +252,10 @@ if __name__ == '__main__' :
 			createFolder(local_folder_path)
 			# Download subdir locally from FTP
 			if conf['source'] == 'ftp' :
-				ftpDownloadRemoteFolder(remote_folder_path)
-			# Create awaited folder structure for CINES
-			mets_file = createStructure(local_folder_path)
+				ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
+			# Create wanted folder structure for CINES
+			# mets_file = createStructure(local_folder_path)
+			mets_file = structure.create(local_folder_path)
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
