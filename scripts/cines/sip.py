@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/tools.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
+# Execution example : python scripts/sip.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
 
 
 #
@@ -282,9 +282,6 @@ def create_node(node_parent, node, element, recursive = False) :
 		del node['repeat']
 		for repeat in repeats :
 			# Recall the function to create the node
-			# print repeat
-			# print repeat.tag
-			# print repeat.attrib
 			create_node(node_parent, node, repeat)
 	elif 'children' in node :
 		node_children = node['children']
