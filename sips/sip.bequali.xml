@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<ArchiveTransfer xmlns="fr:gouv:culture:archivesdefrance:seda:v1.0">
+<pac xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cines.fr/pac/sip" xsi:schemaLocation="http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd">
   <ArchiveTransfer>
-    <Date>2017-03-14</Date>
+    <Date>2017-03-27</Date>
     <TransferIdentifier>cdsp_bequali_sp5</TransferIdentifier>
     <ArchivalAgency>
       <Identification schemeAgencyName="INSEE" schemeName="SIRET">19341594000017</Identification>
@@ -15,11 +15,21 @@
       <ArchivalAgreement>TO BE DONE</ArchivalAgreement>
       <ArchivalProfile>TO BE DONE</ArchivalProfile>
       <DescriptionLanguage>fra</DescriptionLanguage>
-      <Name>Représentation du champ social, attitudes politiques et changements socio-économiques</Name>
+      <Name>Représentation du champ social, attitudes politiques et
+                                    changements socio-économiques</Name>
       <OriginatingAgencyArchiveIdentifier>cdsp_bequali_sp5</OriginatingAgencyArchiveIdentifier>
       <TransferringAgencyArchiveIdentifier>cdsp_bequali_sp5</TransferringAgencyArchiveIdentifier>
       <ContentDescription>
-        <Description>Enquête réalisée entre 1978 et 1980 sous la direction de Jean-Marie Donégani, Guy Michelat et Michel Simon pour le Comité d'organisation des recherches apppliquées sur le développement économique et social (CORDES) et faisant écho à une autre recherche de démarche quantitative menée en 1966. Le terrain a été réalisé en 1978, juste avant les élections législatives, sur la base d'entretiens non directifs conduits par Claude Nédélec et Jean-Marie Donégani. L'analyse typologique qui en a découlé a conduit à la parution d'un rapport en 1980 intitulé "Représentation du champ social, attitudes politiques et changements socio-économiques". </Description>
+        <Description>Enquête réalisée entre 1978 et 1980 sous la direction de
+                                Jean-Marie Donégani, Guy Michelat et Michel Simon pour le Comité
+                                d'organisation des recherches apppliquées sur le développement
+                                économique et social (CORDES) et faisant écho à une autre recherche
+                                de démarche quantitative menée en 1966. Le terrain a été réalisé en
+                                1978, juste avant les élections législatives, sur la base
+                                d'entretiens non directifs conduits par Claude Nédélec et Jean-Marie
+                                Donégani. L'analyse typologique qui en a découlé a conduit à la
+                                parution d'un rapport en 1980 intitulé "Représentation du champ
+                                social, attitudes politiques et changements socio-économiques". </Description>
         <DescriptionLevel listVersionID="edition 2009">Item</DescriptionLevel>
         <Language listVersionID="edition 2011">fra</Language>
         <LatestDate>A REVOIR APRES EVOLUTION DE L'EAD</LatestDate>
@@ -49,6 +59,7 @@
         <StartDate>TO BE DONE</StartDate>
       </AppraisalRule>
       <ArchiveObject>
+        <Name>Collecte</Name>
         <ContentDescription>
           <Description>A REPRENDRE</Description>
           <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
@@ -58,63 +69,7 @@
         </ContentDescription>
       </ArchiveObject>
       <ArchiveObject>
-        <ContentDescription>
-          <Description>A REPRENDRE</Description>
-          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
-          <Language listVersionID="listVersionID">TO BE DONE</Language>
-          <LatestDate>A VOIR PLUS TARD</LatestDate>
-          <OldestDate>A VOIR PLUS TARD</OldestDate>
-        </ContentDescription>
-      </ArchiveObject>
-      <ArchiveObject>
-        <Name>Col 3</Name>
-        <ContentDescription>
-          <Description>A REPRENDRE</Description>
-          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
-          <Language listVersionID="listVersionID">TO BE DONE</Language>
-          <LatestDate>A VOIR PLUS TARD</LatestDate>
-          <OldestDate>A VOIR PLUS TARD</OldestDate>
-        </ContentDescription>
-      </ArchiveObject>
-      <ArchiveObject>
-        <ContentDescription>
-          <Description>A REPRENDRE</Description>
-          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
-          <Language listVersionID="listVersionID">TO BE DONE</Language>
-          <LatestDate>A VOIR PLUS TARD</LatestDate>
-          <OldestDate>A VOIR PLUS TARD</OldestDate>
-        </ContentDescription>
-      </ArchiveObject>
-      <ArchiveObject>
-        <Name>Ana 1</Name>
-        <ContentDescription>
-          <Description>A REPRENDRE</Description>
-          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
-          <Language listVersionID="listVersionID">TO BE DONE</Language>
-          <LatestDate>A VOIR PLUS TARD</LatestDate>
-          <OldestDate>A VOIR PLUS TARD</OldestDate>
-        </ContentDescription>
-      </ArchiveObject>
-      <ArchiveObject>
-        <ContentDescription>
-          <Description>A REPRENDRE</Description>
-          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
-          <Language listVersionID="listVersionID">TO BE DONE</Language>
-          <LatestDate>A VOIR PLUS TARD</LatestDate>
-          <OldestDate>A VOIR PLUS TARD</OldestDate>
-        </ContentDescription>
-      </ArchiveObject>
-      <ArchiveObject>
-        <ContentDescription>
-          <Description>A REPRENDRE</Description>
-          <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
-          <Language listVersionID="listVersionID">TO BE DONE</Language>
-          <LatestDate>A VOIR PLUS TARD</LatestDate>
-          <OldestDate>A VOIR PLUS TARD</OldestDate>
-        </ContentDescription>
-      </ArchiveObject>
-      <ArchiveObject>
-        <Name>Add</Name>
+        <Name>Analyse</Name>
         <ContentDescription>
           <Description>A REPRENDRE</Description>
           <DescriptionLevel listVersionID="edition 2009">A REPRENDRE</DescriptionLevel>
@@ -125,4 +80,4 @@
       </ArchiveObject>
     </Archive>
   </ArchiveTransfer>
-</ArchiveTransfer>
+</pac>
