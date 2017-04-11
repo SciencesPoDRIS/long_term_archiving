@@ -7,6 +7,8 @@
 #
 
 import logging
+import os
+import tools
 
 
 #
@@ -16,18 +18,16 @@ import logging
 # Create the tree structure for the archived folder, as wanted by the CINES platform
 def create(local_folder_path) :
 	# If not exists, create DEPOT folder
-	createFolder(os.path.join(local_folder_path, 'DEPOT'))
+	tools.createFolder(os.path.join(local_folder_path, 'DEPOT'))
 	# If not exists, create DESC folder into DEPOT folder
-	createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
+	tools.createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
 	# logging.info('Create structure for folder : ' + local_folder_path)
 	# If exists, delete "ill" folder
-	# removeFolder(os.path.join(local_folder_path, 'ill'))
+	# tools.removeFolder(os.path.join(local_folder_path, 'ill'))
 	# If exists, delete "illview" folder
-	# removeFolder(os.path.join(local_folder_path, 'illview'))
+	# tools.removeFolder(os.path.join(local_folder_path, 'illview'))
 	# If exists, delete "view" folder
-	# removeFolder(os.path.join(local_folder_path, 'view'))
-	
-	
+	# tools.removeFolder(os.path.join(local_folder_path, 'view'))
 	
 	# for root, dirs, files in os.walk(local_folder_path):
 	# 	for file in files :
