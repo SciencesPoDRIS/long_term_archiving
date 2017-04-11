@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/sip.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
+# Execution example : python scripts/cines/sip.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
 
 
 #
