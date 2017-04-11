@@ -15,7 +15,7 @@ import os
 import paramiko
 import shutil
 import sys
-from cines import sip, structure
+from cines import sip, structure, tools
 
 
 #
@@ -32,6 +32,7 @@ forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
 conf_folder = 'conf'
+mapping_folder = 'mapping'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
 xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'
@@ -71,25 +72,6 @@ mimetype = {
 # Functions
 #
 
-# Create a new folder into folder_path
-# @return True if a new folder has been created, else False
-def createFolder(folder_path) :
-	# Check if folder already exists
-	if not os.path.exists(folder_path) :
-		os.mkdir(folder_path)
-		return True
-	else :
-		return False
-
-# Delete the folder into folder_path
-# @return True if the folder has been deleted, else False
-def removeFolder(folder_path) :
-	if os.path.exists(folder_path) :
-		shutil.rmtree(folder_path)
-		return True
-	else :
-		return False
-
 # Download the remote_folder_path into the local_folder_path
 def ftpDownloadRemoteFolder(remote_folder_path, local_folder_path) :
 	logging.info('Download the folder to local : ' + remote_folder_path)
@@ -107,7 +89,7 @@ def ftpDownloadRemoteFolder(remote_folder_path, local_folder_path) :
 		if words[0][0] == 'd' :
 			if content_name not in forbidden_folders :
 				# Create local folder
-				createFolder(os.path.join(local_folder_path, remote_folder_path.replace(conf['remote_path'], ''), content_name))
+				tools.createFolder(os.path.join(local_folder_path, remote_folder_path.replace(conf['remote_path'], ''), content_name))
 				# Download remote folder content
 				ftpDownloadRemoteFolder(os.path.join(conf['remote_path'], remote_folder_path, content_name))
 		# If it is a file
@@ -122,15 +104,15 @@ def ftpDownloadRemoteFolder(remote_folder_path, local_folder_path) :
 def createStructure(local_folder_path) :
 	logging.info('Create structure for folder : ' + local_folder_path)
 	# If exists, delete "ill" folder
-	removeFolder(os.path.join(local_folder_path, 'ill'))
+	tools.removeFolder(os.path.join(local_folder_path, 'ill'))
 	# If exists, delete "illview" folder
-	removeFolder(os.path.join(local_folder_path, 'illview'))
+	tools.removeFolder(os.path.join(local_folder_path, 'illview'))
 	# If exists, delete "view" folder
-	removeFolder(os.path.join(local_folder_path, 'view'))
+	tools.removeFolder(os.path.join(local_folder_path, 'view'))
 	# If not exists, create DEPOT folder
-	createFolder(os.path.join(local_folder_path, 'DEPOT'))
+	tools.createFolder(os.path.join(local_folder_path, 'DEPOT'))
 	# If not exists, create DESC folder into DEPOT folder
-	createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
+	tools.createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
 	for root, dirs, files in os.walk(local_folder_path):
 		for file in files :
 			# If exists, delete .pdf file at the root of the folder
@@ -206,8 +188,7 @@ if __name__ == '__main__' :
 	# Generate path for config file and mapping file
 	my_project = sys.argv[1]
 	config_file = os.path.join(conf_folder, 'conf.' + my_project + '.json')
-	mapping_file = 'mapping/mapping.' + my_project + '.json'
-	sip_file = 'sip.' + my_project + '.xml'
+	mapping_file = os.path.join(mapping_folder, 'mapping.' + my_project + '.json')
 	if not os.path.isfile(config_file) :
 		logging.error('Config file %s doesn\'t exist, please create it.', config_file)
 		sys.exit()
@@ -219,8 +200,8 @@ if __name__ == '__main__' :
 	with open(config_file) as conf_f :
 		conf = json.load(conf_f)
 	contents_bis = []
+	# Connect to server through FTP
 	if conf['source'] == 'ftp' :
-		# Connect to server through FTP
 		logging.info('Connect to server through FTP')
 		ftp = FTP(conf['ftp_server'], conf['ftp_user'], conf['ftp_password'])
 		ftp.cwd(conf['remote_path'])
@@ -238,9 +219,9 @@ if __name__ == '__main__' :
 	# Filters all forbidden folders
 	readBlacklistedFolders()
 	# Delete tmp_path before download
-	removeFolder(conf['tmp_path'])
+	tools.removeFolder(conf['tmp_path'])
 	# Check that tmp_path already exists
-	createFolder(conf['tmp_path'])
+	tools.createFolder(conf['tmp_path'])
 	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
@@ -249,12 +230,11 @@ if __name__ == '__main__' :
 			local_folder_path = os.path.join(conf['tmp_path'], subdir)
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
 			# Create subdir locally into tmp_path
-			createFolder(local_folder_path)
+			tools.createFolder(local_folder_path)
 			# Download subdir locally from FTP
 			if conf['source'] == 'ftp' :
 				ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
 			# Create wanted folder structure for CINES
-			# mets_file = createStructure(local_folder_path)
 			mets_file = structure.create(local_folder_path)
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
@@ -265,5 +245,5 @@ if __name__ == '__main__' :
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
 			# Delete locally downloaded subdir
-			removeFolder(local_folder_path)
+			tools.removeFolder(local_folder_path)
 	logging.info('End script')
