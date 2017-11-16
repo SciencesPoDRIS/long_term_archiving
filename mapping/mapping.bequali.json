@@ -2,6 +2,9 @@
     "root": [{
         "name": "ArchiveTransfer",
         "children": [{
+            "name": "Comment",
+            "default_values": ["Archivage des enquêtes qualitatives beQuali"]
+        }, {
             "name": "Date",
             "filters": ["current_date"]
         }, {
@@ -34,30 +37,27 @@
                 }
             }, {
                 "name": "Name",
-                "default_values": ["CDSP - UMS828"]
+                "default_values": ["CDSP (Centre de Données Socio-Politiques) - UMS828"]
             }]
         }, {
             "name": "Archive",
             "children": [{
                 "name": "ArchivalAgreement",
-                "default_values": ["TO BE DONE"]
+                "default_values": ["090388"]
             }, {
                 "name": "ArchivalProfile",
-                "default_values": ["TO BE DONE"]
+                "default_values": ["ark:/acompleter_cines/"]
             }, {
                 "name": "DescriptionLanguage",
-                "default_values": ["fra"]
+                "default_values": ["fra"],
+                "attributes": {
+                    "listVersionID": "edition 2011"
+                }
             }, {
                 "name": "Name",
                 "value": [{
                     "method": "xpath",
-                    "paths": [".//ddi:stdyDscr/ddi:citation/ddi:titlStmt/ddi:titl"]
-                }]
-            }, {
-                "name": "OriginatingAgencyArchiveIdentifier",
-                "value": [{
-                    "method": "xpath",
-                    "paths": [".//ddi:IDNo"]
+                    "paths": [".//mets:dmdSec/mets:mdWrap/mets:xmlData/ead/eadheader/filedesc/titlestmt/titleproper"]
                 }]
             }, {
                 "name": "TransferringAgencyArchiveIdentifier",
@@ -69,16 +69,16 @@
                 "name": "ContentDescription",
                 "children": [{
                     "name": "Description",
-                    "value": [{
-                        "method": "xpath",
-                        "paths": [".//ddi:abstract"]
-                    }]
+                    "default_values": ["Enquêtes qualitatives documentées traitées dans le cadre de l'Equipex DIME-SHS puis mises à disposition sur la banque d'enquêtes Bequali (DIME-Quali)."]
                 }, {
                     "name": "DescriptionLevel",
-                    "default_values": ["Item"],
+                    "default_values": ["subfonds"],
                     "attributes": {
                         "listVersionID": "edition 2009"
                     }
+                }, {
+                    "name": "FilePlanPosition",
+                    "default_values": ["Enquêtes qualitatives beQuali"]
                 }, {
                     "name": "Language",
                     "default_values": ["fra"],
@@ -87,10 +87,16 @@
                     }
                 }, {
                     "name": "LatestDate",
-                    "default_values": ["A REVOIR APRES EVOLUTION DE L'EAD"]
+                    "default_values": ["A REVOIR !!! DATE DU JOUR ???"]
                 }, {
                     "name": "OldestDate",
-                    "default_values": ["A REVOIR APRES EVOLUTION DE L'EAD"]
+                    "default_values": ["A REVOIR !!! ???"]
+                }, {
+                    "name": "CustodialHistory",
+                    "children": [{
+                        "name": "CustodialHistoryItem",
+                        "default_values": ["Enquêtes collectées auprès de chercheurs, de laboratoires ou de services d'archives puis classement et documentation des documents, avant leur numérisation en vue de leur mise à disposition au sein d'un catalogue en ligne."]
+                    }]
                 }, {
                     "name": "Keyword",
                     "children": [{
@@ -136,7 +142,8 @@
                     "value": [{
                         "method": "xpath",
                         "paths": [".//acqinfo/chronlist/chronitem/date"]
-                    }]
+                    }],
+                    "comment": "A REPRENDRE, n'est-ce pas plutôt la date du jour ???"
                 }]
             }, {
                 "name": "AppraisalRule",
@@ -160,7 +167,8 @@
                     "name": "Name",
                     "value": [{
                         "method": "xpath",
-                        "paths": ["./did/unittitle"]
+                        "paths": ["./did/unittitle"],
+                        "filters": ["translate"]
                         }]
                     }, {
                     "name": "ContentDescription",
@@ -169,15 +177,15 @@
                         "default_values": ["A REPRENDRE"]
                     }, {
                         "name": "DescriptionLevel",
-                        "default_values": ["A REPRENDRE"],
+                        "default_values": ["file"],
                         "attributes": {
                             "listVersionID": "edition 2009"
                         }
                     }, {
                         "name": "Language",
-                        "default_values": ["TO BE DONE"],
+                        "default_values": ["fra"],
                         "attributes": {
-                            "listVersionID": "listVersionID"
+                            "listVersionID": "edition 2011"
                         }
                     }, {
                         "name": "LatestDate",
