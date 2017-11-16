@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  Titre:	Profil d'archivage du CINES pour l'archivage au format SEDA dans PAC
+  Fonction:	schéma du profil d'archivage CINES	
+  Date:	2013/04/16
+  Auteur(s):	Lorène Béchard, Pascal Dugénie, Benjamin Watine (équipe PAC)
+  Version:	1.3
+  Dernières modifications : 
+       v1.1 : suppression des attributs "Id"
+       v1.2 : modif commentaires, suppression FilePlanPosition au niveau ArchiveObject, ajout OriginatingAgency au niveau ArchiveObject, ajout 3 profondeurs d'ArchiveObject
+       v1.3 : ajout des énumérations sur Attachment@algorithme, Attachment@mimeCode, Attachment@format, Size@unitCode, cardinalité Archive à 1
+             
+--><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="fr:gouv:culture:archivesdefrance:seda:v1.0" xmlns:qdt="fr:gouv:culture:archivesdefrance:seda:v1.0:QualifiedDataType:1" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:10" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="fr:gouv:culture:archivesdefrance:seda:v1.0" version="1.0">
+  <xsd:element name="ArchiveTransfer">
+    <xsd:element fixed="Archivage des enquêtes qualitatives beQuali" maxOccurs="1" minOccurs="1" name="Comment" type="udt:TextType">
+      <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+      <xsd:annotation>Commentaires sur le versement</xsd:annotation>
+    </xsd:element>
+    <xsd:element name="Date" type="udt:DateTimeType">
+      <xsd:annotation>Date courante</xsd:annotation>
+    </xsd:element>
+    <xsd:element name="TransferIdentifier" type="qdt:ArchivesIDType">
+      <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+      <xsd:attribute name="schemeName" type="xsd:string" use="prohibited"/>
+      <xsd:attribute name="schemeAgencyName" type="xsd:string" use="prohibited"/>
+      <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+      <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+      <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+      <xsd:annotation>Identifiant unique du répertoire de versement de la forme cdsp_bequali_spX (.//ddi:IDNo)</xsd:annotation>
+    </xsd:element>
+    <xsd:element name="ArchivalAgency" type="OrganizationType">
+      <xsd:element fixed="19341594000017" name="Identification" type="qdt:ArchivesIDType">
+        <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute fixed="SIRET" name="schemeName" type="xsd:string" use="required"/>
+        <xsd:attribute fixed="INSEE" name="schemeAgencyName" type="xsd:string" use="required"/>
+        <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:annotation>Identifie le CINES de manière unique et non équivoque</xsd:annotation>
+      </xsd:element>
+      <xsd:element fixed="Centre Informatique National de l'Enseignement Supérieur" minOccurs="1" name="Name" type="udt:TextType">
+        <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+        <xsd:annotation>Nom du service d'archives</xsd:annotation>
+      </xsd:element>
+    </xsd:element>
+    <xsd:element name="TransferringAgency" type="OrganizationType">
+      <xsd:element fixed="40180089013" name="Identification" type="qdt:ArchivesIDType">
+        <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute fixed="SIRET" name="schemeName" type="xsd:string" use="required"/>
+        <xsd:attribute fixed="INSEE" name="schemeAgencyName" type="xsd:string" use="required"/>
+        <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:annotation>Doit permettre d'identifier le service versant de manière unique et non équivoque</xsd:annotation>
+      </xsd:element>
+      <xsd:element fixed="CDSP (Centre de Données Socio-Politiques) - UMS828" minOccurs="1" name="Name" type="udt:TextType">
+        <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+        
+      </xsd:element>
+    </xsd:element>
+    
+    <xsd:element maxOccurs="1" name="Archive" type="ArchiveType">
+      <xsd:element fixed="090388" minOccurs="1" name="ArchivalAgreement" type="qdt:ArchivesIDType">
+        <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeName" type="xsd:string" use="prohibited"/>
+        <xsd:attribute name="schemeAgencyName" type="xsd:string" use="prohibited"/>
+        <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:annotation>n°ARK de la convention d'archivage. </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="1" name="ArchivalProfile" type="qdt:ArchivesIDType">
+        <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeName" type="xsd:string" use="prohibited"/>
+        <xsd:attribute name="schemeAgencyName" type="xsd:string" use="prohibited"/>
+        <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:annotation>n°ARK du profil d'archivage du service versant. </xsd:annotation>
+      </xsd:element>
+      <xsd:element fixed="fra" maxOccurs="unbounded" name="DescriptionLanguage" type="qdt:CodeLanguageType">
+        <xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/>
+        
+      </xsd:element>
+      <xsd:element name="Name" type="udt:TextType">
+        <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+        <xsd:annotation>CDSP_BQ_DOMAINEIDENTIFIER où DOMAIN sera "SP" ou "S" et IDENTIFIER sera un nombre. (.//archdesc/did/unitid) (ex : CDSP_BQ_SP5)</xsd:annotation>
+      </xsd:element>
+      
+      <xsd:element minOccurs="1" name="TransferringAgencyArchiveIdentifier" type="qdt:ArchivesIDType">
+        <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeName" type="xsd:string" use="prohibited"/>
+        <xsd:attribute name="schemeAgencyName" type="xsd:string" use="prohibited"/>
+        <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+        <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+        <xsd:annotation>Identifiant donné à l'archive par le service versant. (.//ddi:IDNo) ex: cdsp_bequali_sp5 ou cdsp_bq_s2</xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ContentDescription" type="ContentDescriptionType">
+        <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+        <xsd:element fixed="Enquêtes qualitatives documentées traitées dans le cadre de l'Equipex DIME-SHS puis mises à disposition sur la banque d'enquêtes Bequali (DIME-Quali)." minOccurs="1" name="Description" type="udt:TextType">
+          <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+          
+        </xsd:element>
+        <xsd:element fixed="subfonds" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType">
+          <xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/>
+          <xsd:annotation>Niveau de la description archivistique</xsd:annotation>
+        </xsd:element>
+        <xsd:element fixed="Enquêtes qualitatives beQuali" maxOccurs="unbounded" minOccurs="0" name="FilePlanPosition" type="qdt:ArchivesIDType"><xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/><xsd:attribute name="schemeName" type="xsd:string" use="prohibited"/><xsd:attribute name="schemeAgencyName" type="xsd:string" use="prohibited"/><xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/><xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/><xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/></xsd:element>
+        <xsd:element fixed="fra" maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType">
+          <xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/>
+          <xsd:annotation>Langue du contenu de l'archive exprimée au format ISO
+            639-2</xsd:annotation>
+        </xsd:element>
+        <xsd:element minOccurs="1" name="LatestDate" type="udt:DateType">
+          
+        <xsd:annotation>Date d'archivage</xsd:annotation></xsd:element>
+        <xsd:element minOccurs="1" name="OldestDate" type="udt:DateType">
+          <xsd:annotation>Date du document le plus ancien dans le paquet. </xsd:annotation>
+        </xsd:element>
+        <xsd:element minOccurs="1" name="CustodialHistory" type="CustodialHistoryType">
+          <xsd:element fixed="Enquêtes collectées auprès de chercheurs, de laboratoires ou de services d'archives puis classement et documentation des documents, avant leur numérisation en vue de leur mise à disposition au sein d'un catalogue en ligne." maxOccurs="1" minOccurs="1" name="CustodialHistoryItem" type="qdt:CustodialHistoryItemType">
+            <xsd:attribute name="when" type="udt:DateType" use="optional"/>
+            <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+          </xsd:element>
+          <xsd:annotation>Eléments renseignant l'historique de la conservation</xsd:annotation>
+        </xsd:element>
+        
+        <xsd:element maxOccurs="unbounded" minOccurs="0" name="Keyword" type="KeywordType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element name="KeywordContent" type="qdt:KeywordContentType"><xsd:attribute name="role" type="xsd:token" use="prohibited"/><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="0" name="OriginatingAgency" type="OrganizationType">
+          <xsd:element fixed="L'Equipex DIME-SHS (Données Infrastructures et Méthodes en Sciences humaines et sociales) est porté par le Centre de données socio-politique (CDSP) depuis 2001. Son objectif est de participer à la recherche méthodologique en SHS en menant un projet de mise à disposition de matériaux d'enquêtes qualitatives avec la banque d'enquête beQuali." minOccurs="1" name="Description" type="udt:TextType">
+            <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+            <xsd:annotation>Description du service producteur</xsd:annotation>
+          </xsd:element>
+          <xsd:element name="Identification" type="qdt:ArchivesIDType">
+            <xsd:attribute name="schemeID" type="xsd:token" use="prohibited"/>
+            <xsd:attribute fixed="SIRET" name="schemeName" type="xsd:string" use="required"/>
+            <xsd:attribute fixed="INSEE" name="schemeAgencyName" type="xsd:string" use="required"/>
+            <xsd:attribute name="schemeVersionID" type="xsd:token" use="prohibited"/>
+            <xsd:attribute name="schemeDataURI" type="xsd:anyURI" use="prohibited"/>
+            <xsd:attribute name="schemeURI" type="xsd:anyURI" use="prohibited"/>
+            <xsd:annotation>Doit permettre d'identifier le service producteur de manière unique et non équivoque. ex : cdsp_bequali_sp5 ou cdsp_bq_s2</xsd:annotation>
+          </xsd:element>
+          <xsd:element fixed="CDSP (Centre de Données Socio-Politiques) - UMS828" minOccurs="1" name="Name" type="udt:TextType">
+            <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+            <xsd:annotation>Nom du service producteur</xsd:annotation>
+          </xsd:element>
+        </xsd:element>
+        <xsd:element maxOccurs="unbounded" minOccurs="0" name="OtherMetadata" type="OtherMetadataType"><xsd:annotation>(.//acqinfo/chronlist/chronitem/event/persname[@source=\"annuaire_producteurs\"])</xsd:annotation></xsd:element>
+      </xsd:element>
+      <xsd:element name="AccessRestrictionRule" type="AccessRestrictionRuleType">
+        <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+        <xsd:element fixed="AR048" name="Code" type="qdt:CodeAccessRestrictionType">
+          <xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/>
+        </xsd:element>
+        <xsd:element name="StartDate" type="udt:DateType">
+          
+        <xsd:annotation>Date d'archivage</xsd:annotation></xsd:element>
+      </xsd:element>
+      <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="AppraisalRule" type="AppraisalRuleType">
+        <xsd:annotation>Contrainte : l'information de DUA doit être renseignée au moins à un niveau de description (Archive ou ArchiveObject)</xsd:annotation>
+        <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+        <xsd:element fixed="conserver" name="Code" type="qdt:CodeAppraisalType">
+          <xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/>
+        </xsd:element>
+        <xsd:element fixed="P5Y" name="Duration" type="qdt:ArchivesDurationType">
+          
+        </xsd:element>
+        <xsd:element name="StartDate" type="udt:DateType">
+          
+        <xsd:annotation>Date d'archivage</xsd:annotation></xsd:element>
+      </xsd:element>
+     
+      <xsd:element maxOccurs="1" minOccurs="1" name="ArchiveObject" type="ArchiveObjectType">
+        <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+        <xsd:element fixed="Métadonnées" name="Name" type="udt:TextType">
+          <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+          <xsd:annotation>(./did/unittitle) Dossier 1e niveau </xsd:annotation>
+        </xsd:element>
+        <xsd:element minOccurs="1" name="ContentDescription" type="ContentDescriptionType">
+          <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+          
+          <xsd:element fixed="Dossier contenant les métadonnées xml et l'inventaire des documents contenus dans le corpus." minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/><xsd:annotation>Lister des sous-dossiers</xsd:annotation></xsd:element><xsd:element fixed="file" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType">
+            <xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/>
+            
+          </xsd:element>
+          <xsd:element maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType">
+            <xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/>
+            <xsd:annotation>Langue du contenu du sous-ensemble de l'archive exprimée au format ISO 639-2</xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="LatestDate" type="udt:DateType">
+            <xsd:annotation>Date du document le plus récent dans l'ArchiveObject. Attention : si la métadonnée est présente, OldestDate doit l'être aussi.</xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="OldestDate" type="udt:DateType">
+            <xsd:annotation>Date du document le plus ancien dans l'ArchiveObject. Attention : si la métadonnée est présente, LatestDate doit l'être aussi.</xsd:annotation>
+          </xsd:element>
+          
+          
+        </xsd:element>
+        
+        
+       
+                
+        <xsd:element maxOccurs="unbounded" minOccurs="1" name="Document" type="DocumentType">
+          <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+          <xsd:element name="Attachment" type="qdt:ArchivesBinaryObjectType">
+            <xsd:attribute name="format" type="clmDAFFileTypeCode:FileTypeCodeType" use="required"/>
+            <xsd:attribute name="mimeCode" type="clmIANAMIMEMediaType:MIMEMediaTypeContentType" use="required"/>
+            <xsd:attribute name="encodingCode" type="clm60133:CharacterSetEncodingCodeContentType" use="prohibited"/>
+            <xsd:attribute name="characterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType" use="prohibited"/>
+            <xsd:attribute name="uri" type="xsd:anyURI" use="prohibited"/>
+            <xsd:attribute name="filename" type="xsd:string" use="required"/>
+            <xsd:annotation>A noter : les contenus en base 64 ne sont pas supportés. Au moins un des deux attributs "format" ou "mimeCode" doit être renseigné. Un seul des deux attributs "filename" ou "uri" doit être renseigné. Pour "format", les seules valeurs acceptées sont : fmt/199, fmt/279, fmt/3, fmt/4, fmt/96, fmt/97, fmt/98, fmt/99, fmt/100, fmt/102, fmt/103, fmt/41, fmt/42, fmt/43, fmt/44, fmt/203, fmt/136, fmt/290, fmt/291, fmt/18, fmt/19, fmt/20, fmt/354, fmt/95, fmt/276, fmt/11, fmt/12, fmt/13, fmt/91, fmt/92, fmt/152, fmt/153, fmt/154, fmt/155, fmt/156, fmt/353, fmt/6, fmt/101, fmt/120, fmt/121. Pour "mimeCode", les seules valeurs acceptées sont : image/gif, image/jpeg, image/png, image/svg+xml, image/tiff, audio/ogg, application/xhtml+xml, application/vnd.oasis.opendocument.text, application/pdf, text/plain, text/xml, text/html.</xsd:annotation>
+          </xsd:element>
+          
+          
+          <xsd:element minOccurs="0" name="Creation" type="udt:DateTimeType"/>
+          <xsd:element minOccurs="1" name="Description" type="udt:TextType">
+            <xsd:attribute name="languageID" type="xsd:language" use="prohibited"/>
+          </xsd:element>
+          <xsd:element minOccurs="1" name="Integrity" type="qdt:ArchivesHashcodeBinaryObjectType">
+            <xsd:attribute name="algorithme" type="xsd:string" use="required"/>
+            <xsd:annotation>Les seules valeurs acceptées pour "algorithme" sont : MD5, SHA-1, SHA-256</xsd:annotation>
+          </xsd:element>
+          
+          <xsd:element maxOccurs="unbounded" minOccurs="1" name="Language" type="qdt:CodeLanguageType">
+            <xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/>
+            <xsd:annotation>Langue du contenu du fichier exprimée au format ISO 639-2</xsd:annotation>
+          </xsd:element>
+          
+          
+          
+          
+          
+          
+          <xsd:element maxOccurs="unbounded" name="Type" type="qdt:CodeDocumentType">
+            <xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/>
+          </xsd:element>
+          
+        </xsd:element>
+      </xsd:element><xsd:element maxOccurs="1" minOccurs="1" name="ArchiveObject" type="ArchiveObjectType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Documents additionnels" name="Name" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="ContentDescription" type="ContentDescriptionType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Documents créés et ajoutés par beQuali au corpus de l'enquête." minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/><xsd:annotation>Lister les sous-dossiers</xsd:annotation></xsd:element><xsd:element fixed="file" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element><xsd:element maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du sous-ensemble de l'archive exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="LatestDate" type="udt:DateType"><xsd:annotation>Date du document le plus récent dans l'ArchiveObject. Attention : si la métadonnée est présente, OldestDate doit l'être aussi.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="OldestDate" type="udt:DateType"><xsd:annotation>Date du document le plus ancien dans l'ArchiveObject. Attention : si la métadonnée est présente, LatestDate doit l'être aussi.</xsd:annotation></xsd:element></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Document" type="DocumentType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element name="Attachment" type="qdt:ArchivesBinaryObjectType"><xsd:attribute name="format" type="clmDAFFileTypeCode:FileTypeCodeType" use="required"/><xsd:attribute name="mimeCode" type="clmIANAMIMEMediaType:MIMEMediaTypeContentType" use="required"/><xsd:attribute name="encodingCode" type="clm60133:CharacterSetEncodingCodeContentType" use="prohibited"/><xsd:attribute name="characterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType" use="prohibited"/><xsd:attribute name="uri" type="xsd:anyURI" use="prohibited"/><xsd:attribute name="filename" type="xsd:string" use="required"/><xsd:annotation>A noter : les contenus en base 64 ne sont pas supportés. Au moins un des deux attributs "format" ou "mimeCode" doit être renseigné. Un seul des deux attributs "filename" ou "uri" doit être renseigné. Pour "format", les seules valeurs acceptées sont : fmt/199, fmt/279, fmt/3, fmt/4, fmt/96, fmt/97, fmt/98, fmt/99, fmt/100, fmt/102, fmt/103, fmt/41, fmt/42, fmt/43, fmt/44, fmt/203, fmt/136, fmt/290, fmt/291, fmt/18, fmt/19, fmt/20, fmt/354, fmt/95, fmt/276, fmt/11, fmt/12, fmt/13, fmt/91, fmt/92, fmt/152, fmt/153, fmt/154, fmt/155, fmt/156, fmt/353, fmt/6, fmt/101, fmt/120, fmt/121. Pour "mimeCode", les seules valeurs acceptées sont : image/gif, image/jpeg, image/png, image/svg+xml, image/tiff, audio/ogg, application/xhtml+xml, application/vnd.oasis.opendocument.text, application/pdf, text/plain, text/xml, text/html.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="Creation" type="udt:DateTimeType"/><xsd:element minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="Integrity" type="qdt:ArchivesHashcodeBinaryObjectType"><xsd:attribute name="algorithme" type="xsd:string" use="required"/><xsd:annotation>Les seules valeurs acceptées pour "algorithme" sont : MD5, SHA-1, SHA-256</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du fichier exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" name="Type" type="qdt:CodeDocumentType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element></xsd:element></xsd:element><xsd:element maxOccurs="1" minOccurs="0" name="ArchiveObject" type="ArchiveObjectType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Préparation" name="Name" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="ContentDescription" type="ContentDescriptionType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Dossier contenant les documents de préparation de l'enquête et du terrain." minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/><xsd:annotation>Lister des sous-dossiers</xsd:annotation></xsd:element><xsd:element fixed="file" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element><xsd:element maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du sous-ensemble de l'archive exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="LatestDate" type="udt:DateType"><xsd:annotation>Date du document le plus récent dans l'ArchiveObject. Attention : si la métadonnée est présente, OldestDate doit l'être aussi.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="OldestDate" type="udt:DateType"><xsd:annotation>Date du document le plus ancien dans l'ArchiveObject. Attention : si la métadonnée est présente, LatestDate doit l'être aussi.</xsd:annotation></xsd:element></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Document" type="DocumentType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element name="Attachment" type="qdt:ArchivesBinaryObjectType"><xsd:attribute name="format" type="clmDAFFileTypeCode:FileTypeCodeType" use="required"/><xsd:attribute name="mimeCode" type="clmIANAMIMEMediaType:MIMEMediaTypeContentType" use="required"/><xsd:attribute name="encodingCode" type="clm60133:CharacterSetEncodingCodeContentType" use="prohibited"/><xsd:attribute name="characterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType" use="prohibited"/><xsd:attribute name="uri" type="xsd:anyURI" use="prohibited"/><xsd:attribute name="filename" type="xsd:string" use="required"/><xsd:annotation>A noter : les contenus en base 64 ne sont pas supportés. Au moins un des deux attributs "format" ou "mimeCode" doit être renseigné. Un seul des deux attributs "filename" ou "uri" doit être renseigné. Pour "format", les seules valeurs acceptées sont : fmt/199, fmt/279, fmt/3, fmt/4, fmt/96, fmt/97, fmt/98, fmt/99, fmt/100, fmt/102, fmt/103, fmt/41, fmt/42, fmt/43, fmt/44, fmt/203, fmt/136, fmt/290, fmt/291, fmt/18, fmt/19, fmt/20, fmt/354, fmt/95, fmt/276, fmt/11, fmt/12, fmt/13, fmt/91, fmt/92, fmt/152, fmt/153, fmt/154, fmt/155, fmt/156, fmt/353, fmt/6, fmt/101, fmt/120, fmt/121. Pour "mimeCode", les seules valeurs acceptées sont : image/gif, image/jpeg, image/png, image/svg+xml, image/tiff, audio/ogg, application/xhtml+xml, application/vnd.oasis.opendocument.text, application/pdf, text/plain, text/xml, text/html.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="Creation" type="udt:DateTimeType"/><xsd:element minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="Integrity" type="qdt:ArchivesHashcodeBinaryObjectType"><xsd:attribute name="algorithme" type="xsd:string" use="required"/><xsd:annotation>Les seules valeurs acceptées pour "algorithme" sont : MD5, SHA-1, SHA-256</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du fichier exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" name="Type" type="qdt:CodeDocumentType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element></xsd:element></xsd:element><xsd:element maxOccurs="1" minOccurs="0" name="ArchiveObject" type="ArchiveObjectType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Collecte" name="Name" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="ContentDescription" type="ContentDescriptionType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Dossier contenant les documents concernant la réalisation du terrain et les documents collectés sur le terrain." minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/><xsd:annotation>Lister des sous-dossiers</xsd:annotation></xsd:element><xsd:element fixed="file" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element><xsd:element maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du sous-ensemble de l'archive exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="LatestDate" type="udt:DateType"><xsd:annotation>Date du document le plus récent dans l'ArchiveObject. Attention : si la métadonnée est présente, OldestDate doit l'être aussi.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="OldestDate" type="udt:DateType"><xsd:annotation>Date du document le plus ancien dans l'ArchiveObject. Attention : si la métadonnée est présente, LatestDate doit l'être aussi.</xsd:annotation></xsd:element></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Document" type="DocumentType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element name="Attachment" type="qdt:ArchivesBinaryObjectType"><xsd:attribute name="format" type="clmDAFFileTypeCode:FileTypeCodeType" use="required"/><xsd:attribute name="mimeCode" type="clmIANAMIMEMediaType:MIMEMediaTypeContentType" use="required"/><xsd:attribute name="encodingCode" type="clm60133:CharacterSetEncodingCodeContentType" use="prohibited"/><xsd:attribute name="characterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType" use="prohibited"/><xsd:attribute name="uri" type="xsd:anyURI" use="prohibited"/><xsd:attribute name="filename" type="xsd:string" use="required"/><xsd:annotation>A noter : les contenus en base 64 ne sont pas supportés. Au moins un des deux attributs "format" ou "mimeCode" doit être renseigné. Un seul des deux attributs "filename" ou "uri" doit être renseigné. Pour "format", les seules valeurs acceptées sont : fmt/199, fmt/279, fmt/3, fmt/4, fmt/96, fmt/97, fmt/98, fmt/99, fmt/100, fmt/102, fmt/103, fmt/41, fmt/42, fmt/43, fmt/44, fmt/203, fmt/136, fmt/290, fmt/291, fmt/18, fmt/19, fmt/20, fmt/354, fmt/95, fmt/276, fmt/11, fmt/12, fmt/13, fmt/91, fmt/92, fmt/152, fmt/153, fmt/154, fmt/155, fmt/156, fmt/353, fmt/6, fmt/101, fmt/120, fmt/121. Pour "mimeCode", les seules valeurs acceptées sont : image/gif, image/jpeg, image/png, image/svg+xml, image/tiff, audio/ogg, application/xhtml+xml, application/vnd.oasis.opendocument.text, application/pdf, text/plain, text/xml, text/html.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="Creation" type="udt:DateTimeType"/><xsd:element minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="Integrity" type="qdt:ArchivesHashcodeBinaryObjectType"><xsd:attribute name="algorithme" type="xsd:string" use="required"/><xsd:annotation>Les seules valeurs acceptées pour "algorithme" sont : MD5, SHA-1, SHA-256</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du fichier exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" name="Type" type="qdt:CodeDocumentType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element></xsd:element></xsd:element><xsd:element maxOccurs="1" minOccurs="0" name="ArchiveObject" type="ArchiveObjectType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Analyse" name="Name" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="ContentDescription" type="ContentDescriptionType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Dossier contenant les documents d'analyse des données collectées sur le terrain et la valorisation des résultats." minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/><xsd:annotation>Lister des sous-dossiers</xsd:annotation></xsd:element><xsd:element fixed="file" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element><xsd:element maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du sous-ensemble de l'archive exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="LatestDate" type="udt:DateType"><xsd:annotation>Date du document le plus récent dans l'ArchiveObject. Attention : si la métadonnée est présente, OldestDate doit l'être aussi.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="OldestDate" type="udt:DateType"><xsd:annotation>Date du document le plus ancien dans l'ArchiveObject. Attention : si la métadonnée est présente, LatestDate doit l'être aussi.</xsd:annotation></xsd:element></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Document" type="DocumentType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element name="Attachment" type="qdt:ArchivesBinaryObjectType"><xsd:attribute name="format" type="clmDAFFileTypeCode:FileTypeCodeType" use="required"/><xsd:attribute name="mimeCode" type="clmIANAMIMEMediaType:MIMEMediaTypeContentType" use="required"/><xsd:attribute name="encodingCode" type="clm60133:CharacterSetEncodingCodeContentType" use="prohibited"/><xsd:attribute name="characterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType" use="prohibited"/><xsd:attribute name="uri" type="xsd:anyURI" use="prohibited"/><xsd:attribute name="filename" type="xsd:string" use="required"/><xsd:annotation>A noter : les contenus en base 64 ne sont pas supportés. Au moins un des deux attributs "format" ou "mimeCode" doit être renseigné. Un seul des deux attributs "filename" ou "uri" doit être renseigné. Pour "format", les seules valeurs acceptées sont : fmt/199, fmt/279, fmt/3, fmt/4, fmt/96, fmt/97, fmt/98, fmt/99, fmt/100, fmt/102, fmt/103, fmt/41, fmt/42, fmt/43, fmt/44, fmt/203, fmt/136, fmt/290, fmt/291, fmt/18, fmt/19, fmt/20, fmt/354, fmt/95, fmt/276, fmt/11, fmt/12, fmt/13, fmt/91, fmt/92, fmt/152, fmt/153, fmt/154, fmt/155, fmt/156, fmt/353, fmt/6, fmt/101, fmt/120, fmt/121. Pour "mimeCode", les seules valeurs acceptées sont : image/gif, image/jpeg, image/png, image/svg+xml, image/tiff, audio/ogg, application/xhtml+xml, application/vnd.oasis.opendocument.text, application/pdf, text/plain, text/xml, text/html.</xsd:annotation></xsd:element><xsd:element minOccurs="0" name="Creation" type="udt:DateTimeType"/><xsd:element minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="Integrity" type="qdt:ArchivesHashcodeBinaryObjectType"><xsd:attribute name="algorithme" type="xsd:string" use="required"/><xsd:annotation>Les seules valeurs acceptées pour "algorithme" sont : MD5, SHA-1, SHA-256</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du fichier exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" name="Type" type="qdt:CodeDocumentType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element></xsd:element></xsd:element><xsd:element maxOccurs="1" minOccurs="1" name="ArchiveObject" type="ArchiveObjectType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Enquête sur l'enquête" name="Name" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="ContentDescription" type="ContentDescriptionType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element fixed="Dossier contenant les fichiers audio et textuels de l'enquête sur l'enquête réalisée par beQuali" minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/><xsd:annotation>Lister les sous-dossiers</xsd:annotation></xsd:element><xsd:element fixed="file" name="DescriptionLevel" type="qdt:CodeDescriptionLevelType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element><xsd:element maxOccurs="unbounded" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du sous-ensemble de l'archive exprimée au format ISO 639-2</xsd:annotation></xsd:element></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Document" type="DocumentType"><xsd:attribute name="Id" type="xsd:ID" use="prohibited"/><xsd:element name="Attachment" type="qdt:ArchivesBinaryObjectType"><xsd:attribute name="format" type="clmDAFFileTypeCode:FileTypeCodeType" use="prohibited"/><xsd:attribute name="mimeCode" type="clmIANAMIMEMediaType:MIMEMediaTypeContentType" use="prohibited"/><xsd:attribute name="encodingCode" type="clm60133:CharacterSetEncodingCodeContentType" use="prohibited"/><xsd:attribute name="characterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType" use="prohibited"/><xsd:attribute name="uri" type="xsd:anyURI" use="prohibited"/><xsd:attribute name="filename" type="xsd:string" use="prohibited"/></xsd:element><xsd:element minOccurs="0" name="Creation" type="udt:DateTimeType"/><xsd:element minOccurs="1" name="Description" type="udt:TextType"><xsd:attribute name="languageID" type="xsd:language" use="prohibited"/></xsd:element><xsd:element minOccurs="1" name="Integrity" type="qdt:ArchivesHashcodeBinaryObjectType"><xsd:attribute name="algorithme" type="xsd:string" use="required"/><xsd:annotation>Les seules valeurs acceptées pour "algorithme" sont : MD5, SHA-1, SHA-256</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" minOccurs="1" name="Language" type="qdt:CodeLanguageType"><xsd:attribute default="edition 2011" fixed="edition 2011" name="listVersionID" type="xsd:token" use="required"/><xsd:annotation>Langue du contenu du fichier exprimée au format ISO 639-2</xsd:annotation></xsd:element><xsd:element maxOccurs="unbounded" name="Type" type="qdt:CodeDocumentType"><xsd:attribute default="edition 2009" fixed="edition 2009" name="listVersionID" type="xsd:token" use="required"/></xsd:element></xsd:element></xsd:element>
+      
+      
+    </xsd:element>
+    <xsd:attribute name="Id" type="xsd:ID" use="prohibited"/>
+  </xsd:element>
+
+</xsd:schema>
