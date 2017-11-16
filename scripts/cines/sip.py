@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Execution example : python scripts/sip.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
+# Execution example : python scripts/cines/sip.py /path/to/mets.file /path/to/output.file /path/to/mapping.file /path/to/conf.file
 
 
 #
@@ -60,6 +60,15 @@ type = {
 format = {
 	'jp2' : 'JPEG2000',
 	'xml' : 'XML'
+}
+# Dict used in translate_filter function to translate the folders name
+translate_dict = {
+	'_meta' : 'Métadonnées',
+	'add' : 'Documents additionnels',
+	'ana' : 'Analyse',
+	'col' : 'Collecte',
+	'ESE' : 'Enquête sur l\'enquête',
+	'prep' : 'Préparation'
 }
 
 
@@ -211,6 +220,10 @@ def md5archelec_filter(values) :
 	if download_image(image_url, image_path) :
 		return [md5(image_path)]
 
+# Translate a key based on a dict
+def translate_filter(values) :
+	return [translate_dict[values[0].text].decode('UTF-8')]
+
 # Download an image from its image_url if it exists into the image_path
 def download_image(image_url, image_path) :
 	try :
@@ -311,8 +324,8 @@ def generate(input_file, output_file, json_file, conf_arg) :
 	global conf
 	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
-	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
-	# data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
+	# data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
@@ -337,7 +350,7 @@ def main() :
 		sys.exit()
 	# Check if the number of arguments is correct
 	elif len(sys.argv) != 5 :
-		logging.error('Wrong number of args. Your command line should look like : python tools.py /path/to/mets.file /path/to/output.file /path/to/matching.file')
+		logging.error('Wrong number of args. Your command line should look like : python sip.py /path/to/mets.file /path/to/output.file /path/to/matching.file path/to/conf.file')
 		sys.exit()
 	else :
 		mets_file = sys.argv[1]
