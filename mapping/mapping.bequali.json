@@ -43,10 +43,10 @@
             "name": "Archive",
             "children": [{
                 "name": "ArchivalAgreement",
-                "default_values": ["090388"]
+                "default_values": ["ark:/87895/1.0-797418"]
             }, {
                 "name": "ArchivalProfile",
-                "default_values": ["ark:/acompleter_cines/"]
+                "default_values": ["ark:/87895/1.0-797417"]
             }, {
                 "name": "DescriptionLanguage",
                 "default_values": ["fra"],
@@ -87,10 +87,18 @@
                     }
                 }, {
                     "name": "LatestDate",
-                    "default_values": ["A REVOIR !!! DATE DU JOUR ???"]
+                    "value": [{
+                        "method": "xpath",
+                        "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
+                        "filters": ["latest_date"]
+                    }]
                 }, {
                     "name": "OldestDate",
-                    "default_values": ["A REVOIR !!! ???"]
+                    "value": [{
+                        "method": "xpath",
+                        "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
+                        "filters": ["oldest_date"]
+                    }]
                 }, {
                     "name": "CustodialHistory",
                     "children": [{
@@ -142,8 +150,7 @@
                     "value": [{
                         "method": "xpath",
                         "paths": [".//acqinfo/chronlist/chronitem/date"]
-                    }],
-                    "comment": "A REPRENDRE, n'est-ce pas plutôt la date du jour ???"
+                    }]
                 }]
             }, {
                 "name": "AppraisalRule",
@@ -158,7 +165,10 @@
                     "default_values": ["0"]
                 }, {
                     "name": "StartDate",
-                    "default_values": ["TO BE DONE"]
+                    "value": [{
+                        "method": "xpath",
+                        "paths": [".//acqinfo/chronlist/chronitem/date"]
+                    }]
                 }]
             }, {
                 "name": "ArchiveObject",
@@ -169,12 +179,16 @@
                         "method": "xpath",
                         "paths": ["./did/unittitle"],
                         "filters": ["translate"]
-                        }]
-                    }, {
+                    }]
+                }, {
                     "name": "ContentDescription",
                     "children": [{
                         "name": "Description",
-                        "default_values": ["A REPRENDRE"]
+                        "value": [{
+                            "method": "xpath",
+                            "paths": ["./did/unittitle"],
+                            "filters": ["translate_bis"]
+                        }]
                     }, {
                         "name": "DescriptionLevel",
                         "default_values": ["file"],
@@ -189,10 +203,18 @@
                         }
                     }, {
                         "name": "LatestDate",
-                        "default_values": ["A VOIR PLUS TARD"]
+                        "value": [{
+                            "method": "xpath",
+                            "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
+                            "filters": ["latest_date"]
+                        }]
                     }, {
                         "name": "OldestDate",
-                        "default_values": ["A VOIR PLUS TARD"]
+                        "value": [{
+                            "method": "xpath",
+                            "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
+                            "filters": ["oldest_date"]
+                        }]
                     }]
                 }]
             }]
