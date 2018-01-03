@@ -21,7 +21,7 @@
                 "value" : [{
                     "method" : "xpath",
                     "paths" : [".//dc:subject[1]"],
-                    "filters" : ["first", "split", "lowercase"]
+                    "filters" : ["first", "split_space", "lowercase"]
                 }]
             }, {
                 "name" : "description",
@@ -72,7 +72,7 @@
                 "value" : [{
                     "method" : "xpath",
                     "paths" : [".//dc:identifier"],
-                    "filters" : ["first", "get_source"]
+                    "filters" : ["first", "split_underscore", "get_first_element"]
                 }]
             }, {
                 "name" : "language",
@@ -85,7 +85,7 @@
                 "value" : [{
                     "method" : "xpath",
                     "paths" : [".//dc:coverage"],
-                    "filters" : ["first", "split"]
+                    "filters" : ["first", "split_space"]
                 }]
             }, {
                 "name" : "rights",

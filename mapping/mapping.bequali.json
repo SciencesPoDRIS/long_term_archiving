@@ -90,14 +90,14 @@
                     "value": [{
                         "method": "xpath",
                         "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
-                        "filters": ["latest_date"]
+                        "filters": ["all", "min"]
                     }]
                 }, {
                     "name": "OldestDate",
                     "value": [{
                         "method": "xpath",
                         "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
-                        "filters": ["oldest_date"]
+                        "filters": ["all", "max"]
                     }]
                 }, {
                     "name": "CustodialHistory",
@@ -172,13 +172,13 @@
                 }]
             }, {
                 "name": "ArchiveObject",
-                "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]",
+                "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]/c",
                 "children": [{
                     "name": "Name",
                     "value": [{
                         "method": "xpath",
-                        "paths": ["./did/unittitle"],
-                        "filters": ["translate"]
+                        "paths": [".//did/unittitle"],
+                        "filters": ["first", "split_underscore", "get_fourth_element", "translate_bequali_folder_name"]
                     }]
                 }, {
                     "name": "ContentDescription",
@@ -186,8 +186,8 @@
                         "name": "Description",
                         "value": [{
                             "method": "xpath",
-                            "paths": ["./did/unittitle"],
-                            "filters": ["translate_bis"]
+                            "paths": [".//did/unittitle"],
+                            "filters": ["first", "split_underscore", "get_fourth_element", "translate_bequali_folder_description"]
                         }]
                     }, {
                         "name": "DescriptionLevel",
@@ -205,15 +205,15 @@
                         "name": "LatestDate",
                         "value": [{
                             "method": "xpath",
-                            "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
-                            "filters": ["latest_date"]
+                            "paths": [".//unitdate[@label='ligeo-date-automatique']"],
+                            "filters": ["all", "min"]
                         }]
                     }, {
                         "name": "OldestDate",
                         "value": [{
                             "method": "xpath",
-                            "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
-                            "filters": ["oldest_date"]
+                            "paths": [".//unitdate[@label='ligeo-date-automatique']"],
+                            "filters": ["all", "max"]
                         }]
                     }]
                 }]
