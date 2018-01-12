@@ -1,6 +1,9 @@
 {
     "root": [{
         "name": "ArchiveTransfer",
+        "attributes": {
+            "xmlns" : "fr:gouv:culture:archivesdefrance:seda:v1.0"
+        },
         "children": [{
             "name": "Comment",
             "default_values": ["Archivage des enquêtes qualitatives beQuali"]

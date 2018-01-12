@@ -195,7 +195,11 @@ def create_node(node_parent, node, element, recursive = False) :
 			create_node(node_parent, node, repeat)
 	elif 'children' in node :
 		node_children = node['children']
-		new_node = etree.SubElement(node_parent, node_name, node_attributes)
+		# If node_parent is None, create the root element
+		if node_parent is None :
+			new_node = etree.Element(node_name, node_attributes)
+		else :
+			new_node = etree.SubElement(node_parent, node_name, node_attributes)
 		for node_child in node_children :
 			create_node(new_node, node_child, element)
 	# Else get the node values and create as many nodes as return by the get_node_values function
@@ -214,6 +218,9 @@ def create_node(node_parent, node, element, recursive = False) :
 	if 'default_values' in node and ((not 'value' in node) or ('value' in node and len(values) == 0)) :
 		for default_value in node['default_values'] :
 			etree.SubElement(node_parent, node_name, node_attributes).text = default_value
+	# If node_parent is None, new_node is the root element, so return it coz it contains the whole tree
+	if node_parent is None :
+		return new_node
 
 def generate(input_file, output_file, json_file, conf_arg) :
 	# Load input_file
@@ -221,14 +228,12 @@ def generate(input_file, output_file, json_file, conf_arg) :
 	global conf
 	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
-	# data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
-	data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
 	# Start the creation of the XML with the 'root' tag of the JSON file
 	for node in meta_json['root'] :
-		create_node(data, node, tree)
+		data = create_node(None, node, tree)
 	# Write result into output_file
 	write_xml_file(output_file, data)
 
