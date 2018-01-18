@@ -73,7 +73,7 @@ def get_mets_file_filter(values) :
 
 # Utils
 def split_space_filter(values) :
-	return values[0].split(' ')
+	return values[0].text.split(' ')
 
 # Utils
 def split_underscore_filter(values) :
@@ -135,12 +135,20 @@ def current_date_filter():
 # BeQuali Filter
 # Translate a key based on a dict
 def translate_bequali_folder_name_filter(values) :
-	return [bequali_folder_name[values[0]].decode('UTF-8')]
+	try :
+		res = [bequali_folder_name[values[0]].decode('UTF-8')]
+	except KeyError :
+		res = [values[0]]
+	return res
 
 # BeQuali Filter
 # Translate a key based on a dict
 def translate_bequali_folder_description_filter(values) :
-	return [bequali_folder_description[values[0]].decode('UTF-8')]
+	try :
+		res = [bequali_folder_description[values[0]].decode('UTF-8')]
+	except KeyError :
+		res = [values[0]]
+	return res
 
 # Archelec Filter
 def format_fichier_filter(values) :
