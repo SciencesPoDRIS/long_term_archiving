@@ -110,28 +110,29 @@
                     }]
                 }, {
                     "name": "Keyword",
+                    "repeat" : ".//ddi:keyword",
                     "children": [{
                         "name": "KeywordContent",
                         "value": [{
                             "method": "xpath",
-                            "paths": [".//ddi:keyword"],
-                            "filters": ["all"]
+                            "paths": ["."]
                         }]
                     }]
                 }, {
                     "name": "OriginatingAgency",
                     "children": [{
                         "name": "Description",
-                        "default_values": ["Equipex Dime SHS"]
+                        "default_values": ["L'Equipex DIME-SHS (Données Infrastructures et Méthodes en Sciences humaines et sociales) est porté par le Centre de données socio-politique (CDSP) depuis 2001. Son objectif est de participer à la recherche méthodologique en SHS en menant un projet de mise à disposition de matériaux d'enquêtes qualitatives avec la banque d'enquête beQuali."]
                     }, {
                         "name": "Identification",
                         "attributes": {
-                            "schemeName": "TVA"
+                            "schemeName": "SIRET",
+                            "schemeAgencyName": "INSEE"
                         },
                         "default_values": ["40180089013"]
                     }, {
                         "name": "Name",
-                        "default_values": ["Sciences Po | CDSP | beQuali"]
+                        "default_values": ["CDSP (Centre de Données Socio-Politiques) - UMS828"]
                     }]
                 }, {
                     "name": "OtherMetadata",
@@ -165,7 +166,7 @@
                     "default_values": ["conserver"]
                 }, {
                     "name": "Duration",
-                    "default_values": ["0"]
+                    "default_values": ["P5Y"]
                 }, {
                     "name": "StartDate",
                     "value": [{
@@ -175,13 +176,13 @@
                 }]
             }, {
                 "name": "ArchiveObject",
-                "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]/c",
+                "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]",
                 "children": [{
                     "name": "Name",
                     "value": [{
                         "method": "xpath",
-                        "paths": [".//did/unittitle"],
-                        "filters": ["first", "split_underscore", "get_fourth_element", "translate_bequali_folder_name"]
+                        "paths": ["./did/unitid"],
+                        "filters": ["split_space", "lowercase", "translate_bequali_folder_name"]
                     }]
                 }, {
                     "name": "ContentDescription",
@@ -189,8 +190,8 @@
                         "name": "Description",
                         "value": [{
                             "method": "xpath",
-                            "paths": [".//did/unittitle"],
-                            "filters": ["first", "split_underscore", "get_fourth_element", "translate_bequali_folder_description"]
+                            "paths": ["./did/unitid"],
+                            "filters": ["split_space", "lowercase", "translate_bequali_folder_description"]
                         }]
                     }, {
                         "name": "DescriptionLevel",
