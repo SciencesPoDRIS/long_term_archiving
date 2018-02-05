@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Execution example : python scripts/long_term_archiving.py MY_PROJECT
+# Execution example : python scripts/long_term_archiving.py bequali
 
 
 #
@@ -131,6 +132,9 @@ def createStructure(local_folder_path) :
 	createFolder(os.path.join(local_folder_path, 'DEPOT'))
 	# If not exists, create DESC folder into DEPOT folder
 	createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
+	# Set mets_file to False by default
+	mets_file = False
+	# Iterate over local path
 	for root, dirs, files in os.walk(local_folder_path):
 		for file in files :
 			# If exists, delete .pdf file at the root of the folder
@@ -150,6 +154,7 @@ def createStructure(local_folder_path) :
 		for dir in dirs :
 			if dir != 'DEPOT' and not root.endswith('/DEPOT') :
 				shutil.move(os.path.join(local_folder_path, dir), os.path.join(local_folder_path, 'DEPOT', dir))
+	# Return the mets file if it was present, else return false
 	return mets_file
 
 # Send archive folder to CINES through SFTP
@@ -233,7 +238,7 @@ if __name__ == '__main__' :
 			for dir in dirs :
 				contents_bis.append(dir)
 	else :
-		logging.error('Config file has no \'source\' parameter or it is badly setted. The supported values are \'ftp\' ou \'source\'.')
+		logging.error('Config file has no \'source\' parameter or it is badly setted. The supported values are \'ftp\' ou \'local\'.')
 		sys.exit()
 	# Filters all forbidden folders
 	readBlacklistedFolders()
@@ -244,26 +249,29 @@ if __name__ == '__main__' :
 	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
-		# if subdir in white listed folders :
-		if subdir in whitelisted_folders :
-			local_folder_path = os.path.join(conf['tmp_path'], subdir)
+		logging.info(subdir)
+		# if subdir in whitelisted_folders :
+		local_folder_path = os.path.join(conf['tmp_path'], subdir)
+		# Create subdir locally into tmp_path
+		createFolder(local_folder_path)
+		# Download subdir locally from FTP
+		if conf['source'] == 'ftp' :
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
-			# Create subdir locally into tmp_path
-			createFolder(local_folder_path)
-			# Download subdir locally from FTP
-			if conf['source'] == 'ftp' :
-				ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
-			# Create wanted folder structure for CINES
-			# mets_file = createStructure(local_folder_path)
-			mets_file = structure.create(local_folder_path)
-			# Generate SIP.xml from the METS.xml file
-			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
-			sip_file_path = os.path.join(local_folder_path, sip_file_name)
-			sip.generate(mets_file_path, sip_file_path, mapping_file, conf)
-			# Send the folder to CINES
-			sendCinesArchive(local_folder_path)
-			# Write the folder as blacklisted folder into the file
-			writeAsBlacklistedFolder(subdir)
-			# Delete locally downloaded subdir
-			removeFolder(local_folder_path)
+			ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
+		# Create wanted folder structure for CINES
+		# mets_file = structure.create(local_folder_path)
+		mets_file = createStructure(local_folder_path)
+		# Generate SIP.xml from the METS.xml file
+		# mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
+		mets_file_path = 'merge_ead_into_mets.xml'
+		# sip_file_path = os.path.join(local_folder_path, sip_file_name)
+		sip_file_path = 'output_file.xml'
+		conf = '../conf/conf.bequali.json'
+		sip.generate(mets_file_path, sip_file_path, mapping_file, conf)
+		# Send the folder to CINES
+		# sendCinesArchive(local_folder_path)
+		# Write the folder as blacklisted folder into the file
+		writeAsBlacklistedFolder(subdir)
+		# Delete locally downloaded subdir
+		# removeFolder(local_folder_path)
 	logging.info('End script')

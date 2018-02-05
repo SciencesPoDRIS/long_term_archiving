@@ -181,7 +181,7 @@
                     "name": "Name",
                     "value": [{
                         "method": "xpath",
-                        "paths": ["./did/unitid"],
+                        "paths": ["./did/unittitle"],
                         "filters": ["split_space", "lowercase", "translate_bequali_folder_name"]
                     }]
                 }, {
@@ -218,6 +218,17 @@
                             "method": "xpath",
                             "paths": [".//unitdate[@label='ligeo-date-automatique']"],
                             "filters": ["all", "max"]
+                        }]
+                    }, {
+                        "name" : "ArchiveObject",
+                        "repeat" : "./c[@altrender=\"ligeo-branche-standard\"]",
+                        "children" : [{
+                            "name" : "Name",
+                            "value" : [{
+                                "method" : "xpath",
+                                "paths" : ["./did/unittitle"],
+                                "filters" : ["split_space", "lowercase", "translate_bequali_folder_name"]
+                            }]
                         }]
                     }]
                 }]

@@ -138,6 +138,8 @@ def translate_bequali_folder_name_filter(values) :
 	try :
 		res = [bequali_folder_name[values[0]].decode('UTF-8')]
 	except KeyError :
+		print "Error"
+		print values[0]
 		res = [values[0]]
 	return res
 
