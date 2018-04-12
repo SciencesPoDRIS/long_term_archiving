@@ -177,62 +177,53 @@
             }, {
                 "name": "ArchiveObject",
                 "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]",
-                "children": [{
-                    "name": "Name",
-                    "value": [{
-                        "method": "xpath",
-                        "paths": ["./did/unittitle"],
-                        "filters": ["split_space", "lowercase", "translate_bequali_folder_name"]
-                    }]
-                }, {
-                    "name": "ContentDescription",
+                    "recursive" : "yes",
                     "children": [{
-                        "name": "Description",
+                        "name": "Name",
                         "value": [{
                             "method": "xpath",
-                            "paths": ["./did/unitid"],
-                            "filters": ["split_space", "lowercase", "translate_bequali_folder_description"]
+                            "paths": [".//did/unittitle"],
+                            "filters": ["split_space", "lowercase", "translate_bequali_folder_name"]
+
                         }]
                     }, {
-                        "name": "DescriptionLevel",
-                        "default_values": ["file"],
-                        "attributes": {
-                            "listVersionID": "edition 2009"
-                        }
-                    }, {
-                        "name": "Language",
-                        "default_values": ["fra"],
-                        "attributes": {
-                            "listVersionID": "edition 2011"
-                        }
-                    }, {
-                        "name": "LatestDate",
-                        "value": [{
-                            "method": "xpath",
-                            "paths": [".//unitdate[@label='ligeo-date-automatique']"],
-                            "filters": ["all", "min"]
-                        }]
-                    }, {
-                        "name": "OldestDate",
-                        "value": [{
-                            "method": "xpath",
-                            "paths": [".//unitdate[@label='ligeo-date-automatique']"],
-                            "filters": ["all", "max"]
-                        }]
-                    }, {
-                        "name" : "ArchiveObject",
-                        "repeat" : "./c[@altrender=\"ligeo-branche-standard\"]",
-                        "children" : [{
-                            "name" : "Name",
-                            "value" : [{
-                                "method" : "xpath",
-                                "paths" : ["./did/unittitle"],
-                                "filters" : ["split_space", "lowercase", "translate_bequali_folder_name"]
+                        "name": "ContentDescription",
+                        "children": [{
+                            "name": "Description",
+                            "value": [{
+                                "method": "xpath",
+                                "paths": ["./did/unitid"],
+                                "filters": ["split_space", "lowercase", "translate_bequali_folder_description"]
+                            }]
+                        }, {
+                            "name": "DescriptionLevel",
+                            "default_values": ["file"],
+                            "attributes": {
+                                "listVersionID": "edition 2009"
+                            }
+                        }, {
+                            "name": "Language",
+                            "default_values": ["fra"],
+                            "attributes": {
+                                "listVersionID": "edition 2011"
+                            }
+                        }, {
+                            "name": "LatestDate",
+                            "value": [{
+                                "method": "xpath",
+                                "paths": [".//unitdate[@label='ligeo-date-automatique']"],
+                                "filters": ["all", "min"]
+                            }]
+                        }, {
+                            "name": "OldestDate",
+                            "value": [{
+                                "method": "xpath",
+                                "paths": [".//unitdate[@label='ligeo-date-automatique']"],
+                                "filters": ["all", "max"]
                             }]
                         }]
                     }]
                 }]
-            }]
         }]
     }]
 }

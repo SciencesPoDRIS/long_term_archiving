@@ -176,23 +176,28 @@ def get_node_values(node, element) :
 		for filter in filters :
 			contents = eval('sip_filters.' + filter + '_filter(contents)')
 	else :
-		print len(values)
-		print node
 		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
 # Build the node (name, value, children...) and add it to the node_parent
-def create_node(node_parent, node, element, recursive = False) :
+def create_node(node_parent, node, element) :
 	node_name = node['name']
 	node_attributes = node['attributes'] if 'attributes' in node else {}
+	if 'recursive' in node :
+		node_b = copy.deepcopy(node)
+		node_b['repeat'] = node_b['repeat'].replace('.//dsc/c', './c')
+		node['children'].append(node_b)
+		del node['recursive']
+		create_node(node_parent, node, element)
 	# If node has children, create them
-	if 'repeat' in node :
-		repeats = tree.xpath(node['repeat'], namespaces = ns)
+	elif 'repeat' in node :
+		repeats = element.xpath(node['repeat'], namespaces = ns)
 		# Delete the repeat attribute
-		del node['repeat']
+		node_b = copy.deepcopy(node)
+		del node_b['repeat']
 		for repeat in repeats :
 			# Recall the function to create the node
-			create_node(node_parent, node, repeat)
+			create_node(node_parent, node_b, repeat)
 	elif 'children' in node :
 		node_children = node['children']
 		# If node_parent is None, create the root element

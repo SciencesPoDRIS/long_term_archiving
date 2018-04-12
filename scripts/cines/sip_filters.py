@@ -17,21 +17,37 @@ import datetime
 bequali_folder_name = {
 	'_meta' : 'Métadonnées',
 	'add' : 'Documents additionnels',
+	'admi' : 'Documents administratifs',
 	'ana' : 'Analyse',
 	'anal' : 'Analyse',
 	'col' : 'Collecte',
+	'docu' : 'Documentation rassemblée en amont ou pendant terrain',
 	'ESE' : 'Enquête sur l\'enquête',
-	'prep' : 'Préparation'
+	'fiche' : 'Fiches',
+	'methodo' : 'Méthodologie',
+	'note'  : 'Notes',
+	'prep' : 'Préparation',
+	'presse' : 'TO BE DONE',
+	'rapport' : 'TO BE DONE',
+	'transcr' : 'Transcription'
 }
 # Dict used in translate_bequali_folder_description_filter function to get the folders description
 bequali_folder_description = {
 	'_meta' : 'Dossier contenant les métadonnées xml et l\'inventaire des documents contenus dans le corpus.',
 	'add' : 'Dossier contenant des documents conçus a posteriori de l’enquête par l’équipe beQuali ou par les auteurs de l’enquête.',
+	'admi' : 'TO BE DONE',
 	'ana' : 'Dossier concernant tous les documents d’analyse, de production et de communication scientifique, produits par les auteurs de l’enquête.',
 	'anal' : 'Dossier concernant tous les documents d’analyse, de production et de communication scientifique, produits par les auteurs de l’enquête.',
 	'col' : 'Dossier concernant tous les documents recueillis sur le terrain, collectés ou coproduits par les auteurs de l’enquête.',
+	'docu' : 'TO BE DONE',
 	'ESE' : 'Dossier contenant la production scientifique réalisée par l’équipe beQuali ayant pour objet d’éclairer d’un point de vue documentaire, méthodologique et analytique l’enquête collectée et mise à disposition.',
-	'prep' : 'Dossier concernant tous les documents préparant l’enquête.'
+	'fiche' : 'TO BE DONE',
+	'methodo' : 'TO BE DONE',
+	'note' : 'TO BE DONE',
+	'prep' : 'Dossier concernant tous les documents préparant l’enquête.',
+	'presse' : 'TO BE DONE',
+	'rapport' : 'TO BE DONE',
+	'transcr' : 'TO BE DONE'
 }
 
 
