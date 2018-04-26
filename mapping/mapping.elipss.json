@@ -1,0 +1,133 @@
+{
+    "root" : [{
+        "name" : "ArchiveTransfer",
+        "attributes": {
+            "xmlns" : "fr:gouv:culture:archivesdefrance:seda:v1.0"
+        },
+        "children" : [{
+            "name": "Date",
+            "filters": ["current_date"]
+        }, {
+            "name" : "TransferIdentifier",
+            "default_values" : ["Archivage d'une enquête ELIPSS"]
+        }, {
+            "name" : "ArchivalAgency",
+            "children" : [{
+                "name" : "Identification",
+                "default_values" : ["19341594000017"],
+                "attributes": {
+                    "schemeName": "SIRET",
+                    "schemeAgencyName": "INSEE"
+                }
+            }, {
+                "name" : "Name",
+                "default_values": ["Centre Informatique National de l'Enseignement Supérieur"]
+            }]
+        }, {
+            "name" : "TransferringAgency",
+            "children" : [{
+                "name" : "Identification",
+                "default_values" : ["40180089013"],
+                "attributes" : {
+                    "schemeName": "SIRET",
+                    "schemeAgencyName": "INSEE"
+                }
+            }, {
+                "name" : "Name",
+                "default_values" : ["CDSP (Centre de Données Socio-Politiques) - UMS828"]
+            }]
+        }, {
+            "name" : "Archive",
+            "children" : [{
+                "name" : "ArchivalAgreement",
+                "default_values" : ["ark:/87895/1.0-797418"]
+            }, {
+                "name" : "ArchivalProfile",
+                "default_values" : ["ark:/87895/1.0-797417"]
+            }, {
+                "name" : "DescriptionLanguage",
+                "default_values" : ["fra"],
+                "attributes" : {
+                    "listVersionID" : "edition 2011"
+                }
+            }, {
+                "name" : "Name",
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//stdyDscr/citation/titlStmt/titl"]
+                }]
+            }, {
+                "name" : "TransferringAgencyArchiveIdentifier",
+                "value" : [{
+                    "method" : "xpath",
+                    "paths" : [".//stdyDscr/citation/titlStmt/IDNo"]
+                }]
+            }, {
+                "name" : "ContentDescription",
+                "children" : [{
+                    "name" : "Description",
+                    "value" : [{
+                        "method" : "xpath",
+                        "paths" : [".//stdyDscr/stdyInfo/abstract"]
+                    }]
+                }, {
+                    "name" : "DescriptionLevel",
+                    "default_values" : ["file"],
+                    "attributes" : {
+                        "listVersionID" : "edition 2009"
+                    }
+                }, {
+                    "name" : "FilePlanPosition",
+                    "default_values" : ["Enquêtes quantitatives ELIPSS"]
+                }, {
+                    "name" : "Language",
+                    "default_values" : ["fra"],
+                    "attributes" : {
+                        "listVersionID" : "edition 2011"
+                    }
+                }, {
+                    "name" : "LatestDate",
+                    "default_values" : ["TO BE DONE"]
+                }, {
+                    "name" : "OldestDate",
+                    "default_values" : ["TO BE DONE"]
+                }, {
+                    "name": "Keyword",
+                    "repeat" : ".//stdyDscr/stdyInfo/subject/keyword",
+                    "children": [{
+                        "name": "KeywordContent",
+                        "value": [{
+                            "method": "xpath",
+                            "paths": ["."]
+                        }]
+                    }]
+                }, {
+                    "name" : "OriginatingAgency",
+                    "children" : [{
+                        "name" : "Description",
+                        "default_values" : ["Le Centre de données socio-politiques (CDSP) a la charge de la production des enquêtes par questionnaires, ainsi que de la documentation et de la mise à disposition des données produites dans le cadre du panel Internet ELIPSS, selon la norme internationale Data Documentation Initiative. Ce panel s'inscrit dans un projet plus large, l’équipement d’excellence DIME-SHS (Données, Infrastructures, Méthodes d’Enquêtes en Sciences Humaines et Sociales), qui vise à doter la France d'une nouvelle structure en matière de collecte, d’enrichissement et de diffusion des données pour la recherche en sciences humaines et sociales."]
+                    }, {
+                        "name" : "Identification",
+                        "default_values" : ["40180089013"],
+                        "attributes" : {
+                            "schemeAgencyName" : "INSEE",
+                            "schemeName" : "SIRET"
+                        }
+                    }, {
+                        "name" : "Name",
+                        "default_values" : ["CDSP (Centre de Données Socio-Politiques) - UMS828"]
+                    }]
+                }]
+            }, {
+                "name" : "AccessRestrictionRule",
+                "children" : [{
+                    "name" : "Code",
+                    "default_values" : ["AR038"],
+                    "attributes" : {
+                        "listVersionID" : "edition 2009"
+                    }
+                }]
+            }]
+        }]
+    }]
+}
