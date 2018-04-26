@@ -21,33 +21,39 @@ bequali_folder_name = {
 	'ana' : 'Analyse',
 	'anal' : 'Analyse',
 	'col' : 'Collecte',
+	'corresp' : 'Correspondance',
 	'docu' : 'Documentation rassemblée en amont ou pendant terrain',
-	'ESE' : 'Enquête sur l\'enquête',
+	'entretien' : 'Entretiens',
+	'ese' : 'Enquête sur l\'enquête',
 	'fiche' : 'Fiches',
 	'methodo' : 'Méthodologie',
 	'note'  : 'Notes',
+	'outil' : 'Outil',
 	'prep' : 'Préparation',
-	'presse' : 'TO BE DONE',
-	'rapport' : 'TO BE DONE',
+	'presse' : 'Presse / périodique',
+	'rapport' : 'Rapports / synthèses',
 	'transcr' : 'Transcription'
 }
 # Dict used in translate_bequali_folder_description_filter function to get the folders description
 bequali_folder_description = {
 	'_meta' : 'Dossier contenant les métadonnées xml et l\'inventaire des documents contenus dans le corpus.',
-	'add' : 'Dossier contenant des documents conçus a posteriori de l’enquête par l’équipe beQuali ou par les auteurs de l’enquête.',
-	'admi' : 'TO BE DONE',
-	'ana' : 'Dossier concernant tous les documents d’analyse, de production et de communication scientifique, produits par les auteurs de l’enquête.',
-	'anal' : 'Dossier concernant tous les documents d’analyse, de production et de communication scientifique, produits par les auteurs de l’enquête.',
-	'col' : 'Dossier concernant tous les documents recueillis sur le terrain, collectés ou coproduits par les auteurs de l’enquête.',
-	'docu' : 'TO BE DONE',
-	'ESE' : 'Dossier contenant la production scientifique réalisée par l’équipe beQuali ayant pour objet d’éclairer d’un point de vue documentaire, méthodologique et analytique l’enquête collectée et mise à disposition.',
-	'fiche' : 'TO BE DONE',
-	'methodo' : 'TO BE DONE',
-	'note' : 'TO BE DONE',
+	'add' : 'Dossier contenant des documents conçus a posteriori de l\'enquête par l’équipe beQuali ou par les auteurs de l\'enquête.',
+	'admi' : 'Dossier contenant des documents administratifs',
+	'ana' : 'Dossier concernant tous les documents d\'analyse, de production et de communication scientifique, produits par les auteurs de l\'enquête.',
+	'anal' : 'Dossier concernant tous les documents d\'analyse, de production et de communication scientifique, produits par les auteurs de l\'enquête.',
+	'col' : 'Dossier concernant tous les documents recueillis sur le terrain, collectés ou coproduits par les auteurs de l\'enquête.',
+	'corresp' : 'TODO',
+	'docu' : 'Dossier contenant la documentation rassemblée en amont ou pendant le terrain',
+	'entretien' : 'TODO',
+	'ese' : 'Dossier contenant la production scientifique réalisée par l\'équipe beQuali ayant pour objet d’éclairer d\'un point de vue documentaire, méthodologique et analytique l\'enquête collectée et mise à disposition.',
+	'fiche' : 'Dossier contenant des documents prenant la forme de fiche synthétique',
+	'methodo' : 'Dossier contenant des documents relatifs à la méthodologie de l\'enquête',
+	'note' : 'Dossier contenant des documents prenant la forme de notes manuscrites ou de notes d\'information',
+	'outil' : 'TODO',
 	'prep' : 'Dossier concernant tous les documents préparant l’enquête.',
-	'presse' : 'TO BE DONE',
-	'rapport' : 'TO BE DONE',
-	'transcr' : 'TO BE DONE'
+	'presse' : 'Dossier contenant des documents relatifs à la presse (coupure, dossier, journaux, etc)',
+	'rapport' : 'Dossier contenant des documents prenant la forme de rapport écrit ou de synthèse',
+	'transcr' : 'Dossier contenant les transcriptions d’entretiens'
 }
 
 
@@ -154,8 +160,7 @@ def translate_bequali_folder_name_filter(values) :
 	try :
 		res = [bequali_folder_name[values[0]].decode('UTF-8')]
 	except KeyError :
-		print "Error"
-		print values[0]
+		print "Error into function translate_bequali_folder_name_filter. Don't know how to translate name of : " + values[0]
 		res = [values[0]]
 	return res
 
@@ -165,8 +170,14 @@ def translate_bequali_folder_description_filter(values) :
 	try :
 		res = [bequali_folder_description[values[0]].decode('UTF-8')]
 	except KeyError :
+		print "Error into function translate_bequali_folder_description_filter. Don't know how to translate description of : " + values[0]
 		res = [values[0]]
 	return res
+
+# BeQuali Filter
+# Translate a key based on a dict
+def bequali_type_filter(values) :
+	return ['CDO']
 
 # Archelec Filter
 def format_fichier_filter(values) :
