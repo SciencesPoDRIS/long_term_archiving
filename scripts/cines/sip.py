@@ -182,7 +182,7 @@ def get_node_values(node, element) :
 # Build the node (name, value, children...) and add it to the node_parent
 def create_node(node_parent, node, element) :
 	node_name = node['name']
-	node_attributes = node['attributes'] if 'attributes' in node else {}
+	node_attributes = ({}, node['attributes'])['attributes' in node]
 	if 'recursive' in node :
 		node_b = copy.deepcopy(node)
 		node_b['repeat'] = node_b['repeat'].replace('.//dsc/c', './c')
