@@ -81,7 +81,7 @@
                     }
                 }, {
                     "name": "FilePlanPosition",
-                    "default_values": ["Enquêtes qualitatives beQuali"]
+                    "default_values": ["Enquetes_qualitatives_beQuali"]
                 }, {
                     "name": "Language",
                     "default_values": ["fra"],
@@ -177,22 +177,21 @@
             }, {
                 "name": "ArchiveObject",
                 "repeat" : ".//dsc/c[@altrender=\"ligeo-branche-standard\"]",
-                    "recursive" : "yes",
-                    "children": [{
-                        "name": "Name",
-                        "value": [{
-                            "method": "xpath",
-                            "paths": [".//did/unittitle"],
-                            "filters": ["split_space", "lowercase", "translate_bequali_folder_name"]
-
-                        }]
-                    }, {
+                "recursive" : "yes",
+                "children": [{
+                            "name": "Name",
+                            "value": [{
+                                "method": "xpath",
+                                "paths": [".//did/unittitle"],
+                                "filters": ["split_space", "lowercase", "translate_bequali_folder_name"]
+                            }]
+                        }, {
                         "name": "ContentDescription",
                         "children": [{
                             "name": "Description",
                             "value": [{
                                 "method": "xpath",
-                                "paths": ["./did/unitid"],
+                                "paths": [".//did/unittitle"],
                                 "filters": ["split_space", "lowercase", "translate_bequali_folder_description"]
                             }]
                         }, {
@@ -220,6 +219,46 @@
                                 "method": "xpath",
                                 "paths": [".//unitdate[@label='ligeo-date-automatique']"],
                                 "filters": ["all", "max"]
+                            }]
+                        }]
+                    }, {
+                        "name": "Document",
+                        "repeat": "./c[@altrender=\"ligeo-article-standard\"]",
+                        "children": [{
+                            "name": "Attachment",
+                            "value": [{
+                                "method": "xpath",
+                                "paths": ["./did/unittitle"]
+                            }],
+                            "attributes" : {
+                                "mimeCode" : "TODO",
+                                "filename" : "TODO"
+                            }
+                        }, {
+                            "name": "Description",
+                            "value": [{
+                                "method": "xpath",
+                                "paths": ["./scopecontent/p"]
+                            }]
+                        }, {
+                            "name": "Integrity",
+                            "attributes": {
+                                "algorithme": "MD5"
+                            },
+                            "value": [{
+                                "method": "xpath",
+                                "paths": ["./did/unittitle"],
+                                "//filters" : ["md5"]
+                            }]
+                        }, {
+                            "name": "Type",
+                            "attributes": {
+                                "listVersionID": "edition 2009"
+                            },
+                            "value": [{
+                                "method": "xpath",
+                                "paths": ["./did/unittitle"],
+                                "filters": ["bequali_type"]
                             }]
                         }]
                     }]
