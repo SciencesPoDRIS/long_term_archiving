@@ -1,16 +1,31 @@
-# long_term_preservation
+# long_term_archiving
 
-Versionning of the sip files for the [CINES](http://www.cines.fr).
+## Description
+Automate the building of an archive to send to the [CINES](http://www.cines.fr).
 
 Python version needed : 2.5 or after.
 
 
-## Install
-
-* rename the file conf/conf.default.json into conf/conf.MY_PROJECT.json where MY_PROJECT is the name of my project and edit it to put your own SRU/SRW server url
-* `mkvirtualenv long_term_archiving`
-* `pip install lxml`
-* `pip install paramiko`
+## Installation
+- `> git clone https://github.com/SciencesPoDRIS/long_term_archiving.git`
+- `> cd long_term_archiving`
+- `> mkvirtualenv long_term_archiving`
+- `> pip install -r requirements.txt`
+- `> cp server/conf/conf.default.json server/conf/conf.MY_PROJECT.json` where MY_PROJECT is the name of your own project
+- Edit it to put your own conf as following
+  - server_url : 
+  - source : 
+  - ftp_server : 
+  - ftp_port : 
+  - ftp_user : 
+  - ftp_password : 
+  - remote_path : 
+  - ftp_cines_server :
+  - ftp_cines_port :
+  - ftp_cines_user :
+  - ftp_cines_password :
+  - remote_cines_path :
+  - tmp_path :
 
 ## How to use it ?
 
