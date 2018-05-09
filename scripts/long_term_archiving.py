@@ -16,7 +16,7 @@ import os
 import paramiko
 import shutil
 import sys
-from cines import sip, structure
+from cines import sip
 
 
 #
@@ -259,7 +259,6 @@ if __name__ == '__main__' :
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
 			ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
 		# Create wanted folder structure for CINES
-		# mets_file = structure.create(local_folder_path)
 		mets_file = createStructure(local_folder_path)
 		# Generate SIP.xml from the METS.xml file
 		# mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
