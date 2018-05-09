@@ -29,7 +29,7 @@ Python version needed : 2.5 or after.
 
 ## How to use it ?
 
-long_term_preservation can be used with any system compatible with python 2.5 by invoking the command
+long_term_archiving can be used with any system compatible with python 2.5 by invoking the command
 
 `python scripts/long_term_archiving.py MY_PROJECT`
 
