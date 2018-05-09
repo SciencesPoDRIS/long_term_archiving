@@ -1,9 +1,10 @@
 {
     "root": [{
         "name": "ArchiveTransfer",
-        "attributes": {
-            "xmlns" : "fr:gouv:culture:archivesdefrance:seda:v1.0"
-        },
+        "attributes": [{
+            "name": "xmlns",
+            "value": "fr:gouv:culture:archivesdefrance:seda:v1.0"
+        }],
         "children": [{
             "name": "Comment",
             "default_values": ["Archivage des enquêtes qualitatives beQuali"]
@@ -21,10 +22,13 @@
             "children": [{
                 "name": "Identification",
                 "default_values": ["19341594000017"],
-                "attributes": {
-                    "schemeName": "SIRET",
-                    "schemeAgencyName": "INSEE"
-                }
+                "attributes": [{
+                    "name": "schemeName",
+                    "value": "SIRET"
+                }, {
+                    "name": "schemeAgencyName",
+                    "value": "INSEE"
+                }]
             }, {
                 "name": "Name",
                 "default_values": ["Centre Informatique National de l'Enseignement Supérieur"]
@@ -34,10 +38,13 @@
             "children": [{
                 "name": "Identification",
                 "default_values": ["40180089013"],
-                "attributes": {
-                    "schemeName": "SIRET",
-                    "schemeAgencyName": "INSEE"
-                }
+                "attributes": [{
+                    "name": "schemeName",
+                    "value": "SIRET"
+                }, {
+                    "name": "schemeAgencyName",
+                    "value": "INSEE"
+                }]
             }, {
                 "name": "Name",
                 "default_values": ["CDSP (Centre de Données Socio-Politiques) - UMS828"]
@@ -53,9 +60,10 @@
             }, {
                 "name": "DescriptionLanguage",
                 "default_values": ["fra"],
-                "attributes": {
-                    "listVersionID": "edition 2011"
-                }
+                "attributes": [{
+                    "name": "listVersionID",
+                    "value": "edition 2011"
+                }]
             }, {
                 "name": "Name",
                 "value": [{
@@ -76,18 +84,20 @@
                 }, {
                     "name": "DescriptionLevel",
                     "default_values": ["subfonds"],
-                    "attributes": {
-                        "listVersionID": "edition 2009"
-                    }
+                    "attributes": [{
+                        "name": "listVersionID",
+                        "value": "edition 2009"
+                    }]
                 }, {
                     "name": "FilePlanPosition",
                     "default_values": ["Enquetes_qualitatives_beQuali"]
                 }, {
                     "name": "Language",
                     "default_values": ["fra"],
-                    "attributes": {
-                        "listVersionID": "edition 2011"
-                    }
+                    "attributes": [{
+                        "name": "listVersionID",
+                        "value": "edition 2011"
+                    }]
                 }, {
                     "name": "LatestDate",
                     "value": [{
@@ -125,10 +135,13 @@
                         "default_values": ["L'Equipex DIME-SHS (Données Infrastructures et Méthodes en Sciences humaines et sociales) est porté par le Centre de données socio-politique (CDSP) depuis 2001. Son objectif est de participer à la recherche méthodologique en SHS en menant un projet de mise à disposition de matériaux d'enquêtes qualitatives avec la banque d'enquête beQuali."]
                     }, {
                         "name": "Identification",
-                        "attributes": {
-                            "schemeName": "SIRET",
-                            "schemeAgencyName": "INSEE"
-                        },
+                        "attributes": [{
+                            "name": "schemeName",
+                            "value": "SIRET"
+                        }, {
+                            "name": "schemeAgencyName",
+                            "value": "INSEE"
+                        }],
                         "default_values": ["40180089013"]
                     }, {
                         "name": "Name",
@@ -145,9 +158,10 @@
                 "name": "AccessRestrictionRule",
                 "children": [{
                     "name": "Code",
-                    "attributes": {
-                        "listVersionID": "edition 2009"
-                    },
+                    "attributes": [{
+                        "name": "listVersionID",
+                        "value": "edition 2009"
+                    }],
                     "default_values": ["AR048"]
                 }, {
                     "name": "StartDate",
@@ -160,9 +174,10 @@
                 "name": "AppraisalRule",
                 "children": [{
                     "name": "Code",
-                    "attributes": {
-                        "listVersionID": "edition 2009"
-                    },
+                    "attributes": [{
+                        "name": "listVersionID",
+                        "value": "edition 2009"
+                    }],
                     "default_values": ["conserver"]
                 }, {
                     "name": "Duration",
@@ -197,15 +212,17 @@
                         }, {
                             "name": "DescriptionLevel",
                             "default_values": ["file"],
-                            "attributes": {
-                                "listVersionID": "edition 2009"
-                            }
+                            "attributes": [{
+                                "name": "listVersionID",
+                                "value": "edition 2009"
+                            }]
                         }, {
                             "name": "Language",
                             "default_values": ["fra"],
-                            "attributes": {
-                                "listVersionID": "edition 2011"
-                            }
+                            "attributes": [{
+                                "name": "listVersionID",
+                                "value": "edition 2011"
+                            }]
                         }, {
                             "name": "LatestDate",
                             "value": [{
@@ -230,10 +247,15 @@
                                 "method": "xpath",
                                 "paths": ["./did/unittitle"]
                             }],
-                            "attributes" : {
-                                "mimeCode" : "TODO",
-                                "filename" : "TODO"
-                            }
+                            "attributes" : [{
+                                "name": "mimeCode",
+                                "xpath": "./did/unittitle",
+                                "filters": ["first", "bequali_mime_type"]
+                            }, {
+                                "name": "filename",
+                                "xpath": "./did/unittitle",
+                                "filters": ["first"]
+                            }]
                         }, {
                             "name": "Description",
                             "value": [{
@@ -242,19 +264,17 @@
                             }]
                         }, {
                             "name": "Integrity",
-                            "attributes": {
-                                "algorithme": "MD5"
-                            },
-                            "value": [{
-                                "method": "xpath",
-                                "paths": ["./did/unittitle"],
-                                "//filters" : ["md5"]
-                            }]
+                            "attributes": [{
+                                "name": "algorithme",
+                                "value": "MD5"
+                            }],
+                            "default_values": ["TODO"]
                         }, {
                             "name": "Type",
-                            "attributes": {
-                                "listVersionID": "edition 2009"
-                            },
+                            "attributes": [{
+                                "name": "listVersionID",
+                                "value": "edition 2009"
+                            }],
                             "value": [{
                                 "method": "xpath",
                                 "paths": ["./did/unittitle"],

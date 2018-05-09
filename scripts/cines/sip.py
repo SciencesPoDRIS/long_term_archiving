@@ -179,10 +179,24 @@ def get_node_values(node, element) :
 		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
+def get_attributes(attributes, element) :
+	res = {}
+	for attribute in attributes :
+		if 'value' in attribute :
+			res[attribute['name']] = attribute['value']
+		elif 'xpath' in attribute :
+			tmp = element.xpath(attribute['xpath'], namespaces = ns)
+			if 'filters' in attribute :
+				for filter in attribute['filters'] :
+					tmp = eval('sip_filters.' + filter + '_filter(tmp)')
+			res[attribute['name']] = tmp[0]
+	return res
+
+
 # Build the node (name, value, children...) and add it to the node_parent
 def create_node(node_parent, node, element) :
 	node_name = node['name']
-	node_attributes = ({}, node['attributes'])['attributes' in node]
+	node_attributes = get_attributes(node['attributes'] if 'attributes' in node else {}, element)
 	if 'recursive' in node :
 		node_b = copy.deepcopy(node)
 		node_b['repeat'] = node_b['repeat'].replace('.//dsc/c', './c')

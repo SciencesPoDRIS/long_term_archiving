@@ -20,6 +20,7 @@ bequali_folder_name = {
 	'admi' : 'Documents administratifs',
 	'ana' : 'Analyse',
 	'anal' : 'Analyse',
+	'archives' : 'Archives',
 	'col' : 'Collecte',
 	'corresp' : 'Correspondance',
 	'docu' : 'Documentation rassemblée en amont ou pendant terrain',
@@ -41,19 +42,26 @@ bequali_folder_description = {
 	'admi' : 'Dossier contenant des documents administratifs',
 	'ana' : 'Dossier concernant tous les documents d\'analyse, de production et de communication scientifique, produits par les auteurs de l\'enquête.',
 	'anal' : 'Dossier concernant tous les documents d\'analyse, de production et de communication scientifique, produits par les auteurs de l\'enquête.',
+	'archives' : 'Dossier contenant des documents relatifs à la consultation d’archives ou d’aide à la compréhension de l’enquête',
 	'col' : 'Dossier concernant tous les documents recueillis sur le terrain, collectés ou coproduits par les auteurs de l\'enquête.',
-	'corresp' : 'TODO',
+	'corresp' : 'Dossier contenant de la correspondance',
 	'docu' : 'Dossier contenant la documentation rassemblée en amont ou pendant le terrain',
-	'entretien' : 'TODO',
+	'entretien' : 'Dossier contenant des documents relatifs aux entretiens',
 	'ese' : 'Dossier contenant la production scientifique réalisée par l\'équipe beQuali ayant pour objet d’éclairer d\'un point de vue documentaire, méthodologique et analytique l\'enquête collectée et mise à disposition.',
 	'fiche' : 'Dossier contenant des documents prenant la forme de fiche synthétique',
 	'methodo' : 'Dossier contenant des documents relatifs à la méthodologie de l\'enquête',
 	'note' : 'Dossier contenant des documents prenant la forme de notes manuscrites ou de notes d\'information',
-	'outil' : 'TODO',
+	'outil' : 'Dossier contenant des documents concernant les outils utilisés (méthodologiques, etc.)',
 	'prep' : 'Dossier concernant tous les documents préparant l’enquête.',
 	'presse' : 'Dossier contenant des documents relatifs à la presse (coupure, dossier, journaux, etc)',
 	'rapport' : 'Dossier contenant des documents prenant la forme de rapport écrit ou de synthèse',
 	'transcr' : 'Dossier contenant les transcriptions d’entretiens'
+}
+# Dict used in bequali_mime_type_filter function to match file extension to a mimeType
+mimeType = {
+	'csv' : 'text/plain',
+	'pdf' : 'application/pdf',
+	'xml' : 'text/xml'
 }
 
 
@@ -178,6 +186,17 @@ def translate_bequali_folder_description_filter(values) :
 # Translate a key based on a dict
 def bequali_type_filter(values) :
 	return ['CDO']
+
+# BeQuali Filter
+# Return a mimeType according to the file extension
+def bequali_mime_type_filter(values) :
+	try :
+		res = [mimeType[values[0].split('.')[-1]]]
+	except KeyError :
+		print "Error into function bequali_mime_type_filter. Don't know any mimeType for file extension : " + values[0]
+		res = [values[0]]
+	return res
+
 
 # Archelec Filter
 def format_fichier_filter(values) :
