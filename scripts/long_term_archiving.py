@@ -61,11 +61,6 @@ type = {
 rights = 'Libre de droits'
 serviceVersant = 'Fondation Nationale des Sciences Politiques'
 planClassement = 'Numérisation patrimoniale'
-mimetype = {
-	'image/jp2' : 'JPEG2000',
-	'image/xml' : 'XML',
-	'image/jpeg' : 'JPEG'
-}
 
 
 #
