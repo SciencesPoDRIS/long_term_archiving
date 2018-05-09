@@ -6,10 +6,10 @@
 	"ftp_user" : "user",
 	"ftp_password" : "password",
 	"remote_path" : "/",
-	"ftp_cines_server" : "server.cines.fr",
-	"ftp_cines_port" : "22",
-	"ftp_cines_user" : "cines.user",
-	"ftp_cines_password" : "cines.password",
-	"remote_cines_path" : "/remote/cines/path",
+	"cines_ftp_server" : "server.cines.fr",
+	"cines_ftp_port" : "22",
+	"cines_ftp_user" : "cines.user",
+	"cines_ftp_password" : "cines.password",
+	"cines_ftp_path" : "/remote/cines/path",
 	"tmp_path" : "/local/path"
 }

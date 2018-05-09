@@ -11,20 +11,20 @@ Python version needed : 2.5 or after.
 - `> cd long_term_archiving`
 - `> mkvirtualenv long_term_archiving`
 - `> pip install -r requirements.txt`
-- `> cp server/conf/conf.default.json server/conf/conf.MY_PROJECT.json` where MY_PROJECT is the name of your own project
+- `> cp server/conf/conf.default.json server/conf/conf.MY_PROJECT_ID.json` where MY_PROJECT_ID is the name of your own project
 - Edit it to put your own conf as following
   - server_url : 
-  - source : 
-  - ftp_server : 
+  - source : can be either *local* (if the files are stored on your local machine) or *ftp* (if the files are stored on a FTP)
+  - ftp_server : if source is ftp, 
   - ftp_port : 
   - ftp_user : 
   - ftp_password : 
   - remote_path : 
-  - ftp_cines_server :
-  - ftp_cines_port :
-  - ftp_cines_user :
-  - ftp_cines_password :
-  - remote_cines_path :
+  - cines_ftp_server : FTP server where to send the archive
+  - cines_ftp_port : FTP port where to send the archive
+  - cines_ftp_user : FTP user to connect to the FTP where to send the archive
+  - cines_ftp_password : FTP password to connect to the FTP where to send the archive
+  - cines_ftp_path : Path on the FTP server where to send the archive
   - tmp_path :
 
 ## How to use it ?

@@ -156,22 +156,22 @@ def createStructure(local_folder_path) :
 def sendCinesArchive(local_folder_path) :
 	logging.info('Send archive to server through FTP for folder : ' + local_folder_path)
 	# Open connection
-	transport = paramiko.Transport((conf['ftp_cines_server'], int(conf['ftp_cines_port'])))
-	transport.connect(username=conf['ftp_cines_user'], password=conf['ftp_cines_password'])
+	transport = paramiko.Transport((conf['cines_ftp_server'], int(conf['cines_ftp_port'])))
+	transport.connect(username=conf['cines_ftp_user'], password=conf['cines_ftp_password'])
 	sftp = paramiko.SFTPClient.from_transport(transport)
-	root_folder_path = local_folder_path.replace(conf['tmp_path'], conf['remote_cines_path'])
+	root_folder_path = local_folder_path.replace(conf['tmp_path'], conf['cines_ftp_path'])
 	sftp.mkdir(root_folder_path, 0770)
 	# Send file through SFTP
 	for dirpath, dirnames, filenames in os.walk(local_folder_path) :
-		remote_folder_path = os.path.join(conf['remote_cines_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
+		remote_folder_path = os.path.join(conf['cines_ftp_path'], folder_separator.join(dirpath.split(folder_separator)[4:]))
 		# Create remote directories
 		for dirname in dirnames :
-			folder_path = os.path.join(dirpath, dirname).replace(conf['tmp_path'], conf['remote_cines_path'])
+			folder_path = os.path.join(dirpath, dirname).replace(conf['tmp_path'], conf['cines_ftp_path'])
 			sftp.mkdir(folder_path, 0770)
 		# Create remote files
 		for filename in filenames :
 			local_file_path = os.path.join(dirpath, filename)
-			remote_file_path = os.path.join(dirpath, filename).replace(conf['tmp_path'], conf['remote_cines_path'])
+			remote_file_path = os.path.join(dirpath, filename).replace(conf['tmp_path'], conf['cines_ftp_path'])
 			sftp.put(local_file_path, remote_file_path)
 	# Close connection
 	sftp.close()
