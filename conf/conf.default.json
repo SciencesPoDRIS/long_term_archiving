@@ -1,5 +1,6 @@
 {
 	"server_url" : "http://yourdomain.com:port",
+	"source" : "ftp",
 	"ftp_server" : "ftp.server.com",
 	"ftp_port" : "22",
 	"ftp_user" : "user",
@@ -10,5 +11,5 @@
 	"ftp_cines_user" : "cines.user",
 	"ftp_cines_password" : "cines.password",
 	"remote_cines_path" : "/remote/cines/path",
-	"local_path" : "/local/path"
+	"tmp_path" : "/local/path"
 }

@@ -4,6 +4,8 @@
     <DocDC>
         <!-- Le même à chaque fois ??? -->
         <title language="fra">France élections législatives 1973, Ain, 01ere circonscription, 1er tour, Professions de foi</title>
+        <!-- A reprendre -->
+        <title language="fra">France élections législatives 1973</title>
         <!-- Constante -->
         <creator>Fondation Nationale des Sciences Politiques</creator>
         <subject language="fra">france</subject>
@@ -12,28 +14,29 @@
         <subject language="fra">1973</subject>
         <subject language="fra">documents</subject>
         <subject language="fra">électoraux</subject>
-        <subject language="fra">01ere circonscription</subject>
-        <subject language="fra">1er tour</subject>
-        <subject language="fra">Professions de foi</subject>
         <!-- Constante -->
-        <description language="fra">Ce fonds d'archives électorales couvre les élections de 1958 à 2002. Il contient des professions de foi et des bulletins de vote des candidats.</description>
+        <description language="fra">Ce fonds d'archives électorales couvre les élections de 1958 à 2002. Il contient des professions de foi et des bulletins de vote des candidats, et autres documents électoraux.</description>
         <!-- Constante -->
         <publisher>SciencesPo CEVIPOF</publisher>
         <!-- La même à chaque fois ??? -->
         <date>1973-03-04</date>
+        <!-- A reprendre -->
+        <date>1973</date>
         <!-- Constante ??? -->
         <type language="fra">Affiches</type>
         <type language="fra">Banderoles</type>
         <type language="fra">Discours et programmes électoraux</type>
         <type language="fra">Tracts</type>
+        <type language="fra">Brochures</type>
+        <type language="fra">Objets</type>
         <!-- Généré par le script : nombre de fichiers par type de format -->
         <format language="fra">5 documents JPG2000</format>
         <format language="fra">3 documents PDF</format>
-        <source language="fra">EL065</source>
+        <source language="fra">EL065_L_1973</source>
         <!-- Constante -->
         <language>fra</language>
+        <!-- A reprendre -->
         <coverage language="fra">France</coverage>
-        <coverage language="fra">Ain</coverage>
         <rights language="fra">domaine public</rights>
         <rights language="fra">Creative Commons CC BY-SA 3.0 FR</rights>
     </DocDC>
@@ -43,6 +46,8 @@
         <serviceVersant>Fondation Nationale des Sciences Politiques</serviceVersant>
         <!-- "Archives électorales" / Type d'élection / Année / Mois / Département -->
         <planClassement language="fra">Archives électorales/Législatives/1973/03/001</planClassement>
+        <!-- A reprendre -->
+        <planClassement language="fra">"Archives électorales" / Type d'élection / Année / Mois / Département</planClassement>
     </DocMeta>
     <FichMeta>
         <!-- En fonction de l'extension du fichier -->
