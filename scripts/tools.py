@@ -55,7 +55,8 @@ ns_marc = {
 # Constants
 type = {
 	'book' : 'Monographie',
-	'map' : 'Carte'
+	'map' : 'Carte',
+	'journal' : 'Journal'
 }
 format = {
 	'jp2' : 'JPEG2000',
@@ -85,8 +86,8 @@ def get_srusrw_tree() :
 
 # Build the SRU/SRW url to query the library catalog
 def get_srusrw_url() :
-	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n')), safe='')
-	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n')), safe='')
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n').replace('œ', 'oe').replace('á', 'a')), safe='')
+	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n').replace('œ', 'oe').replace('á', 'a')), safe='')
 	srusrw_url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query='
 	if url_creator != '' :
 		srusrw_url += 'dc.creator%3D' + url_creator + '%20and%20'
@@ -165,6 +166,9 @@ def count_PDF_filter(values) :
 
 def get_source_filter(values) :
 	return [values[0].split('_')[0]]
+
+def remove_X_filter(values) :
+	return [values[0].replace('X', '')]
 
 # Archelec Filter
 def plan_classement_filter(values) :
@@ -280,9 +284,6 @@ def create_node(node_parent, node, element, recursive = False) :
 		del node['repeat']
 		for repeat in repeats :
 			# Recall the function to create the node
-			# print repeat
-			# print repeat.tag
-			# print repeat.attrib
 			create_node(node_parent, node, repeat)
 	elif 'children' in node :
 		node_children = node['children']

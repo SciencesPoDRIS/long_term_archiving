@@ -55,8 +55,10 @@
             "name" : "date",
             "value" : [{
                 "method" : "xpath",
-                "paths" : [".//mods:dateIssued"]
-            }]
+                "paths" : [".//mods:dateIssued"],
+                "filters" : ["first", "remove_X"]
+            }],
+            "default_values" : ["s.d."]
         }, {
             "name" : "type",
             "attributes" : {
