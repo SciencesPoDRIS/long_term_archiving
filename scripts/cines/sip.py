@@ -316,8 +316,6 @@ def get_node_values(node, element) :
 		for filter in filters :
 			contents = eval(filter + '_filter(contents)')
 	else :
-		print len(values)
-		print node
 		logging.error('Node "' + node['name'] + '" has a problem with the filters attribute.')
 	return contents
 
