@@ -105,8 +105,8 @@ def get_srusrw_tree() :
 
 # Build the SRU/SRW url to query the library catalog
 def get_srusrw_url() :
-	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n').replace('œ', 'oe').replace('á', 'a')), safe='')
-	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n').replace('œ', 'oe').replace('á', 'a')), safe='')
+	url_title = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_title().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n').replace('œ', 'oe').replace('á', 'a').replace('ä', 'a')), safe='')
+	url_creator = urllib.quote(re.sub(r'([^\s\w\'-]|_)+', '', get_creator().lower().encode('utf-8').replace('é', 'e').replace('ç', 'c').replace('è', 'e').replace('ê', 'e').replace('ń', 'n').replace('œ', 'oe').replace('á', 'a').replace('ä', 'a')), safe='')
 	srusrw_url = conf['server_url'] + '?version=2.0&operation=searchRetrieve&query='
 	if url_creator != '' :
 		srusrw_url += 'dc.creator%3D' + url_creator + '%20and%20'
@@ -155,13 +155,13 @@ def filename_filter(values) :
 def md5_filter(values) :
 	# For a file, download it and return the MD5 checksum
 	image_url = 'http://' + conf['ftp_server'] + conf['remote_path'] + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'master' + folder_separator + values[0].split(folder_separator)[-1]
-	image_path = values[0].replace('file://master/', conf['local_path'] + folder_separator + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'DEPOT' + folder_separator + 'master' + folder_separator).replace('file://ocr/', conf['local_path'] + folder_separator + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'DEPOT' + folder_separator + 'master' + folder_separator)
+	image_path = values[0].replace('file://master/', conf['tmp_path'] + folder_separator + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'DEPOT' + folder_separator + 'master' + folder_separator).replace('file://ocr/', conf['tmp_path'] + folder_separator + '_'.join(values[0].split(folder_separator)[-1].split('_')[0:3]) + folder_separator + 'DEPOT' + folder_separator + 'master' + folder_separator)
 	if download_image(image_url, image_path) :
 		return [md5(image_path)]
 
 def md5xml_filter(values) :
 	image_url = 'http://' + conf['ftp_server'] + conf['remote_path'] + values[0].text + folder_separator + values[0].text + '.xml'
-	image_path = conf['local_path'] + folder_separator + values[0].text + folder_separator + 'DEPOT' + folder_separator + 'DESC' + folder_separator + values[0].text + '.xml'
+	image_path = conf['tmp_path'] + folder_separator + values[0].text + folder_separator + 'DEPOT' + folder_separator + 'DESC' + folder_separator + values[0].text + '.xml'
 	if download_image(image_url, image_path) :
 		return [md5(image_path)]
 
@@ -250,7 +250,7 @@ def nom_fichier_filter(values) :
 def md5archelec_filter(values) :
 	# For a file, download it into local path and return the MD5 checksum
 	image_url = values[0].replace('file://', 'http://drd-archives01.sciences-po.fr/ArchivesArchElec/ELECTION%20LOT_00/LOT_00/').replace('.PDF', '.pdf').replace('.JP2', '.jp2').replace('.JPG', '.jpg')
-	image_path = conf['local_path'] + folder_separator + values[0].split('/')[-1]
+	image_path = conf['tmp_path'] + folder_separator + values[0].split('/')[-1]
 	if download_image(image_url, image_path) :
 		return [md5(image_path)]
 
@@ -361,8 +361,8 @@ def generate(input_file, output_file, json_file, conf_arg) :
 	global conf
 	conf = conf_arg
 	tree = etree.parse(input_file).getroot()
-	# data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
-	data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
+	data = etree.Element('pac', nsmap=nsmap, attrib={'{' + xsi + '}schemaLocation' : xsi_schemalocation})
+	# data = etree.Element('ArchiveTransfer', nsmap=nsmap_seda)
 	# Load meta_json file
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)

@@ -15,7 +15,7 @@ import os
 import paramiko
 import shutil
 import sys
-from cines import sip, structure
+from cines import sip
 
 
 #
@@ -24,7 +24,7 @@ from cines import sip, structure
 
 # Complete with the folders number
 # whitelisted_folders = ['sc_0000354761_00000000390999', 'sc_0000397026_00000001066004', 'sc_0000611205_00000000309875']
-whitelisted_folders = ['sc_0000954232_00000001698433', 'sc_0000986313_00000000793670', 'sc_0000986321_00000000256877']
+whitelisted_folders = ['sc_0000954232_00000001698433']
 folder_separator = '/'
 blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
@@ -32,6 +32,7 @@ forbidden_folders = ['.', '..']
 log_folder = 'log'
 log_level = logging.DEBUG
 conf_folder = 'conf'
+sip_file_name = 'sip.xml'
 # Namespaces
 xsi = 'http://www.w3.org/2001/XMLSchema-instance'
 xsi_schemalocation = 'http://www.cines.fr/pac/sip http://www.cines.fr/pac/sip.xsd'
@@ -107,14 +108,15 @@ def ftpDownloadRemoteFolder(remote_folder_path, local_folder_path) :
 		if words[0][0] == 'd' :
 			if content_name not in forbidden_folders :
 				# Create local folder
-				createFolder(os.path.join(local_folder_path, remote_folder_path.replace(conf['remote_path'], ''), content_name))
+				local_folder = os.path.join(local_folder_path, content_name)
+				createFolder(local_folder)
 				# Download remote folder content
-				ftpDownloadRemoteFolder(os.path.join(conf['remote_path'], remote_folder_path, content_name))
-		# If it is a file
+				ftpDownloadRemoteFolder(os.path.join(conf['remote_path'], remote_folder_path, content_name), local_folder)
+		# Else, it is a file
 		else :
 			ftp.cwd(remote_folder_path)
 			# Download file
-			local_filename = os.path.join(local_folder_path, remote_folder_path.replace(conf['remote_path'], ''), content_name)
+			local_filename = os.path.join(local_folder_path, content_name)
 			ftp.retrbinary('RETR ' + content_name, open(local_filename, 'w').write)
 	ftp.quit()
 
@@ -238,7 +240,7 @@ if __name__ == '__main__' :
 	# Filters all forbidden folders
 	readBlacklistedFolders()
 	# Delete tmp_path before download
-	# removeFolder(conf['tmp_path'])
+	removeFolder(conf['tmp_path'])
 	# Check that tmp_path already exists
 	createFolder(conf['tmp_path'])
 	# for subdir in contents_bis :
@@ -253,10 +255,9 @@ if __name__ == '__main__' :
 			createFolder(local_folder_path)
 			# Download subdir locally from FTP
 			if conf['source'] == 'ftp' :
-				ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
+				ftpDownloadRemoteFolder(remote_folder_path, local_folder_path)
 			# Create wanted folder structure for CINES
-			# mets_file = createStructure(local_folder_path)
-			mets_file = structure.create(local_folder_path)
+			mets_file = createStructure(local_folder_path)
 			# Generate SIP.xml from the METS.xml file
 			mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
 			sip_file_path = os.path.join(local_folder_path, sip_file_name)
@@ -266,5 +267,5 @@ if __name__ == '__main__' :
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
 			# Delete locally downloaded subdir
-			# removeFolder(local_folder_path)
+			removeFolder(local_folder_path)
 	logging.info('End script')
