@@ -24,7 +24,7 @@ from cines import sip, structure
 
 # Complete with the folders number
 # whitelisted_folders = ['sc_0000354761_00000000390999', 'sc_0000397026_00000001066004', 'sc_0000611205_00000000309875']
-whitelisted_folders = []
+whitelisted_folders = ['sc_0000954232_00000001698433', 'sc_0000986313_00000000793670', 'sc_0000986321_00000000256877']
 folder_separator = '/'
 blacklisted_folders_file = 'blacklistedFolders'
 blacklisted_folders = []
@@ -229,7 +229,7 @@ if __name__ == '__main__' :
 		# Close the FTP connection
 		ftp.quit()
 	elif conf['source'] == 'local' :
-		for root, dirs, files in os.walk(conf['local_path']):
+		for root, dirs, files in os.walk(conf['tmp_path']):
 			for dir in dirs :
 				contents_bis.append(dir)
 	else :
@@ -238,9 +238,10 @@ if __name__ == '__main__' :
 	# Filters all forbidden folders
 	readBlacklistedFolders()
 	# Delete tmp_path before download
-	removeFolder(conf['tmp_path'])
+	# removeFolder(conf['tmp_path'])
 	# Check that tmp_path already exists
 	createFolder(conf['tmp_path'])
+	# for subdir in contents_bis :
 	for subdir in contents_bis :
 		# Get folder name
 		subdir = subdir.split(None, 8)[-1].lstrip()
@@ -265,5 +266,5 @@ if __name__ == '__main__' :
 			# Write the folder as blacklisted folder into the file
 			writeAsBlacklistedFolder(subdir)
 			# Delete locally downloaded subdir
-			removeFolder(local_folder_path)
+			# removeFolder(local_folder_path)
 	logging.info('End script')
