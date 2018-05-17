@@ -103,14 +103,14 @@
                     "value": [{
                         "method": "xpath",
                         "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
-                        "filters": ["all", "min"]
+                        "filters": ["all", "max_date"]
                     }]
                 }, {
                     "name": "OldestDate",
                     "value": [{
                         "method": "xpath",
                         "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
-                        "filters": ["all", "max"]
+                        "filters": ["all", "min_date"]
                     }]
                 }, {
                     "name": "CustodialHistory",
@@ -227,15 +227,15 @@
                             "name": "LatestDate",
                             "value": [{
                                 "method": "xpath",
-                                "paths": [".//unitdate[@label='ligeo-date-automatique']"],
-                                "filters": ["all", "min"]
+                                "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
+                                "filters": ["all", "max_date"]
                             }]
                         }, {
                             "name": "OldestDate",
                             "value": [{
                                 "method": "xpath",
-                                "paths": [".//unitdate[@label='ligeo-date-automatique']"],
-                                "filters": ["all", "max"]
+                                "paths": [".//c[@altrender='ligeo-article-standard']/did/unitdate[@label='ligeo-date-automatique']"],
+                                "filters": ["all", "min_date"]
                             }]
                         }]
                     }, {

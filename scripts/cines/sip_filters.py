@@ -64,6 +64,12 @@ mimeType = {
 	'xml' : 'text/xml'
 }
 
+date_format = {
+	1 : '%Y',
+	2 : '%m/%Y',
+	3 : '%d/%m/%Y'
+}
+
 
 #
 # Functions
@@ -135,9 +141,28 @@ def all_filter(values) :
 def min_filter(values) :
 	return [min(values)]
 
+def min_date_filter(values) :
+	
+	res = []
+	format = {}
+	for value in values :
+		format[datetime.datetime.strptime(value, date_format[len(value.split('/'))])] = len(value.split('/'))
+		res.append(datetime.datetime.strptime(value, date_format[len(value.split('/'))]))
+	tmp = min(res)
+	return [tmp.strftime(date_format[format[tmp]])]
+
 # Utils
 def max_filter(values) :
 	return [max(values)]
+
+def max_date_filter(values) :
+	res = []
+	format = {}
+	for value in values :
+		format[datetime.datetime.strptime(value, date_format[len(value.split('/'))])] = len(value.split('/'))
+		res.append(datetime.datetime.strptime(value, date_format[len(value.split('/'))]))
+	tmp = max(res)
+	return [tmp.strftime(date_format[format[tmp]])]
 
 # Archelec Filter
 def plan_classement_filter(values) :
