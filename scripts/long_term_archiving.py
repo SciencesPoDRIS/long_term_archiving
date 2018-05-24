@@ -16,6 +16,7 @@ import os
 import paramiko
 import shutil
 import sys
+from lxml import etree
 from cines import sip
 
 
@@ -115,18 +116,14 @@ def ftpDownloadRemoteFolder(remote_folder_path, local_folder_path) :
 	ftp.quit()
 
 # Create the tree structure for the archived folder, as waited by the CINES platform
-def createStructure(local_folder_path) :
+def createStructure(local_folder_path, conf) :
+
 	logging.info('Create structure for folder : ' + local_folder_path)
-	# If exists, delete "ill" folder
-	removeFolder(os.path.join(local_folder_path, 'ill'))
-	# If exists, delete "illview" folder
-	removeFolder(os.path.join(local_folder_path, 'illview'))
-	# If exists, delete "view" folder
-	removeFolder(os.path.join(local_folder_path, 'view'))
 	# If not exists, create DEPOT folder
 	createFolder(os.path.join(local_folder_path, 'DEPOT'))
 	# If not exists, create DESC folder into DEPOT folder
 	createFolder(os.path.join(local_folder_path, 'DEPOT', 'DESC'))
+	shutil.copyfile(conf['mets_file_path'], os.path.join(local_folder_path, 'DEPOT', 'DESC', 'mets.xml'))
 	# Set mets_file to False by default
 	mets_file = False
 	# Iterate over local path
@@ -229,8 +226,8 @@ if __name__ == '__main__' :
 		# Close the FTP connection
 		ftp.quit()
 	elif conf['source'] == 'local' :
-		for root, dirs, files in os.walk(conf['local_path']):
-			for dir in dirs :
+		for dir in os.listdir(conf['local_path']) :
+			if os.path.isdir(os.path.join(conf['local_path'], dir)):
 				contents_bis.append(dir)
 	else :
 		logging.error('Config file has no \'source\' parameter or it is badly setted. The supported values are \'ftp\' ou \'local\'.')
@@ -246,7 +243,16 @@ if __name__ == '__main__' :
 		subdir = subdir.split(None, 8)[-1].lstrip()
 		logging.info(subdir)
 		# if subdir in whitelisted_folders :
-		local_folder_path = os.path.join(conf['tmp_path'], subdir)
+		tree = etree.parse(conf['mets_file_path']).getroot()
+		ns = {
+			'mods' : 'http://www.loc.gov/mods/v3',
+			'mets' : 'http://www.loc.gov/METS/',
+			'xlink' : 'http://www.w3.org/1999/xlink',
+			'ddi' : 'ddi:codebook:2_2',
+			'dc' : 'http://purl.org/dc/elements/1.1/'
+		}
+		survey_id = tree.xpath(conf['identifier_xpath'], namespaces = ns)[0].text
+		local_folder_path = os.path.join(conf['tmp_path'], survey_id)
 		# Create subdir locally into tmp_path
 		createFolder(local_folder_path)
 		# Download subdir locally from FTP
@@ -254,13 +260,12 @@ if __name__ == '__main__' :
 			remote_folder_path = os.path.join(conf['remote_path'], subdir)
 			ftpDownloadRemoteFolder(remote_folder_path, conf['tmp_path'])
 		# Create wanted folder structure for CINES
-		mets_file = createStructure(local_folder_path)
+		mets_file = createStructure(local_folder_path, conf)
 		# Generate SIP.xml from the METS.xml file
 		# mets_file_path = os.path.join(local_folder_path, 'DEPOT', 'DESC', mets_file)
-		mets_file_path = 'merge_ead_into_mets.xml'
-		# sip_file_path = os.path.join(local_folder_path, sip_file_name)
-		sip_file_path = 'output_file.xml'
-		conf = '../conf/conf.bequali.json'
+		mets_file_path = conf['mets_file_path']
+		sip_file_name = 'ArchiveTransfer.xml'
+		sip_file_path = os.path.join(local_folder_path, sip_file_name)
 		sip.generate(mets_file_path, sip_file_path, mapping_file, conf)
 		# Send the folder to CINES
 		# sendCinesArchive(local_folder_path)
