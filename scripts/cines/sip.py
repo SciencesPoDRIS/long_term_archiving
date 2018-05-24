@@ -251,8 +251,7 @@ def generate(input_file, output_file, json_file, conf_arg) :
 	with open(json_file) as json_f :
 		meta_json = json.load(json_f)
 	# Start the creation of the XML with the 'root' tag of the JSON file
-	for node in meta_json['root'] :
-		data = create_node(None, node, tree)
+	data = create_node(None, meta_json['root'][0], tree)
 	# Write result into output_file
 	write_xml_file(output_file, data)
 
